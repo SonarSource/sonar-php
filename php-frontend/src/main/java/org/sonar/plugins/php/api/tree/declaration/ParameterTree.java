@@ -30,7 +30,7 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
  *   {@link #variableIdentifier()} = {@link #initValue()}
  *   ... {@link #variableIdentifier()}
  *   & {@link #variableIdentifier()}
- *   {@link #type()} {@link #variableIdentifier()}
+ *   {@link #declaredType()} {@link #variableIdentifier()}
  * </pre>
  *
  */
@@ -38,13 +38,6 @@ public interface ParameterTree extends Tree, HasAttributes {
 
   @Nullable
   SyntaxToken visibility();
-
-  /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
-   */
-  @Nullable
-  @Deprecated(since = "3.11", forRemoval = true)
-  TypeTree type();
 
   @Nullable
   DeclaredTypeTree declaredType();

@@ -30,8 +30,6 @@ import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
-import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
@@ -47,20 +45,20 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   @Nullable
   private final InternalSyntaxToken eosToken;
   @Nullable
-  private final DeclaredTypeTree typeAnnotation;
+  private final DeclaredTypeTree declaredType;
 
   private ClassPropertyDeclarationTreeImpl(
     Kind kind,
     List<AttributeGroupTree> attributeGroups,
     List<SyntaxToken> modifierTokens,
-    @Nullable DeclaredTypeTree typeAnnotation,
+    @Nullable DeclaredTypeTree declaredType,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     @Nullable PropertyHookListTree propertyHookList,
     @Nullable InternalSyntaxToken eosToken) {
     this.kind = kind;
     this.attributeGroups = attributeGroups;
     this.modifierTokens = modifierTokens;
-    this.typeAnnotation = typeAnnotation;
+    this.declaredType = declaredType;
     this.declarations = declarations;
     this.propertyHookList = propertyHookList;
     this.eosToken = eosToken;
@@ -68,14 +66,14 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
 
   public static ClassPropertyDeclarationTree variable(List<AttributeGroupTree> attributes,
     List<SyntaxToken> modifierTokens,
-    @Nullable DeclaredTypeTree typeAnnotation,
+    @Nullable DeclaredTypeTree declaredType,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     @Nullable PropertyHookListTree propertyHook,
     @Nullable InternalSyntaxToken eosToken) {
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_PROPERTY_DECLARATION,
       attributes,
       Collections.unmodifiableList(modifierTokens),
-      typeAnnotation,
+      declaredType,
       declarations,
       propertyHook,
       eosToken);
@@ -84,7 +82,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
   public static ClassPropertyDeclarationTree constant(List<AttributeGroupTree> attributes,
     List<SyntaxToken> modifiers,
     SyntaxToken constToken,
-    @Nullable DeclaredTypeTree typeAnnotation,
+    @Nullable DeclaredTypeTree declaredType,
     SeparatedListImpl<VariableDeclarationTree> declarations,
     InternalSyntaxToken eosToken) {
 
@@ -93,7 +91,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return new ClassPropertyDeclarationTreeImpl(Kind.CLASS_CONSTANT_PROPERTY_DECLARATION,
       attributes,
       Collections.unmodifiableList(modifierTokens),
-      typeAnnotation,
+      declaredType,
       declarations,
       null,
       eosToken);
@@ -109,28 +107,10 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return modifierTokens;
   }
 
-  /**
-   * @deprecated since 3.11 - use {@link #declaredType()} instead.
-   */
-  @Nullable
-  @Override
-  @Deprecated(since = "3.11", forRemoval = true)
-  public TypeTree typeAnnotation() {
-    if (typeAnnotation == null) {
-      return null;
-    }
-
-    if (typeAnnotation.is(Kind.TYPE)) {
-      return (TypeTree) typeAnnotation;
-    } else {
-      return ((UnionTypeTree) typeAnnotation).types().get(0);
-    }
-  }
-
   @Nullable
   @Override
   public DeclaredTypeTree declaredType() {
-    return typeAnnotation;
+    return declaredType;
   }
 
   @Override
@@ -180,7 +160,7 @@ public class ClassPropertyDeclarationTreeImpl extends PHPTree implements ClassPr
     return IteratorUtils.concat(
       attributeGroups.iterator(),
       modifierTokens.iterator(),
-      IteratorUtils.nullableIterator(typeAnnotation),
+      IteratorUtils.nullableIterator(declaredType),
       declarations.elementsAndSeparators(),
       IteratorUtils.nullableIterator(propertyHookList),
       IteratorUtils.nullableIterator(eosToken));

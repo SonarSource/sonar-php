@@ -32,7 +32,6 @@ import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
-import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -43,7 +42,6 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   private final List<AttributeGroupTree> attributeGroups;
   private final SyntaxToken classToken;
   private final SyntaxToken openParenthesisToken;
-  private final SeparatedList<ExpressionTree> arguments;
   private final SyntaxToken closeParenthesisToken;
   private final SyntaxToken extendsToken;
   private final NamespaceNameTree superClass;
@@ -72,16 +70,11 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
     SyntaxToken openCurlyBraceToken,
     List<ClassMemberTree> members,
     SyntaxToken closeCurlyBraceToken) {
-    List<ExpressionTree> argumentValues = callArguments.stream()
-      .map(CallArgumentTree::value)
-      .toList();
-
     this.attributeGroups = attributeGroups;
     this.readonly = readonly;
     this.classToken = classToken;
     this.openParenthesisToken = openParenthesisToken;
     this.callArguments = callArguments;
-    this.arguments = new SeparatedListImpl<>(argumentValues, callArguments.getSeparators());
     this.closeParenthesisToken = closeParenthesisToken;
     this.extendsToken = extendsToken;
     this.superClass = superClass;
@@ -111,15 +104,6 @@ public class AnonymousClassTreeImpl extends PHPTree implements AnonymousClassTre
   @Override
   public SyntaxToken openParenthesisToken() {
     return openCurlyBraceToken;
-  }
-
-  /**
-   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
-   */
-  @Deprecated(since = "3.11", forRemoval = true)
-  @Override
-  public SeparatedList<ExpressionTree> arguments() {
-    return arguments;
   }
 
   @Override

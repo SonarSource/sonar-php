@@ -41,12 +41,6 @@ public interface AnonymousClassTree extends ExpressionTree, ClassTree {
   @Nullable
   SyntaxToken openParenthesisToken();
 
-  /**
-   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
-   */
-  @Deprecated(since = "3.11", forRemoval = true)
-  SeparatedList<ExpressionTree> arguments();
-
   SeparatedList<CallArgumentTree> callArguments();
 
   @Nullable

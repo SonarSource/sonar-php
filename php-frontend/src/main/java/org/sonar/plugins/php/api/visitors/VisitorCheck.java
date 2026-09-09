@@ -93,7 +93,6 @@ import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -335,12 +334,6 @@ public interface VisitorCheck extends PHPCheck {
   void visitAttributeGroup(AttributeGroupTree tree);
 
   void visitAttribute(AttributeTree tree);
-
-  /**
-   * @deprecated since 3.1. Use {@link #visitEchoTagStatement(EchoTagStatementTree)}
-   */
-  @Deprecated(since = "3.1", forRemoval = true)
-  void visitExpressionListStatement(ExpressionListStatementTree tree);
 
   void visitCallArgument(CallArgumentTree tree);
 

@@ -78,6 +78,17 @@ class EchoTagStatementTreeTest extends PHPTreeModelTest {
   }
 
   @Test
+  void shouldParseEchoTagStatement() {
+    EchoTagStatementTree tree = parse("$a, foo();", PHPLexicalGrammar.ECHO_TAG_STATEMENT);
+
+    assertThat(tree.getKind()).isEqualTo(Kind.ECHO_TAG_STATEMENT);
+    assertThat(tree.expressions()).hasSize(2);
+    assertThat(tree.expressions().get(0).getKind()).isEqualTo(Kind.VARIABLE_IDENTIFIER);
+    assertThat(tree.expressions().get(1).getKind()).isEqualTo(Kind.FUNCTION_CALL);
+    assertThat(tree.eosToken().text()).isEqualTo(";");
+  }
+
+  @Test
   void severalEchoTags() {
     CompilationUnitTree tree = parse("<?php foo(); ?> 1 <?= $a ?> 2 <?= $b; ?> 3 <?= $c; bar(); ?> 4", PHPLexicalGrammar.COMPILATION_UNIT);
     ScriptTree script = tree.script();

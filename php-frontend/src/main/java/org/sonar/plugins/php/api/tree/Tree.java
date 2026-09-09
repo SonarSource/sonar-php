@@ -93,7 +93,6 @@ import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -948,13 +947,6 @@ public interface Tree {
      * {@link ExpressionStatementTree}
      */
     EXPRESSION_STATEMENT(ExpressionStatementTree.class),
-
-    /**
-     * {@link ExpressionListStatementTree}
-     * @deprecated since 3.1. Use {@link #ECHO_TAG_STATEMENT}
-     */
-    @Deprecated
-    EXPRESSION_LIST_STATEMENT(ExpressionListStatementTree.class),
 
     /**
      * {@link EchoTagStatementTree}

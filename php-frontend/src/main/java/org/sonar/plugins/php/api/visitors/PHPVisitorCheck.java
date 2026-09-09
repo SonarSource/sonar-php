@@ -101,7 +101,6 @@ import org.sonar.plugins.php.api.tree.statement.ElseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.EmptyStatementTree;
 import org.sonar.plugins.php.api.tree.statement.EnumCaseTree;
-import org.sonar.plugins.php.api.tree.statement.ExpressionListStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ExpressionStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.tree.statement.ForStatementTree;
@@ -357,11 +356,6 @@ public abstract class PHPVisitorCheck implements VisitorCheck {
 
   @Override
   public void visitExpressionStatement(ExpressionStatementTree tree) {
-    scan(tree);
-  }
-
-  @Override
-  public void visitExpressionListStatement(ExpressionListStatementTree tree) {
     scan(tree);
   }
 

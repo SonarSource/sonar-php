@@ -22,18 +22,12 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 /**
  * ReturnTypeClauseTree is an optional element of function declaration
  * <pre>
- *  : {@link #type()}
+ *  : {@link #declaredType()}
  *  </pre>
  */
 public interface ReturnTypeClauseTree extends Tree {
 
   SyntaxToken colonToken();
-
-  /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
-   */
-  @Deprecated(since = "3.11", forRemoval = true)
-  TypeTree type();
 
   DeclaredTypeTree declaredType();
 }
