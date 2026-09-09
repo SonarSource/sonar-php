@@ -58,7 +58,7 @@ If you have an idea for a rule, but you are not sure that everyone needs it you 
     * `ClassPropertyDeclarationTree#typeAnnotation()` was removed. Use `ClassPropertyDeclarationTree#declaredType()` instead.
     * `FunctionCallTree#arguments()` was removed. Use `FunctionCallTree#callArguments()` instead.
     * `AnonymousClassTree#arguments()` was removed. Use `AnonymousClassTree#callArguments()` instead.
-    * `ClassDeclarationTree#modifierToken()` and `EnumDeclarationTree#modifierToken()` were removed. Use `modifiersToken()` and the existing modifier helpers instead.
+    * `ClassDeclarationTree#modifierToken()` and `EnumDeclarationTree#modifierToken()` were removed. Use `modifiersToken()` for full token access, or `isAbstract()`, `isFinal()`, and `isReadOnly()` for semantic checks. `modifiersToken()` is not a drop-in replacement: `modifierToken()` only returned `abstract` or `final`, and returned `null` otherwise, while `modifiersToken()` returns all modifier tokens, including `readonly`.
 - **3.32** (October 2023)
     * Additional `newIssue` endpoint added to the `CheckContext` API interface
 - **3.15** (January 2021)
