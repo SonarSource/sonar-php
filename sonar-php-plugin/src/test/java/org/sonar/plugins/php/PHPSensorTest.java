@@ -479,7 +479,8 @@ class PHPSensorTest {
   @ParameterizedTest
   @CsvSource({
     "S6418, HardCodedSecret.php",
-    "S3011, ChangingAccessibility.php"
+    "S3011, ChangingAccessibility.php",
+    "S1313, HardCodedIpAddress.php"
   })
   void shouldBeSuppressedOnTestLikePath(String ruleKey, String fileName) {
     checkFactory = new CheckFactory(new ActiveRulesBuilder().addRule(newActiveRule(ruleKey)).build());
