@@ -73,16 +73,6 @@ public class ClassDeclarationTreeImpl extends PHPTree implements ClassDeclaratio
     this.closeCurlyBraceToken = closeCurlyBraceToken;
   }
 
-  @Nullable
-  @Override
-  public SyntaxToken modifierToken() {
-    return modifiersToken.stream()
-      .filter(modifier -> modifier.text().equalsIgnoreCase("final")
-        || modifier.text().equalsIgnoreCase("abstract"))
-      .findFirst()
-      .orElse(null);
-  }
-
   @Override
   public List<SyntaxToken> modifiersToken() {
     return modifiersToken;

@@ -51,6 +51,14 @@ To submit a contribution, create a pull request for this repository. Please make
 If you have an idea for a rule, but you are not sure that everyone needs it you can implement a [custom rule](https://docs.sonarqube.org/latest/analysis/languages/php/) available only for you.
 
 #### Custom Rules API Changes
+- **4.0**
+    * `ExpressionListStatementTree`, `Tree.Kind#EXPRESSION_LIST_STATEMENT`, and `VisitorCheck#visitExpressionListStatement(...)` were removed. Use `EchoTagStatementTree`, `Tree.Kind#ECHO_TAG_STATEMENT`, and `VisitorCheck#visitEchoTagStatement(...)` instead.
+    * `ParameterTree#type()` was removed. Use `ParameterTree#declaredType()` instead.
+    * `ReturnTypeClauseTree#type()` was removed. Use `ReturnTypeClauseTree#declaredType()` instead.
+    * `ClassPropertyDeclarationTree#typeAnnotation()` was removed. Use `ClassPropertyDeclarationTree#declaredType()` instead.
+    * `FunctionCallTree#arguments()` was removed. Use `FunctionCallTree#callArguments()` instead.
+    * `AnonymousClassTree#arguments()` was removed. Use `AnonymousClassTree#callArguments()` instead.
+    * `ClassDeclarationTree#modifierToken()` and `EnumDeclarationTree#modifierToken()` were removed. Use `modifiersToken()` for full token access, or `isAbstract()`, `isFinal()`, and `isReadOnly()` for semantic checks. `modifiersToken()` is not a drop-in replacement: `modifierToken()` only returned `abstract` or `final`, and returned `null` otherwise, while `modifiersToken()` returns all modifier tokens, including `readonly`.
 - **3.32** (October 2023)
     * Additional `newIssue` endpoint added to the `CheckContext` API interface
 - **3.15** (January 2021)

@@ -42,13 +42,6 @@ public interface ClassPropertyDeclarationTree extends ClassMemberTree, HasAttrib
 
   List<SyntaxToken> modifierTokens();
 
-  /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
-   */
-  @Deprecated(since = "3.11", forRemoval = true)
-  @Nullable
-  TypeTree typeAnnotation();
-
   @Nullable
   DeclaredTypeTree declaredType();
 

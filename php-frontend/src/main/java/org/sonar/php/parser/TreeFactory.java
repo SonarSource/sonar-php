@@ -443,14 +443,14 @@ public class TreeFactory {
     Optional<List<AttributeGroupTree>> attributes,
     Optional<List<SyntaxToken>> modifiers,
     InternalSyntaxToken constToken,
-    DeclaredTypeTree typeAnnotation,
+    DeclaredTypeTree declaredType,
     VariableDeclarationTree firstDeclaration,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalDeclarations,
     InternalSyntaxToken eosToken) {
     return ClassPropertyDeclarationTreeImpl.constant(attributes.or(Collections.emptyList()),
       modifiers.or(Collections.emptyList()),
       constToken,
-      typeAnnotation,
+      declaredType,
       separatedList(firstDeclaration, additionalDeclarations),
       eosToken);
   }
@@ -466,13 +466,13 @@ public class TreeFactory {
   public ClassPropertyDeclarationTree classVariableDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
     List<SyntaxToken> modifierTokens,
-    Optional<DeclaredTypeTree> typeAnnotation,
+    Optional<DeclaredTypeTree> declaredType,
     VariableDeclarationTree firstVariable,
     Optional<List<Tuple<InternalSyntaxToken, VariableDeclarationTree>>> additionalVariables,
     InternalSyntaxToken eosToken) {
     return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
       modifierTokens,
-      typeAnnotation.orNull(),
+      declaredType.orNull(),
       separatedList(firstVariable, additionalVariables),
       null,
       eosToken);
@@ -481,12 +481,12 @@ public class TreeFactory {
   public ClassPropertyDeclarationTree classVariableDeclaration(
     Optional<List<AttributeGroupTree>> attributes,
     List<SyntaxToken> modifierTokens,
-    Optional<DeclaredTypeTree> typeAnnotation,
+    Optional<DeclaredTypeTree> declaredType,
     VariableDeclarationTree variable,
     PropertyHookListTree propertyHookListTree) {
     return ClassPropertyDeclarationTreeImpl.variable(attributes.or(Collections.emptyList()),
       modifierTokens,
-      typeAnnotation.orNull(),
+      declaredType.orNull(),
       separatedList(variable, Optional.absent()),
       propertyHookListTree,
       null);

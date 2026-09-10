@@ -75,10 +75,8 @@ class UsagesTest extends ParsingTestUtils {
         } else if ("__construct".equals(methodName)) {
           testAnonymousClassMethod(scope);
         }
-      } else if (tree.is(Tree.Kind.ANONYMOUS_CLASS)) {
-        if (((AnonymousClassTree) tree).arguments().size() == 2) {
-          testAnonymousClass(scope);
-        }
+      } else if (tree.is(Tree.Kind.ANONYMOUS_CLASS) && ((AnonymousClassTree) tree).callArguments().size() == 2) {
+        testAnonymousClass(scope);
       }
     }
 

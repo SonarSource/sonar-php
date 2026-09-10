@@ -170,7 +170,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotation() {
+  void shouldSupportDeclaredType() {
     ClassPropertyDeclarationTree tree = parse("public int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(((TypeTree) tree.declaredType()).typeName().is(Kind.BUILT_IN_TYPE)).isTrue();
@@ -185,7 +185,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotationClassname() {
+  void shouldSupportDeclaredTypeClassname() {
     ClassPropertyDeclarationTree tree = parse("public MyClass $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(((TypeTree) tree.declaredType()).typeName().is(Kind.NAMESPACE_NAME)).isTrue();
@@ -193,7 +193,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotationSelfParent() {
+  void shouldSupportDeclaredTypeSelfParent() {
     ClassPropertyDeclarationTree tree = parse("public self $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(builtinType(tree)).isEqualTo("self");
@@ -203,7 +203,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportStaticTypeAnnotation() {
+  void shouldSupportStaticDeclaredType() {
     ClassPropertyDeclarationTree tree = parse("public static iterable $staticProp;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(tree.modifierTokens()).extracting(SyntaxToken::text).containsExactly("public", "static");
@@ -211,7 +211,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotationDefaultValue() {
+  void shouldSupportDeclaredTypeDefaultValue() {
     ClassPropertyDeclarationTree tree = parse("private string $str = \"foo\";", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(builtinType(tree)).isEqualTo("string");
@@ -219,7 +219,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotationVar() {
+  void shouldSupportDeclaredTypeVar() {
     ClassPropertyDeclarationTree tree = parse("var bool $flag;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     assertThat(builtinType(tree)).isEqualTo("bool");
@@ -227,7 +227,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
   }
 
   @Test
-  void shouldSupportTypeAnnotationNullable() {
+  void shouldSupportDeclaredTypeNullable() {
     ClassPropertyDeclarationTree tree = parse("public ?int $id;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
     assertThat(tree.is(Kind.CLASS_PROPERTY_DECLARATION)).isTrue();
     TypeTree type = (TypeTree) tree.declaredType();

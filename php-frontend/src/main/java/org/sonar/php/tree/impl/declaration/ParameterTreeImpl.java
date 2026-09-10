@@ -27,7 +27,6 @@ import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.PropertyHookListTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
@@ -94,24 +93,8 @@ public class ParameterTreeImpl extends PHPTree implements ParameterTree {
     return visibility;
   }
 
-  /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
-   */
   @Nullable
   @Override
-  @Deprecated
-  public TypeTree type() {
-    if (type == null) {
-      return null;
-    }
-
-    if (type.is(Kind.TYPE)) {
-      return (TypeTree) type;
-    } else {
-      return ((CombinedTypeTreeImpl) type).types().get(0);
-    }
-  }
-
   public DeclaredTypeTree declaredType() {
     return type;
   }

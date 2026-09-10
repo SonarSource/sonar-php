@@ -24,8 +24,8 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 /**
  * <a href="http://php.net/manual/en/functions.user-defined.php">Function call</a>
  * <pre>
- *   {@link #callee()} {@link #arguments()}
- *   {@link #callee()} ( {@link #arguments()} )
+ *   {@link #callee()} {@link #callArguments()}
+ *   {@link #callee()} ( {@link #callArguments()} )
  * </pre>
  */
 public interface FunctionCallTree extends ExpressionTree {
@@ -37,12 +37,6 @@ public interface FunctionCallTree extends ExpressionTree {
    */
   @Nullable
   SyntaxToken openParenthesisToken();
-
-  /**
-   * @deprecated since 3.11 . Use {@link #callArguments()} instead.
-   */
-  @Deprecated(since = "3.11")
-  SeparatedList<ExpressionTree> arguments();
 
   SeparatedList<CallArgumentTree> callArguments();
 

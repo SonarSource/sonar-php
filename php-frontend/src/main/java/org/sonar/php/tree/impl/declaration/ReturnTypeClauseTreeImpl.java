@@ -23,8 +23,6 @@ import org.sonar.php.utils.collections.IteratorUtils;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.ReturnTypeClauseTree;
-import org.sonar.plugins.php.api.tree.declaration.TypeTree;
-import org.sonar.plugins.php.api.tree.declaration.UnionTypeTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.visitors.VisitorCheck;
 
@@ -57,19 +55,6 @@ public class ReturnTypeClauseTreeImpl extends PHPTree implements ReturnTypeClaus
   @Override
   public SyntaxToken colonToken() {
     return colonToken;
-  }
-
-  /**
-   * @deprecated since 3.11 - Use {@link #declaredType()} instead.
-   */
-  @Override
-  @Deprecated(since = "3.11", forRemoval = true)
-  public TypeTree type() {
-    if (type.is(Kind.TYPE)) {
-      return (TypeTree) type;
-    } else {
-      return ((UnionTypeTree) type).types().get(0);
-    }
   }
 
   @Override
