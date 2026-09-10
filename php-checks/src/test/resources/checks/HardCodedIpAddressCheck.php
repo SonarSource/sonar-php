@@ -16,11 +16,19 @@ function foo($socket) {
   socket_connect($socket, '1.1.1.1', 23); // Noncompliant
 }
 
+const addressList = "1.2.3.4,5.6.7.8"; // Noncompliant
+const addressWithTrailingSpace = "1.2.3.4 "; // Noncompliant
+const addressWithLeadingSpace = " 1.2.3.4"; // Compliant - beginning is stricter than ending
+const addressWithExtraDot = "1.2.3.4."; // Compliant
+
 const localhost = "127.0.0.1"; // Compliant - Loopback address
 const localhostUrl = "ftp://127.0.0.1:22/bla"; // Compliant - exception for localhost
 const notIPAddress = "1.20.33.345"; // Compliant - segment > 255
 const notRouteable = "0.0.0.0"; // Compliant
 
+const versionNumber = "3.0.1.2"; // Noncompliant
+                                 // Cannot distinguish from an IP address :(
+const buildNumber = "145.33.7.12c0"; // Compliant
 
 // IPv6 like strings
 

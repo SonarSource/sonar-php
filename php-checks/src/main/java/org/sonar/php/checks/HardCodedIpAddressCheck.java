@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
@@ -27,7 +28,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 @Rule(key = "S1313")
-public class HardCodedIpAddressCheck extends PHPVisitorCheck {
+public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
 
   private static final String LOOPBACK_IPV4 = "^127(?:\\.\\d+){0,2}\\.\\d+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
@@ -35,7 +36,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6 + "|" + LOOPBACK_IPV4_MAPPED_TO_IPV6);
 
   private static final String PROTOCOL = "((\\w+:)?\\/\\/)?";
-  public static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?!\\d)";
+  public static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?![\\w\\.])";
 
   // @spotless:off
   public static final String IP_V6 = "\\[?(" +
@@ -55,7 +56,7 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck {
     "([0-9a-fA-F]{1,4}:){1,4}:" +
     "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}" +
     "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"+           // 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-    ")(?![\\d\\w:])";
+    ")(?![\\w:])";
   // @spotless:on
 
   private static final Pattern IP_PATTERN = Pattern.compile(String.format("%s(?<ip>((%s)|(%s)))", PROTOCOL, IP_V4, IP_V6));
