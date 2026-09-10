@@ -18,6 +18,7 @@ package org.sonar.php.checks.security;
 
 import java.util.function.Predicate;
 import org.sonar.check.Rule;
+import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.php.checks.utils.type.ArrayAccess;
 import org.sonar.php.checks.utils.type.NewObjectCall;
 import org.sonar.php.checks.utils.type.ObjectMemberFunctionCall;
@@ -27,7 +28,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S3011")
-public class ChangingAccessibilityCheck extends PHPVisitorCheck {
+public class ChangingAccessibilityCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
 
   private static final String UPDATE_MESSAGE = "Make sure that this accessibility update is safe here.";
   private static final String BYPASS_MESSAGE = "Make sure that this accessibility bypass is safe here.";
