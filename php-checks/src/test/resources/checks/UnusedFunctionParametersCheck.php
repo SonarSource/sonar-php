@@ -73,6 +73,30 @@ function f($p1, $p2) {                   // Noncompliant {{Remove the unused fun
     return $p2;
 }
 
+class FuncGetArgsState
+{
+    public function outerFuncGetArgsMustBePreserved($indirectlyUsed)
+    {
+        func_get_args();
+
+        return new class {
+            public function __set($name, $value)
+            {
+            }
+        };
+    }
+
+    public function nestedFuncGetArgsMustNotLeak($unused) // Noncompliant {{Remove the unused function parameter "$unused".}}
+    {
+        return new class {
+            public function __set($name, $value)
+            {
+                func_get_args();
+            }
+        };
+    }
+}
+
 class C {
 
 // Noncompliant@+1 {{Remove the unused function parameter "$p2".}}
