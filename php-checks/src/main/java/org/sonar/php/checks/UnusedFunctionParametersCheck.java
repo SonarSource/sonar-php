@@ -28,12 +28,12 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
-import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
@@ -50,8 +50,8 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionCall(FunctionCallTree tree) {
-    String callee = SourceBuilder.build(tree.callee()).trim();
-    if (callee.equals("func_get_args")) {
+    if (tree.callee() instanceof NamespaceNameTree callee
+      && callee.qualifiedName().equals("func_get_args")) {
       hasFuncGetArgsStack.pop();
       hasFuncGetArgsStack.push(true);
     }
