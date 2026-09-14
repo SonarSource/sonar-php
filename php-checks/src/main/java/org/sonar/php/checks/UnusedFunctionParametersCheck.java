@@ -80,7 +80,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     hasFuncGetArgsStack.push(false);
     super.visitMethodDeclaration(tree);
-    if (!(isExcluded(tree) || hasFuncGetArgsStack.pop())) {
+    if (!(hasFuncGetArgsStack.pop() || isExcluded(tree))) {
       collectConstructorPromotedProperties(tree);
       checkParameters(tree);
     }
