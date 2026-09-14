@@ -42,6 +42,10 @@ function containing_func_get_args_with_only_not_explicitly_used_parameters($p1, 
     $args = func_get_args();
 }
 
+function containing_fully_qualified_func_get_args_with_only_not_explicitly_used_parameters($p1, $p2) {
+    $args = \func_get_args();
+}
+
 function containing_func_get_args_with_some_not_explicitly_used_parameters($p1, $p2, $p3) {
     call($p2);
     print_r(func_get_args());
@@ -376,5 +380,4 @@ class ReadonlyOnlyPromotion {
         echo $this->usedViaThis;
     }
 }
-
 
