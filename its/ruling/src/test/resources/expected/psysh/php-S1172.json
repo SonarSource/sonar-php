@@ -21,9 +21,6 @@
 "psysh:src/TabCompletion/AutoCompleter.php": [
 53
 ],
-"psysh:src/VarDumper/Presenter.php": [
-64
-],
 "psysh:test/Formatter/DocblockFormatterTest.php": [
 34
 ],
