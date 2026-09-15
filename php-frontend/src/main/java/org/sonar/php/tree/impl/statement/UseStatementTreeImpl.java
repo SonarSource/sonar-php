@@ -34,33 +34,24 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
   private final Kind kind;
   private final InternalSyntaxToken useToken;
   private final InternalSyntaxToken useTypeToken;
-  private final NamespaceNameTree prefix;
-  private final InternalSyntaxToken nsSeparatorToken;
-  private final InternalSyntaxToken openCurlyBraceToken;
+  private NamespaceNameTree prefix;
+  private InternalSyntaxToken nsSeparatorToken;
+  private InternalSyntaxToken openCurlyBraceToken;
   private final SeparatedListImpl<UseClauseTree> clauses;
-  private final InternalSyntaxToken closeCurlyBraceToken;
+  private InternalSyntaxToken closeCurlyBraceToken;
   private final InternalSyntaxToken eosToken;
 
   private UseStatementTreeImpl(
     Tree.Kind kind,
     InternalSyntaxToken useToken,
     @Nullable InternalSyntaxToken useTypeToken,
-    @Nullable NamespaceNameTree prefix,
-    @Nullable InternalSyntaxToken nsSeparatorToken,
-    @Nullable InternalSyntaxToken openCurlyBraceToken,
     SeparatedListImpl<UseClauseTree> clauses,
-    @Nullable InternalSyntaxToken closeCurlyBraceToken,
     InternalSyntaxToken eosToken) {
+    this.kind = kind;
     this.useToken = useToken;
     this.useTypeToken = useTypeToken;
-    this.prefix = prefix;
-    this.nsSeparatorToken = nsSeparatorToken;
-    this.openCurlyBraceToken = openCurlyBraceToken;
     this.clauses = clauses;
-    this.closeCurlyBraceToken = closeCurlyBraceToken;
     this.eosToken = eosToken;
-
-    this.kind = kind;
   }
 
   public static UseStatementTreeImpl createUseStatement(
@@ -68,19 +59,26 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     @Nullable InternalSyntaxToken useTypeToken,
     SeparatedListImpl<UseClauseTree> clauses,
     InternalSyntaxToken eosToken) {
-    return new UseStatementTreeImpl(Kind.USE_STATEMENT, useToken, useTypeToken, null, null, null, clauses, null, eosToken);
+    return new UseStatementTreeImpl(Kind.USE_STATEMENT, useToken, useTypeToken, clauses, eosToken);
+  }
+
+  public record GroupPrefix(NamespaceNameTree prefix, InternalSyntaxToken nsSeparatorToken) {
   }
 
   public static UseStatementTreeImpl createGroupUseStatement(
     InternalSyntaxToken useToken,
     @Nullable InternalSyntaxToken useTypeToken,
-    NamespaceNameTree prefix,
-    InternalSyntaxToken nsSeparatorToken,
+    GroupPrefix groupPrefix,
     InternalSyntaxToken openCurlyBraceToken,
     SeparatedListImpl<UseClauseTree> clauses,
     InternalSyntaxToken closeCurlyBraceToken,
     InternalSyntaxToken eosToken) {
-    return new UseStatementTreeImpl(Kind.GROUP_USE_STATEMENT, useToken, useTypeToken, prefix, nsSeparatorToken, openCurlyBraceToken, clauses, closeCurlyBraceToken, eosToken);
+    var tree = new UseStatementTreeImpl(Kind.GROUP_USE_STATEMENT, useToken, useTypeToken, clauses, eosToken);
+    tree.prefix = groupPrefix.prefix();
+    tree.nsSeparatorToken = groupPrefix.nsSeparatorToken();
+    tree.openCurlyBraceToken = openCurlyBraceToken;
+    tree.closeCurlyBraceToken = closeCurlyBraceToken;
+    return tree;
   }
 
   @Override
