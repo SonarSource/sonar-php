@@ -467,3 +467,38 @@ class ReadonlyOnlyPromotion {
         echo $this->usedViaThis;
     }
 }
+
+//------------ POSITIONAL CALLBACK PLACEHOLDERS --------------
+
+$callback = function($placeholder, $used, $trailing) { // Noncompliant {{Remove the unused function parameter "$trailing".}}
+    return $used;
+};
+
+$callback = function($placeholder1, $used1, $placeholder2, $used2, $trailing1, $trailing2) { // Noncompliant 2
+    consume($used1, $used2);
+};
+
+(function($placeholder, $used, $trailing) {            // Noncompliant {{Remove the unused function parameter "$trailing".}}
+    return $used;
+})(1, 2, 3);
+
+$allUnused = function($p1, $p2) {}; // Noncompliant 2
+
+$outer = function($outerPlaceholder, $outerUsed, $outerTrailing) { // Noncompliant {{Remove the unused function parameter "$outerTrailing".}}
+    $inner = function($innerPlaceholder, $innerUsed, $innerTrailing) { // Noncompliant {{Remove the unused function parameter "$innerTrailing".}}
+        return $innerUsed;
+    };
+    return $outerUsed;
+};
+
+function positionalParametersAreStillChecked($unused, $used) // Noncompliant {{Remove the unused function parameter "$unused".}}
+{
+    return $used;
+}
+
+// Accepted FP: removing $namedTrailing would break this named invocation.
+// Just one example. In general, there are several cases where removing trailing unused parameters can break code.
+$callbackWithNamedArguments = function($used, $namedTrailing) { // Noncompliant {{Remove the unused function parameter "$namedTrailing".}}
+    return $used;
+};
+$callbackWithNamedArguments(used: 42, namedTrailing: 'context');
