@@ -71,7 +71,7 @@ public class PhpPrAnalysisTest {
   @ParameterizedTest
   @MethodSource("parameters")
   void prAnalysisLogs(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
-    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    File litsDifferencesFile = FileLocation.of("build/differences").getFile();
 
     // Analyze base commit
     analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile);
@@ -89,7 +89,7 @@ public class PhpPrAnalysisTest {
   @ParameterizedTest
   @MethodSource("parameters")
   void prAnalysisIssues(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
-    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    File litsDifferencesFile = FileLocation.of("build/differences").getFile();
 
     // Analyze base commit
     analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile);
