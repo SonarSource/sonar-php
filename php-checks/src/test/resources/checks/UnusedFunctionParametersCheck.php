@@ -468,6 +468,18 @@ class ReadonlyOnlyPromotion {
     }
 }
 
+class PromotionWithPropertyHook {
+    public function __construct(
+        public string $name {
+            set(string $value) {
+                $this->name = $value;
+            }
+        },
+        $unused, // Noncompliant
+    ) {
+    }
+}
+
 //------------ POSITIONAL CALLBACK PLACEHOLDERS --------------
 
 $callback = function($placeholder, $used, $trailing) { // Noncompliant {{Remove the unused function parameter "$trailing".}}

@@ -85,13 +85,15 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     if (!canDetermineUnusedParameters(tree, scope)) {
       return;
     }
-    List<Symbol> parameters = scope.getSymbols(Symbol.Kind.PARAMETER);
+    List<ParameterTree> parameterTrees = tree.parameters().parameters();
+    List<Symbol> parameters = parameterTrees.stream()
+      .map(parameter -> context().symbolTable().getSymbol(parameter.variableIdentifier()))
+      .toList();
 
     // Anonymous functions are often passed as callbacks, so their positional signature can be constrained by the callback invoker.
     // Do not report unused parameters before the last used one because removing them would shift argument binding.
     // Still report unused trailing parameters because PHP callbacks can ignore extra positional arguments.
     int lastUsedParameterIndex = tree.is(Tree.Kind.FUNCTION_EXPRESSION) ? lastUsedParameterIndex(parameters) : -1;
-    List<ParameterTree> parameterTrees = tree.parameters().parameters();
     List<ParameterTree> unused = new ArrayList<>();
 
     for (int i = 0; i < parameters.size(); i++) {
@@ -197,7 +199,7 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     private static final QualifiedName URL_ROUTABLE = QualifiedName.qualifiedName("Illuminate\\Contracts\\Routing\\UrlRoutable");
     private static final QualifiedName LARAVEL_REQUEST = QualifiedName.qualifiedName("Illuminate\\Http\\Request");
     private static final QualifiedName LARAVEL_FORM_REQUEST = QualifiedName.qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
-    private static final Set<String> RESOURCE_ACTIONS = Set.of("index", "show", "create", "store", "edit", "update", "destroy", "__invoke");
+    private static final Set<String> RESOURCE_ACTIONS = Set.of("index", "show", "create", "store", "edit", "update", "destroy");
 
     /**
      * Filters out parameters likely consumed by Laravel's implicit route-model binding, using controller, action,
