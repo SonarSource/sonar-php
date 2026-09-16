@@ -157,7 +157,7 @@ sonar-php/its/ruling/build/actual/
 ```
 into the directory with the expected issues
 ```
-sonar-php/its/ruling/src/test/resources/expected/php/
+sonar-php/its/ruling/src/test/resources/expected/
 ```
 
 ### Rule Descriptions
