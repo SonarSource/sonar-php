@@ -25,4 +25,10 @@ class UnusedFunctionParametersCheckTest {
   void test() throws Exception {
     CheckVerifier.verify(new UnusedFunctionParametersCheck(), "UnusedFunctionParametersCheck.php");
   }
+
+  @Test
+  void laravelImplicitRouteModelBinding() throws Exception {
+    CheckVerifier.verify(new UnusedFunctionParametersCheck(), "UnusedFunctionParametersCheckLaravel.php");
+  }
+
 }
