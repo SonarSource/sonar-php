@@ -13,6 +13,8 @@ $a = function($p1, $p2) {
     return $p1;
 };
 
+func_get_args(); // Outside a callable, it does not affect S1172.
+
 function f($p1, $p2) {                   // Noncompliant {{Remove the unused function parameter "$p1".}}
   function nestedF($p1, $p2) {           // Noncompliant {{Remove the unused function parameter "$p2".}}
     $p1 = 1;
@@ -40,6 +42,19 @@ function containing_func_get_args_with_one_not_explicitly_used_parameter($p1) {
 
 function containing_func_get_args_with_only_not_explicitly_used_parameters($p1, $p2) {
     $args = func_get_args();
+}
+
+function containing_fully_qualified_func_get_args_with_only_not_explicitly_used_parameters($p1, $p2) {
+    $args = \func_get_args();
+}
+
+function containing_mixed_case_func_get_args_with_only_not_explicitly_used_parameters($p1, $p2) {
+    $args = FuNc_GeT_ArGs();
+}
+
+// Accepted FN: scope-wide suppression also hides $p2, which is not retrieved.
+function containing_func_get_arg($p1, $p2) {
+    return func_get_arg(0);
 }
 
 function containing_func_get_args_with_some_not_explicitly_used_parameters($p1, $p2, $p3) {
@@ -71,6 +86,30 @@ function f($p1, $p2) {                   // Noncompliant {{Remove the unused fun
         func_get_args();
     }
     return $p2;
+}
+
+class FuncGetArgsState
+{
+    public function outerFuncGetArgsMustBePreserved($indirectlyUsed)
+    {
+        func_get_args();
+
+        return new class {
+            public function __set($name, $value)
+            {
+            }
+        };
+    }
+
+    public function nestedFuncGetArgsMustNotLeak($unused) // Noncompliant {{Remove the unused function parameter "$unused".}}
+    {
+        return new class {
+            public function __set($name, $value)
+            {
+                func_get_args();
+            }
+        };
+    }
 }
 
 class C {
@@ -179,6 +218,82 @@ class Foo {
 
 function executionOperator($p) {
   $result = `ls $p`;
+}
+
+function containingDynamicEval($code, $possiblyUsed, $otherwiseUnused) {
+  eval($code);
+}
+
+// Accepted FN: scope-wide suppression also hides the unused $otherwiseUnused.
+function containingConstantEval($possiblyUsed, $otherwiseUnused) {
+  eval('return $possiblyUsed;');
+}
+
+function containingVariableVariable($name, $possiblyUsed, $otherwiseUnused) {
+  return $$name;
+}
+
+// Accepted FN: scope-wide suppression also hides the unused $otherwiseUnused.
+function containingConstantVariableName($possiblyUsed, $otherwiseUnused) {
+  $name = 'possiblyUsed';
+  return $$name;
+}
+
+function containingCompoundVariable($name, $possiblyUsed, $otherwiseUnused) {
+  return ${$name};
+}
+
+function directCompoundStringInterpolation($used, $unused) { // Noncompliant
+  echo "value: ${used}";
+}
+
+function directCompoundHeredocInterpolation($used, $unused) { // Noncompliant
+  echo <<<TEXT
+value: ${used}
+TEXT;
+}
+
+function computedCompoundStringInterpolation($name, $possiblyUsed) {
+  echo "value: ${$name}";
+}
+
+function containingExtract($values, $possiblyUsed, $otherwiseUnused) {
+  extract($values);
+}
+
+function containingInclude($possiblyUsed, $otherwiseUnused) {
+  include 'included.php';
+}
+
+function containingIncludeOnce($possiblyUsed, $otherwiseUnused) {
+  include_once 'included.php';
+}
+
+function containingRequire($possiblyUsed, $otherwiseUnused) {
+  require 'included.php';
+}
+
+function containingRequireOnce($possiblyUsed, $otherwiseUnused) {
+  require_once 'included.php';
+}
+
+function dynamicAccessMustNotLeakIntoNestedScopes($code, $possiblyUsed) {
+  eval($code);
+  $nested = function ($unused) {}; // Noncompliant
+}
+
+function dynamicAccessInNestedScopeMustNotLeakOut($unused) { // Noncompliant
+  $nested = function ($name, $possiblyUsed) {
+    return $$name;
+  };
+}
+
+function dynamicAccessInAnonymousClassConstructorArgument($possiblyUsed, $otherwiseUnused) {
+  return new class(eval('$possiblyUsed')) {
+    public function __construct($value) {
+      echo $value;
+    }
+  };
 }
 
 //------------ INTERFACES--------------
@@ -352,5 +467,3 @@ class ReadonlyOnlyPromotion {
         echo $this->usedViaThis;
     }
 }
-
-

@@ -16,11 +16,12 @@
  */
 package org.sonar.php.checks;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
@@ -28,16 +29,21 @@ import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
-import org.sonar.php.utils.SourceBuilder;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
+import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = UnusedFunctionParametersCheck.KEY)
@@ -45,42 +51,24 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S1172";
   private static final String MESSAGE = "Remove the unused function parameter \"%s\".";
-  private final Deque<Boolean> hasFuncGetArgsStack = new ArrayDeque<>();
   private List<IdentifierTree> constructorPromotedProperties = new ArrayList<>();
 
   @Override
-  public void visitFunctionCall(FunctionCallTree tree) {
-    String callee = SourceBuilder.build(tree.callee()).trim();
-    if (callee.equals("func_get_args")) {
-      hasFuncGetArgsStack.pop();
-      hasFuncGetArgsStack.push(true);
-    }
-    super.visitFunctionCall(tree);
-  }
-
-  @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    hasFuncGetArgsStack.push(false);
     super.visitFunctionDeclaration(tree);
-    if (!hasFuncGetArgsStack.pop()) {
-      checkParameters(tree);
-    }
+    checkParameters(tree);
   }
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {
-    hasFuncGetArgsStack.push(false);
     super.visitFunctionExpression(tree);
-    if (!hasFuncGetArgsStack.pop()) {
-      checkParameters(tree);
-    }
+    checkParameters(tree);
   }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    hasFuncGetArgsStack.push(false);
     super.visitMethodDeclaration(tree);
-    if (!(isExcluded(tree) || hasFuncGetArgsStack.pop())) {
+    if (!isExcluded(tree)) {
       collectConstructorPromotedProperties(tree);
       checkParameters(tree);
     }
@@ -89,19 +77,29 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
 
   private void checkParameters(FunctionTree tree) {
     Scope scope = context().symbolTable().getScopeFor(tree);
-    if (!(scope == null || scope.hasUnresolvedCompact())) {
-      List<IdentifierTree> unused = new ArrayList<>();
+    if (!canDetermineUnusedParameters(tree, scope)) {
+      return;
+    }
+    List<IdentifierTree> unused = new ArrayList<>();
 
-      for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
-        if (!isExcluded(symbol) && symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
-          unused.add(symbol.declaration());
-        }
-      }
-
-      for (IdentifierTree unusedParameter : unused) {
-        context().newIssue(this, unusedParameter, String.format(MESSAGE, unusedParameter.text()));
+    for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
+      if (!isExcluded(symbol) && symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
+        unused.add(symbol.declaration());
       }
     }
+
+    for (IdentifierTree unusedParameter : unused) {
+      context().newIssue(this, unusedParameter, String.format(MESSAGE, unusedParameter.text()));
+    }
+  }
+
+  private static boolean canDetermineUnusedParameters(FunctionTree tree, @Nullable Scope scope) {
+    if (scope == null || scope.hasUnresolvedCompact()) {
+      return false;
+    }
+    PotentialIndirectParameterAccessVisitor visitor = new PotentialIndirectParameterAccessVisitor();
+    tree.body().accept(visitor);
+    return !visitor.hasPotentialIndirectParameterAccess;
   }
 
   private void collectConstructorPromotedProperties(MethodDeclarationTree tree) {
@@ -159,5 +157,72 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       // skip the leading '$'
       .skip(1)
       .allMatch(c -> '_' == c);
+  }
+
+  private static class PotentialIndirectParameterAccessVisitor extends PHPVisitorCheck {
+    private static final Set<String> FUNCTIONS_WITH_POTENTIAL_INDIRECT_PARAMETER_ACCESS = Set.of(
+      "eval",
+      // With collision flags such as EXTR_SKIP, extract() observes existing parameters matching array keys.
+      "extract",
+      "func_get_arg",
+      "func_get_args",
+      "get_defined_vars",
+      "include",
+      "include_once",
+      "require",
+      "require_once");
+
+    private boolean hasPotentialIndirectParameterAccess;
+
+    @Override
+    public void visitFunctionCall(FunctionCallTree tree) {
+      if (tree.callee() instanceof NamespaceNameTree callee) {
+        String functionName = callee.qualifiedName().toLowerCase(Locale.ROOT);
+        if (FUNCTIONS_WITH_POTENTIAL_INDIRECT_PARAMETER_ACCESS.contains(functionName)) {
+          hasPotentialIndirectParameterAccess = true;
+          return;
+        }
+      }
+      super.visitFunctionCall(tree);
+    }
+
+    @Override
+    public void visitVariableVariable(VariableVariableTree tree) {
+      hasPotentialIndirectParameterAccess = true;
+    }
+
+    @Override
+    public void visitCompoundVariable(CompoundVariableTree tree) {
+      // ${foo} directly interpolates $foo; other expressions compute the variable name.
+      if (!tree.variableExpression().is(Tree.Kind.NAME_IDENTIFIER, Tree.Kind.NAMESPACE_NAME)) {
+        hasPotentialIndirectParameterAccess = true;
+      }
+    }
+
+    @Override
+    public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
+      // Do not visit nested functions.
+    }
+
+    @Override
+    public void visitFunctionExpression(FunctionExpressionTree tree) {
+      // Do not visit nested closures.
+    }
+
+    @Override
+    public void visitArrowFunctionExpression(ArrowFunctionExpressionTree tree) {
+      // Do not visit nested arrow functions.
+    }
+
+    @Override
+    public void visitClassDeclaration(ClassDeclarationTree tree) {
+      // Do not visit nested classes.
+    }
+
+    @Override
+    public void visitAnonymousClass(AnonymousClassTree tree) {
+      // Constructor arguments are evaluated in the enclosing scope, class members are not.
+      scan(tree.callArguments());
+    }
   }
 }
