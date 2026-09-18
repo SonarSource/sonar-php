@@ -4,6 +4,13 @@ body. While this might seem harmless at first glance, it can lead to confusion a
 such parameters, the function’s behavior will be the same, but the programmer’s intention won’t be clearly expressed anymore. Therefore, removing
 function parameters that are not being utilized is considered best practice.</p>
 <h3>Exceptions</h3>
+<p>A parameter whose name consists only of underscores, such as <code>$_</code> or <code>$__</code>, is considered intentionally unused and is ignored
+by the rule. This convention can be used when a signature must be preserved and the parameter name is not part of the external contract.</p>
+<pre>
+function doSomething($_, $value) { // no issue reported on $_
+  return compute($value);
+}
+</pre>
 <p>Functions in classes that override a class or implement interfaces are ignored.</p>
 <pre>
 class C extends B {
