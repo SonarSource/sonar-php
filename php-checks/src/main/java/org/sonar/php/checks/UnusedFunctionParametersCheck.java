@@ -80,10 +80,21 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     if (!canDetermineUnusedParameters(tree, scope)) {
       return;
     }
+    List<Symbol> parameters = scope.getSymbols(Symbol.Kind.PARAMETER);
+
+    // Anonymous functions are often passed as callbacks, so their positional signature can be constrained by the callback invoker.
+    // Do not report unused parameters before the last used one because removing them would shift argument binding.
+    // Still report unused trailing parameters because PHP callbacks can ignore extra positional arguments.
+    int lastUsedParameterIndex = tree.is(Tree.Kind.FUNCTION_EXPRESSION) ? lastUsedParameterIndex(parameters) : -1;
+
     List<IdentifierTree> unused = new ArrayList<>();
 
-    for (Symbol symbol : scope.getSymbols(Symbol.Kind.PARAMETER)) {
-      if (!isExcluded(symbol) && symbol.usages().isEmpty() && !constructorPromotedProperties.contains(symbol.declaration())) {
+    for (int i = 0; i < parameters.size(); i++) {
+      Symbol symbol = parameters.get(i);
+      if (i > lastUsedParameterIndex
+        && !isExcluded(symbol)
+        && symbol.usages().isEmpty()
+        && !constructorPromotedProperties.contains(symbol.declaration())) {
         unused.add(symbol.declaration());
       }
     }
@@ -91,6 +102,15 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     for (IdentifierTree unusedParameter : unused) {
       context().newIssue(this, unusedParameter, String.format(MESSAGE, unusedParameter.text()));
     }
+  }
+
+  private static int lastUsedParameterIndex(List<Symbol> parameters) {
+    for (int i = parameters.size() - 1; i >= 0; i--) {
+      if (!parameters.get(i).usages().isEmpty()) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   private static boolean canDetermineUnusedParameters(FunctionTree tree, @Nullable Scope scope) {

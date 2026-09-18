@@ -17,23 +17,16 @@
 "monica:app/Providers/DAVServiceProvider.php": [
 53
 ],
-"monica:app/Providers/RouteServiceProvider.php": [
-108
-],
 "monica:app/Services/Account/Activity/ActivityStatisticService.php": [
-101,
-106
+101
 ],
 "monica:app/Services/Account/Photo/UploadPhoto.php": [
-23,
 23,
 23
 ],
 "monica:app/Services/DavClient/Utils/AddressBookSynchronizer.php": [
 60,
-100,
-128,
-239
+100
 ],
 "monica:app/Services/DispatchableService.php": [
 47

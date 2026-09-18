@@ -5,8 +5,5 @@
 "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php": [
 2121,
 2148
-],
-"PhpSpreadsheet:tests/PhpSpreadsheetTests/Helper/HtmlTest.php": [
-41
 ]
 }
