@@ -124,4 +124,29 @@ public class FunctionExpressionTreeImpl extends PHPTree implements FunctionExpre
     visitor.visitFunctionExpression(this);
   }
 
+  /**
+   * Utility class hidden from API (it's mainly created to reduce parameter count in grammar)
+   */
+  public static class FunctionExpressionHeader {
+
+    private final List<AttributeGroupTree> attributeGroups;
+    private final InternalSyntaxToken staticToken;
+
+    public FunctionExpressionHeader(
+      List<AttributeGroupTree> attributeGroups,
+      @Nullable InternalSyntaxToken staticToken) {
+      this.attributeGroups = attributeGroups;
+      this.staticToken = staticToken;
+    }
+
+    public List<AttributeGroupTree> attributeGroups() {
+      return attributeGroups;
+    }
+
+    @Nullable
+    public InternalSyntaxToken staticToken() {
+      return staticToken;
+    }
+  }
+
 }
