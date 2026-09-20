@@ -18,7 +18,6 @@ package org.sonar.php.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import org.sonar.check.Rule;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.plugins.php.api.tree.Tree;
@@ -34,6 +33,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
   public static final String KEY = "S1124";
 
   private static final String MESSAGE = "Reorder the modifiers to comply with the PSR2 standard.";
+  private static final String SET_VISIBILITY_SUFFIX = "(set)";
 
   private static final String[] EXPECTED_ORDER = {
     PHPKeyword.FINAL.getValue(),
@@ -41,6 +41,9 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
     PHPKeyword.PUBLIC.getValue(),
     PHPKeyword.PROTECTED.getValue(),
     PHPKeyword.PRIVATE.getValue(),
+    PHPKeyword.PUBLIC.getValue() + SET_VISIBILITY_SUFFIX,
+    PHPKeyword.PROTECTED.getValue() + SET_VISIBILITY_SUFFIX,
+    PHPKeyword.PRIVATE.getValue() + SET_VISIBILITY_SUFFIX,
     PHPKeyword.READONLY.getValue(),
     PHPKeyword.STATIC.getValue()};
 
@@ -62,8 +65,7 @@ public class ModifiersOrderCheck extends PHPSubscriptionCheck {
     if (modifiers.size() > 1) {
       int i = 0;
       for (SyntaxToken modifier : modifiers) {
-        String normalizedModifier = modifier.text().toLowerCase(Locale.ENGLISH);
-        while (i < EXPECTED_ORDER.length && !EXPECTED_ORDER[i].equals(normalizedModifier)) {
+        while (i < EXPECTED_ORDER.length && !EXPECTED_ORDER[i].equalsIgnoreCase(modifier.text())) {
           i++;
         }
       }
