@@ -276,7 +276,9 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
      * Laravel Actions dispatches to {@code asController} when declared, otherwise
      * to {@code handle}. The distinctive
      * {@code asController} name is sufficient evidence by itself.
-     * For the common {@code handle} method name we additionally require a package trait or a conventional {@code Actions} namespace in the class hierarchy, in order to reduce the chance of misclassification
+     * For the common {@code handle} method name we additionally require a package
+     * trait or a conventional {@code Actions} namespace in the class hierarchy,
+     * in order to reduce the chance of misclassification
      */
     private static boolean isLaravelActionEntryPoint(MethodDeclarationTree method) {
       if (!isPublicNonStatic(method) || !(method.getParent() instanceof ClassDeclarationTree owner)) {

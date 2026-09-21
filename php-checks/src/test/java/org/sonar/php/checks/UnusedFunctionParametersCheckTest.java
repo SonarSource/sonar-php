@@ -22,17 +22,17 @@ import org.sonar.plugins.php.CheckVerifier;
 class UnusedFunctionParametersCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new UnusedFunctionParametersCheck(), "UnusedFunctionParametersCheck.php");
   }
 
   @Test
-  void laravelImplicitRouteModelBinding() throws Exception {
+  void laravelImplicitRouteModelBinding() {
     CheckVerifier.verify(new UnusedFunctionParametersCheck(), "UnusedFunctionParametersCheckLaravel.php");
   }
 
   @Test
-  void laravelActionsImplicitRouteModelBinding() throws Exception {
+  void laravelActionsImplicitRouteModelBinding() {
     CheckVerifier.verify(new UnusedFunctionParametersCheck(), "UnusedFunctionParametersCheckLaravelActions.php");
   }
 
