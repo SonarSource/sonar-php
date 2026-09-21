@@ -14,4 +14,14 @@ abstract class Foo
     
     public $x = 1; // OK
     var $y = 1;    // OK
+
+    // PHP asymmetric visibility
+    public private(set) string $name; // OK
+    abstract public protected(set) string $abstractName { get; set; } // OK
+    public private(set) readonly string $readonlyName; // OK
+    PUBLIC PRIVATE(SET) string $upperCaseName; // OK
+    private(set) public string $misorderedName; // Noncompliant
+    // Asymmetric visibility for static properties is supported since PHP 8.5.
+    public private(set) static string $staticName; // OK
+    public static private(set) string $misorderedStaticName; // Noncompliant
 }
