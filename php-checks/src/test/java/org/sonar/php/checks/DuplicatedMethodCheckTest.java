@@ -44,13 +44,14 @@ class DuplicatedMethodCheckTest {
       "private string $value;" +
         "public string $publicValue;" +
         "public function getValue(): string { return $this->value; }" +
+        "public function getValueWithoutType() { return $this->value; }" +
         "public function getWithParameter($parameter): string { return $this->value; }" +
         "protected function getProtected(): string { return $this->value; }" +
         "public static function getStatic(): string { return $this->value; }" +
         "public function getPublicValue(): string { return $this->publicValue; }" +
         "public function getDynamicValue(): string { return $this->dynamicValue; }" +
         "public function getFromCall(): string { return loadValue(); }",
-      "getValue");
+      "getValue", "getValueWithoutType");
   }
 
   @Test
@@ -58,11 +59,13 @@ class DuplicatedMethodCheckTest {
     assertAccessors(
       "private bool $value;" +
         "public function isValue(): bool { return $this->value; }" +
+        "public function hasValue(): bool { return $this->value; }" +
+        "public function canChangeValue(): bool { return $this->value; }" +
         "public function isValueWithoutType() { return $this->value; }" +
         "public function isNullableValue(): ?bool { return $this->value; }" +
         "public function isStringValue(): string { return $this->value; }" +
         "public function isValueFromCall(): bool { return loadValue(); }",
-      "isValue", "isValueWithoutType", "isNullableValue");
+      "isValue", "hasValue", "canChangeValue", "isValueWithoutType", "isNullableValue");
   }
 
   @Test

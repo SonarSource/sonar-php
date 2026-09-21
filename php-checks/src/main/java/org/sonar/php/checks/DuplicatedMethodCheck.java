@@ -213,7 +213,8 @@ public class DuplicatedMethodCheck extends PHPVisitorCheck {
 
     private boolean isGetter(MethodDeclarationTree tree, StatementTree statement) {
       String methodName = tree.name().text();
-      return (methodName.startsWith("get") || (methodName.startsWith("is") && hasCompatibleReturnType(tree, "bool")))
+      boolean hasBooleanGetterPrefix = methodName.startsWith("is") || methodName.startsWith("has") || methodName.startsWith("can");
+      return (methodName.startsWith("get") || (hasBooleanGetterPrefix && hasCompatibleReturnType(tree, "bool")))
         && tree.parameters().parameters().isEmpty() && statement instanceof ReturnStatementTree returnStatement &&
         isDeclaredNonPublicInstanceProperty(returnStatement.expression());
     }
