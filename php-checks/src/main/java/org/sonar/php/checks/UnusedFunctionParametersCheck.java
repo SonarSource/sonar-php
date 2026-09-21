@@ -27,16 +27,21 @@ import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.symbols.ClassSymbol;
 import org.sonar.php.symbols.MethodSymbol;
 import org.sonar.php.symbols.Symbols;
+import org.sonar.php.symbols.Trilean;
 import org.sonar.php.symbols.Visibility;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.plugins.php.api.symbols.QualifiedName;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.DeclaredTypeTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeNameTree;
+import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.ArrowFunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -44,6 +49,7 @@ import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
+import org.sonar.plugins.php.api.tree.statement.UseTraitDeclarationTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = UnusedFunctionParametersCheck.KEY)
@@ -80,14 +86,16 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
     if (!canDetermineUnusedParameters(tree, scope)) {
       return;
     }
-    List<Symbol> parameters = scope.getSymbols(Symbol.Kind.PARAMETER);
+    List<ParameterTree> parameterTrees = tree.parameters().parameters();
+    List<Symbol> parameters = parameterTrees.stream()
+      .map(parameter -> context().symbolTable().getSymbol(parameter.variableIdentifier()))
+      .toList();
 
     // Anonymous functions are often passed as callbacks, so their positional signature can be constrained by the callback invoker.
     // Do not report unused parameters before the last used one because removing them would shift argument binding.
     // Still report unused trailing parameters because PHP callbacks can ignore extra positional arguments.
     int lastUsedParameterIndex = tree.is(Tree.Kind.FUNCTION_EXPRESSION) ? lastUsedParameterIndex(parameters) : -1;
-
-    List<IdentifierTree> unused = new ArrayList<>();
+    List<ParameterTree> unused = new ArrayList<>();
 
     for (int i = 0; i < parameters.size(); i++) {
       Symbol symbol = parameters.get(i);
@@ -95,12 +103,19 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
         && !isExcluded(symbol)
         && symbol.usages().isEmpty()
         && !constructorPromotedProperties.contains(symbol.declaration())) {
-        unused.add(symbol.declaration());
+        unused.add(parameterTrees.get(i));
       }
     }
 
-    for (IdentifierTree unusedParameter : unused) {
-      context().newIssue(this, unusedParameter, String.format(MESSAGE, unusedParameter.text()));
+    if (unused.isEmpty()) {
+      return;
+    }
+
+    List<ParameterTree> parametersToReport = LaravelRouteModelBindingHeuristic.parametersToReport(tree, unused);
+
+    for (ParameterTree parameter : parametersToReport) {
+      IdentifierTree declaration = parameter.variableIdentifier().variableExpression();
+      context().newIssue(this, declaration, String.format(MESSAGE, declaration.text()));
     }
   }
 
@@ -177,6 +192,167 @@ public class UnusedFunctionParametersCheck extends PHPVisitorCheck {
       // skip the leading '$'
       .skip(1)
       .allMatch(c -> '_' == c);
+  }
+
+  private static class LaravelRouteModelBindingHeuristic {
+    private static final QualifiedName LARAVEL_CONTROLLER = QualifiedName.qualifiedName("Illuminate\\Routing\\Controller");
+    private static final QualifiedName ELOQUENT_MODEL = QualifiedName.qualifiedName("Illuminate\\Database\\Eloquent\\Model");
+    private static final QualifiedName URL_ROUTABLE = QualifiedName.qualifiedName("Illuminate\\Contracts\\Routing\\UrlRoutable");
+    private static final QualifiedName LARAVEL_REQUEST = QualifiedName.qualifiedName("Illuminate\\Http\\Request");
+    private static final QualifiedName LARAVEL_FORM_REQUEST = QualifiedName.qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");
+    private static final Set<QualifiedName> LARAVEL_ACTION_TRAITS = Set.of(
+      QualifiedName.qualifiedName("Lorisleiva\\Actions\\Concerns\\AsAction"),
+      QualifiedName.qualifiedName("Lorisleiva\\Actions\\Concerns\\AsController"));
+    private static final Set<String> RESOURCE_ACTIONS = Set.of("index", "show", "create", "store", "edit", "update", "destroy");
+
+    /**
+     * Filters out parameters likely consumed by Laravel's implicit route-model binding, using controller, action,
+     * and model-type evidence available during single-file analysis.
+     */
+    private static List<ParameterTree> parametersToReport(FunctionTree tree, List<ParameterTree> unusedParameters) {
+      if (!(tree instanceof MethodDeclarationTree method) || !isPotentialRouteAction(method)) {
+        return unusedParameters;
+      }
+
+      return unusedParameters.stream()
+        .filter(parameter -> !isPotentialRouteModelParameter(parameter))
+        .toList();
+    }
+
+    private static boolean isPotentialRouteModelParameter(ParameterTree parameter) {
+      NamespaceNameTree parameterType = classType(parameter);
+      if (parameterType == null) {
+        return false;
+      }
+
+      ClassSymbol typeSymbol = Symbols.getClass(parameterType);
+      Trilean isRouteBindable = typeSymbol.isSubTypeOf(ELOQUENT_MODEL, URL_ROUTABLE);
+      if (isRouteBindable.isTrue()) {
+        return true;
+      }
+
+      return isRouteBindable == Trilean.UNKNOWN && hasModelNamespaceSegment(typeSymbol.qualifiedName());
+    }
+
+    private static boolean isPotentialRouteAction(MethodDeclarationTree method) {
+      return isPotentialControllerAction(method) || isLaravelActionEntryPoint(method);
+    }
+
+    private static boolean isPublicNonStatic(MethodDeclarationTree method) {
+      return Symbols.get(method).visibility() == Visibility.PUBLIC && !CheckUtils.isStatic(method);
+    }
+
+    /**
+     * Laravel does not require controllers to extend a framework base class, and route registrations are often in
+     * another file. Identify likely controller actions from information available during single-file analysis:
+     * - The method is public and non-static.
+     * - The declaring class either inherits from {@code Illuminate\Routing\Controller}, or its qualified name
+     * contains {@code Http\Controllers} and its simple name ends with {@code Controller}.
+     * - The method either has a conventional resource-action name or declares a Request-like parameter.
+     * Combining these signals avoids treating arbitrary methods that merely accept an Eloquent model as route
+     * actions.
+     */
+    private static boolean isPotentialControllerAction(MethodDeclarationTree method) {
+      if (!isPublicNonStatic(method)) {
+        return false;
+      }
+
+      MethodSymbol methodSymbol = Symbols.get(method);
+      ClassSymbol owner = methodSymbol.owner();
+      QualifiedName ownerName = owner.qualifiedName();
+      String qualifiedOwnerName = "\\" + ownerName.toString().toLowerCase(Locale.ROOT) + "\\";
+      boolean hasControllerRole = owner.isSubTypeOf(LARAVEL_CONTROLLER).isTrue()
+        || (ownerName.simpleName().toLowerCase(Locale.ROOT).endsWith("controller")
+          && qualifiedOwnerName.contains("\\http\\controllers\\"));
+
+      return hasControllerRole
+        && (RESOURCE_ACTIONS.contains(method.name().text().toLowerCase(Locale.ROOT))
+          || method.parameters().parameters().stream().anyMatch(LaravelRouteModelBindingHeuristic::isRequestLikeParameter));
+    }
+
+    /**
+     * Identifies entry points exposed by the Laravel Actions package. The method
+     * must be public and non-static.
+     * Laravel Actions dispatches to {@code asController} when declared, otherwise
+     * to {@code handle}. The distinctive
+     * {@code asController} name is sufficient evidence by itself.
+     * For the common {@code handle} method name we additionally require a package
+     * trait or a conventional {@code Actions} namespace in the class hierarchy,
+     * in order to reduce the chance of misclassification
+     */
+    private static boolean isLaravelActionEntryPoint(MethodDeclarationTree method) {
+      if (!isPublicNonStatic(method) || !(method.getParent() instanceof ClassDeclarationTree owner)) {
+        return false;
+      }
+
+      String methodName = method.name().text();
+      return "asController".equalsIgnoreCase(methodName)
+        || ("handle".equalsIgnoreCase(methodName)
+          && !declaresMethod(owner, "asController")
+          && (usesLaravelActionTrait(owner) || hasActionClassShape(Symbols.get(owner))));
+    }
+
+    private static boolean usesLaravelActionTrait(ClassDeclarationTree owner) {
+      return owner.members().stream()
+        .filter(UseTraitDeclarationTree.class::isInstance)
+        .map(UseTraitDeclarationTree.class::cast)
+        .flatMap(useTrait -> useTrait.traits().stream())
+        .map(Symbols::getClass)
+        .map(ClassSymbol::qualifiedName)
+        .anyMatch(LARAVEL_ACTION_TRAITS::contains);
+    }
+
+    /**
+     * Checks whether the class or one of its ancestors belongs to a conventional {@code Actions} namespace.
+     */
+    private static boolean hasActionClassShape(ClassSymbol owner) {
+      return owner.allSuperTypes().stream()
+        .map(ClassSymbol::qualifiedName)
+        // QualifiedName values are normalized to lowercase.
+        .map(className -> "\\" + className + "\\")
+        .anyMatch(qualifiedName -> qualifiedName.contains("\\actions\\"));
+    }
+
+    private static boolean declaresMethod(ClassDeclarationTree owner, String methodName) {
+      return owner.members().stream()
+        .filter(MethodDeclarationTree.class::isInstance)
+        .map(MethodDeclarationTree.class::cast)
+        .anyMatch(method -> method.name().text().equalsIgnoreCase(methodName));
+    }
+
+    private static boolean isRequestLikeParameter(ParameterTree parameter) {
+      NamespaceNameTree type = classType(parameter);
+      if (type == null) {
+        return false;
+      }
+
+      ClassSymbol typeSymbol = Symbols.getClass(type);
+      Trilean isLaravelRequest = typeSymbol.isSubTypeOf(LARAVEL_REQUEST, LARAVEL_FORM_REQUEST);
+      if (isLaravelRequest.isTrue()) {
+        return true;
+      }
+
+      return isLaravelRequest == Trilean.UNKNOWN
+        && typeSymbol.qualifiedName().simpleName().toLowerCase(Locale.ROOT).endsWith("request");
+    }
+
+    @Nullable
+    private static NamespaceNameTree classType(ParameterTree parameter) {
+      DeclaredTypeTree declaredType = parameter.declaredType();
+      if (declaredType instanceof TypeTree type) {
+        TypeNameTree typeName = type.typeName();
+        if (typeName instanceof NamespaceNameTree namespaceName) {
+          return namespaceName;
+        }
+      }
+      return null;
+    }
+
+    private static boolean hasModelNamespaceSegment(QualifiedName typeName) {
+      // In IDE analysis the model declaration is usually unavailable, but its imported qualified name is known.
+      String qualifiedName = "\\" + typeName.toString().toLowerCase(Locale.ROOT) + "\\";
+      return qualifiedName.contains("\\model\\") || qualifiedName.contains("\\models\\");
+    }
   }
 
   private static class PotentialIndirectParameterAccessVisitor extends PHPVisitorCheck {
