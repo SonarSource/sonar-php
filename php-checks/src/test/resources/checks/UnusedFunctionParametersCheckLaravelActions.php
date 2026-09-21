@@ -140,7 +140,8 @@ use App\Models\Account;
 
 class InheritedAccountHandler extends BaseAction
 {
-    // The action role is inherited from a parent class in another namespace.
+    // BaseAction is defined in an Actions namespace, so its subclass is likely a Laravel Actions class.
+    // Therefore, its model parameter is suppressed.
     public function handle(Account $account) // Compliant
     {
     }
