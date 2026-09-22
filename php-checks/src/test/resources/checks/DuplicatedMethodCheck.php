@@ -130,6 +130,8 @@ class B {
 class C {
    private $x;
    private $y;
+   private bool $enabled;
+   private bool $visible;
 
  public function __call($method, $args)
     {
@@ -141,22 +143,22 @@ class C {
     }
 
     public function getXprop() {
-       return $x;
+       return $this->x;
     }
     public function getYprop() { // Noncompliant
-       return $x;
+       return $this->x;
     }
-    public function setXprop($x) {
+    public function setXprop($x): void {
        $this->x = $x;
     }
-    public function setYprop($x) { // Noncompliant
+    public function setYprop($x): void { // Noncompliant
        $this->x = $x;
     }
-    public function isXprop() {
-       return $x == 0;
+    public function isEnabled(): bool {
+       return $this->enabled;
     }
-    public function isYprop() { // Noncompliant
-       return $x == 0;
+    public function isVisible(): bool { // Noncompliant
+       return $this->enabled;
     }
 
     public function emptyMethod() {
@@ -206,31 +208,10 @@ function myFunctionSmall($a, $lot, $of, $params, $again) : array // OK, not rais
 }
 
 class D {
-    public function getAprop() {
-       return null;
+    public function getFirst($id) {
+        return $this->load($id);
     }
-    public function getA2prop() {
-       return null;
-    }
-
-    public function getXprop() {
-       return [];
-    }
-    public function getX2prop() {
-       return [];
-    }
-
-    public function getYprop() {
-       throw new \LogicException("Not implemented");
-    }
-    public function getY2prop() {
-       throw new \LogicException("Not implemented");
-    }
-
-    public function getZprop() {
-       return new C();
-    }
-    public function getZ2prop() {
-       return new C();
+    public function getSecond($id) { // Compliant, this one-statement method is not an accessor
+        return $this->load($id);
     }
 }
