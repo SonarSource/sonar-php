@@ -20,6 +20,7 @@ import com.sonar.sslr.api.typed.GrammarBuilder;
 import org.sonar.php.api.PHPKeyword;
 import org.sonar.php.api.PHPPunctuator;
 import org.sonar.php.tree.impl.SeparatedListImpl;
+import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl.FunctionExpressionHeader;
 import org.sonar.php.tree.impl.expression.HeredocStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.lexical.InternalSyntaxToken;
 import org.sonar.php.tree.impl.statement.DeclareStatementTreeImpl.DeclareStatementHead;
@@ -993,8 +994,7 @@ public class PHPGrammar {
         b.zeroOrMore(INNER_STATEMENT()),
         b.zeroOrMore(ALTERNATIVE_ELSEIF_CLAUSE()),
         b.optional(ALTERNATIVE_ELSE_CLAUSE()),
-        b.token(PHPKeyword.ENDIF),
-        EOS()));
+        f.newTuple(b.token(PHPKeyword.ENDIF), EOS())));
   }
 
   public ElseClauseTree ELSE_CLAUSE() {
@@ -1888,11 +1888,17 @@ public class PHPGrammar {
         f.arrayPair2(REFERENCE_VARIABLE())));
   }
 
+  public FunctionExpressionHeader FUNCTION_EXPRESSION_HEADER() {
+    return b.<FunctionExpressionHeader>nonterminal().is(
+      f.functionExpressionHeader(
+        b.zeroOrMore(ATTRIBUTE_GROUP()),
+        b.optional(b.token(STATIC))));
+  }
+
   public FunctionExpressionTree FUNCTION_EXPRESSION() {
     return b.<FunctionExpressionTree>nonterminal(Kind.FUNCTION_EXPRESSION).is(
       f.functionExpression(
-        b.zeroOrMore(ATTRIBUTE_GROUP()),
-        b.optional(b.token(STATIC)),
+        FUNCTION_EXPRESSION_HEADER(),
         b.token(FUNCTION),
         b.optional(b.token(AMPERSAND)),
         PARAMETER_LIST(),
@@ -1910,8 +1916,7 @@ public class PHPGrammar {
         b.optional(b.token(AMPERSAND)),
         PARAMETER_LIST(),
         b.optional(RETURN_TYPE_CLAUSE()),
-        b.token(DOUBLEARROW),
-        EXPRESSION()));
+        f.newTuple(b.token(DOUBLEARROW), EXPRESSION())));
   }
 
   public NewExpressionTree NEW_EXPRESSION() {

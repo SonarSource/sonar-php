@@ -81,6 +81,7 @@ import org.sonar.php.tree.impl.expression.ExpandableStringCharactersTreeImpl;
 import org.sonar.php.tree.impl.expression.ExpandableStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
 import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl;
+import org.sonar.php.tree.impl.expression.FunctionExpressionTreeImpl.FunctionExpressionHeader;
 import org.sonar.php.tree.impl.expression.HeredocStringLiteralTreeImpl;
 import org.sonar.php.tree.impl.expression.LexicalVariablesTreeImpl;
 import org.sonar.php.tree.impl.expression.ListExpressionTreeImpl;
@@ -769,8 +770,7 @@ public class TreeFactory {
     return UseStatementTreeImpl.createGroupUseStatement(
       useToken,
       useTypeToken.orNull(),
-      prefix,
-      nsSeparator,
+      new UseStatementTreeImpl.GroupPrefix(prefix, nsSeparator),
       lCurlyBrace,
       declarations,
       rCurlyBrace,
@@ -1001,7 +1001,7 @@ public class TreeFactory {
   public IfStatementTree alternativeIfStatement(
     InternalSyntaxToken ifToken, ParenthesisedExpressionTree condition, InternalSyntaxToken colonToken,
     Optional<List<StatementTree>> statements, Optional<List<ElseifClauseTree>> elseifClauses, Optional<ElseClauseTree> elseClause,
-    InternalSyntaxToken endIfToken, InternalSyntaxToken eosToken) {
+    Tuple<InternalSyntaxToken, InternalSyntaxToken> endIfTokenAndEos) {
     return new IfStatementTreeImpl(
       ifToken,
       condition,
@@ -1009,8 +1009,8 @@ public class TreeFactory {
       interposeEchoTagStatements(optionalList(statements)),
       optionalList(elseifClauses),
       elseClause.orNull(),
-      endIfToken,
-      eosToken);
+      endIfTokenAndEos.first(),
+      endIfTokenAndEos.second());
   }
 
   public ElseClauseTree alternativeElseClause(InternalSyntaxToken elseToken, InternalSyntaxToken colonToken, Optional<List<StatementTree>> statements) {
@@ -1645,9 +1645,14 @@ public class TreeFactory {
       closeBracket);
   }
 
-  public FunctionExpressionTree functionExpression(
+  public FunctionExpressionHeader functionExpressionHeader(
     Optional<List<AttributeGroupTree>> attributes,
-    Optional<InternalSyntaxToken> staticToken,
+    Optional<InternalSyntaxToken> staticToken) {
+    return new FunctionExpressionHeader(attributes.or(Collections.emptyList()), staticToken.orNull());
+  }
+
+  public FunctionExpressionTree functionExpression(
+    FunctionExpressionHeader header,
     InternalSyntaxToken functionToken,
     Optional<InternalSyntaxToken> ampersandToken,
     ParameterListTree parameters,
@@ -1656,8 +1661,8 @@ public class TreeFactory {
     BlockTree block) {
 
     return new FunctionExpressionTreeImpl(
-      attributes.or(Collections.emptyList()),
-      staticToken.orNull(),
+      header.attributeGroups(),
+      header.staticToken(),
       functionToken,
       ampersandToken.orNull(),
       parameters,
@@ -1673,8 +1678,7 @@ public class TreeFactory {
     Optional<InternalSyntaxToken> ampersandToken,
     ParameterListTree parameters,
     Optional<ReturnTypeClauseTree> returnTypeClause,
-    InternalSyntaxToken doubleArrowToken,
-    ExpressionTree body) {
+    Tuple<InternalSyntaxToken, ExpressionTree> doubleArrowAndBody) {
     return new ArrowFunctionExpressionTreeImpl(
       attributes.or(Collections.emptyList()),
       staticToken.orNull(),
@@ -1682,8 +1686,8 @@ public class TreeFactory {
       ampersandToken.orNull(),
       parameters,
       returnTypeClause.orNull(),
-      doubleArrowToken,
-      body);
+      doubleArrowAndBody.first(),
+      doubleArrowAndBody.second());
   }
 
   public NewExpressionTree newExpression(InternalSyntaxToken newToken, ExpressionTree expression) {
