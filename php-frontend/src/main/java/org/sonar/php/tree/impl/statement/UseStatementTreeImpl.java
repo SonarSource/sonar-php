@@ -62,6 +62,9 @@ public class UseStatementTreeImpl extends PHPTree implements UseStatementTree {
     return new UseStatementTreeImpl(Kind.USE_STATEMENT, useToken, useTypeToken, clauses, eosToken);
   }
 
+  /**
+   * Utility class hidden from API (it's mainly created to reduce parameter count in grammar)
+   */
   public record GroupPrefix(NamespaceNameTree prefix, InternalSyntaxToken nsSeparatorToken) {
   }
 
