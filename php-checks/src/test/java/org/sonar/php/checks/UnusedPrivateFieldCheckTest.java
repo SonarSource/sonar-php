@@ -30,4 +30,9 @@ class UnusedPrivateFieldCheckTest {
   void shouldSuppressUnusedPrivateMembersOnDynamicAccess() {
     CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckDynamic.php");
   }
+
+  @Test
+  void shouldSuppressUnusedPrivateFieldsWithDoctrineORMMappings() {
+    CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckDoctrine.php");
+  }
 }
