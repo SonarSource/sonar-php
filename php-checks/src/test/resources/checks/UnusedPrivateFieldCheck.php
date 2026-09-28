@@ -159,3 +159,15 @@ class CallsMethodNotProperty {
     $this->method();
   }
 }
+
+class UnusedMessages {
+  private const UNUSED = 'value'; // Noncompliant {{Remove this unused "UNUSED" private field.}}
+  private $field; // Noncompliant {{Remove this unused "$field" private field.}}
+
+  public function __construct(
+    private readonly string $forwarded, // Noncompliant {{Remove property promotion from this "$forwarded" parameter, since the field it creates is not used elsewhere in the class.}}
+    private string $unusedPromotion // Noncompliant {{Remove this unused "$unusedPromotion" private field.}}
+  ) {
+    echo $forwarded;
+  }
+}
