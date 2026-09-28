@@ -36,6 +36,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.HasAttributes;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -55,7 +56,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 @Rule(key = "S1068")
 public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Remove this unused \"%s\" private field.";
+  private static final String FIELD_MESSAGE = "Remove this unused \"%s\" private field.";
+  private static final String PROMOTED_PROPERTY_MESSAGE = "Remove property promotion from this \"%s\" parameter, since the field it creates is not used elsewhere in the class.";
 
   private static final Set<String> constantUsedBeforeInit = new HashSet<>();
   private final PersistenceMapping persistenceMapping = new PersistenceMapping();
@@ -99,7 +101,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
         && !persistenceMapping.isMappedProperty(fieldSymbol)
         && !accesses.mayAccess(fieldSymbol)
         && !(enumShapedClass && TreeUtils.findAncestorWithKind(fieldSymbol.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null)) {
-        context().newIssue(this, fieldSymbol.declaration(), String.format(MESSAGE, fieldSymbol.name()));
+        context().newIssue(this, fieldSymbol.declaration(), messageFor(fieldSymbol));
       }
     }
 
@@ -118,6 +120,18 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
   private boolean isEnumShapedClass(ClassDeclarationTree tree, List<Symbol> fields) {
     return tree.superClass() != null && "enum".equals(getFullyQualifiedName(tree.superClass()).simpleName())
       && fields.stream().allMatch(field -> TreeUtils.findAncestorWithKind(field.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null);
+  }
+
+  private String messageFor(Symbol symbol) {
+    String format = isPromotedPropertyUsedAsParameter(symbol) ? PROMOTED_PROPERTY_MESSAGE : FIELD_MESSAGE;
+    return String.format(format, symbol.name());
+  }
+
+  private boolean isPromotedPropertyUsedAsParameter(Symbol symbol) {
+    Tree parameter = TreeUtils.findAncestorWithKind(symbol.declaration(), Tree.Kind.PARAMETER);
+    return parameter instanceof ParameterTree promoted && promoted.isPropertyPromotion()
+      && context().symbolTable().getSymbols(Symbol.Kind.PARAMETER).stream()
+        .anyMatch(candidate -> candidate.declaration() == symbol.declaration() && !candidate.usages().isEmpty());
   }
 
   private List<Symbol> getFieldSymbolsForCurrentClass(ClassDeclarationTree tree) {
