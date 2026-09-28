@@ -35,4 +35,9 @@ class UnusedPrivateFieldCheckTest {
   void shouldSuppressUnusedPrivateFieldsWithDoctrineORMMappings() {
     CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckDoctrine.php");
   }
+
+  @Test
+  void shouldRecognizeEnumShapedSubclasses() {
+    CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckEnum.php");
+  }
 }
