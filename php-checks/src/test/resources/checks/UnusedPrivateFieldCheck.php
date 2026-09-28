@@ -136,3 +136,26 @@ class MySingleton {
     return MySingleton::$instance;
   }
 }
+
+class InstantiatesPropertyClass {
+  private string $className; // Compliant
+
+  public function __construct(private string $promotedClassName) { // Compliant
+  }
+
+  public function create() {
+    new $this->className();
+    new $this->promotedClassName();
+  }
+}
+
+class CallsMethodNotProperty {
+  private $method; // Noncompliant
+
+  private function method() {
+  }
+
+  public function call() {
+    $this->method();
+  }
+}
