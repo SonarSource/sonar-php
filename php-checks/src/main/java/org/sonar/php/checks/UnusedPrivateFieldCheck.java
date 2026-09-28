@@ -92,15 +92,32 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(tree);
 
     MemberAccessCollector accesses = MemberAccessCollector.collect(tree, context().symbolTable());
-    for (Symbol fieldSymbol : getFieldSymbolsForCurrentClass(tree)) {
+    List<Symbol> fields = getFieldSymbolsForCurrentClass(tree);
+    boolean enumShapedClass = isEnumShapedClass(tree, fields);
+    for (Symbol fieldSymbol : fields) {
       if (fieldSymbol.hasModifier("private") && fieldSymbol.usages().isEmpty() && !constantUsedBeforeInit.contains(fieldSymbol.name())
         && !persistenceMapping.isMappedProperty(fieldSymbol)
-        && !accesses.mayAccess(fieldSymbol)) {
+        && !accesses.mayAccess(fieldSymbol)
+        && !(enumShapedClass && TreeUtils.findAncestorWithKind(fieldSymbol.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null)) {
         context().newIssue(this, fieldSymbol.declaration(), String.format(MESSAGE, fieldSymbol.name()));
       }
     }
 
     constantUsedBeforeInit.clear();
+  }
+
+  // Based on user feedback, private constants in enum-like classes can cause false positives.
+  // Before PHP 8.1 introduced native enums, libraries like php-enum
+  // (https://github.com/myclabs/php-enum) provided enum implementations.
+  // One pattern is a subclass of Enum with private class constants, no properties.
+  // The enum library then reads the private constants via reflection and creates
+  // accessor methods.
+  //
+  // User feedback shows the same pattern with other base classes named Enum, so
+  // this heuristic recognizes any such base class.
+  private boolean isEnumShapedClass(ClassDeclarationTree tree, List<Symbol> fields) {
+    return tree.superClass() != null && "enum".equals(getFullyQualifiedName(tree.superClass()).simpleName())
+      && fields.stream().allMatch(field -> TreeUtils.findAncestorWithKind(field.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null);
   }
 
   private List<Symbol> getFieldSymbolsForCurrentClass(ClassDeclarationTree tree) {
