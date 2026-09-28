@@ -613,11 +613,16 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       tree.object().accept(this);
     }
 
-    boolean isFunctionCall = tree.getParent().is(Kind.FUNCTION_CALL) && ((FunctionCallTree) tree.getParent()).callee() == tree;
+    boolean isMethodCall = tree.getParent() instanceof FunctionCallTree functionCall
+      && functionCall.callee() == tree
+      // When doing "dynamic class instantiation", e.g., `new $this->className()`,
+      // `$this->className` is a property read.
+      // Normal `$this->method()` outside `new` is a method call.
+      && !functionCall.getParent().is(Kind.NEW_EXPRESSION);
     classMemberUsageState = new ClassMemberUsageState();
     classMemberUsageState.isStatic = tree.isStatic();
     classMemberUsageState.isSelfMember = isSelfMember(tree);
-    classMemberUsageState.isField = !isFunctionCall;
+    classMemberUsageState.isField = !isMethodCall;
     classMemberUsageState.isConst = classMemberUsageState.isField && tree.isStatic();
 
     tree.member().accept(this);
