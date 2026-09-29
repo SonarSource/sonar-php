@@ -27,7 +27,7 @@ class UnusedPrivateFieldCheckTest {
   }
 
   @Test
-  void shouldSuppressUnusedPrivateieldsOnDynamicPropertyAccess() {
+  void shouldSuppressUnusedPrivateMembersOnDynamicAccess() {
     CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckDynamic.php");
   }
 }
