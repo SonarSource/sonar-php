@@ -587,18 +587,22 @@ public class SymbolVisitor extends NamespaceNameResolvingVisitor {
       // Because we unwind the chain from the end, we don't know its exact length, and this branch will execute even for short chains.
       ExpressionTree current = tree;
       while (current != null) {
-        if (current instanceof MemberAccessTree memberAccessTree) {
-          visitMemberAccess(memberAccessTree, false);
-          current = memberAccessTree.object();
-        } else if (current instanceof FunctionCallTree functionCallTree) {
-          visitFunctionCall(functionCallTree, false);
-          current = functionCallTree.callee();
-        } else {
-          if (!current.is(Kind.NAMESPACE_NAME)) {
-            // namespace name is handled in a corresponding `visit*` method; here we continue processing after leaving the chain
-            current.accept(this);
+        switch (current) {
+          case MemberAccessTree memberAccessTree -> {
+            visitMemberAccess(memberAccessTree, false);
+            current = memberAccessTree.object();
           }
-          current = null;
+          case FunctionCallTree functionCallTree -> {
+            visitFunctionCall(functionCallTree, false);
+            current = functionCallTree.callee();
+          }
+          default -> {
+            if (!current.is(Kind.NAMESPACE_NAME)) {
+              // namespace name is handled in a corresponding `visit*` method; here we continue processing after leaving the chain
+              current.accept(this);
+            }
+            current = null;
+          }
         }
       }
     } else {
