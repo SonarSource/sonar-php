@@ -166,7 +166,8 @@ class UnusedMessages {
 
   public function __construct(
     private readonly string $forwarded, // Noncompliant {{Remove property promotion from this "$forwarded" parameter, since the field it creates is not used elsewhere in the class.}}
-    private string $unusedPromotion // Noncompliant {{Remove this unused "$unusedPromotion" private field.}}
+    private string $unusedPromotion, // Noncompliant {{Remove this unused "$unusedPromotion" private field.}}
+    public string $publicPromotion // Compliant. This rule is only about private fields.
   ) {
     echo $forwarded;
   }
