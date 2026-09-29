@@ -100,7 +100,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     super.visitFunctionCall(tree);
   }
 
-  private boolean isSuspiciousGlobalFunction(FunctionCallTree tree) {
+  private static boolean isSuspiciousGlobalFunction(FunctionCallTree tree) {
     ExpressionTree callee = tree.callee();
     if (callee.is(Tree.Kind.NAMESPACE_NAME)) {
       String qualifiedNameLowerCase = ((NamespaceNameTree) callee).qualifiedName().toLowerCase(Locale.ENGLISH);
@@ -124,7 +124,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
+  private static boolean isSuspiciousMemberFunction(FunctionCallTree tree, TreeValues possibleValues) {
     if (SUSPICIOUS_MYSQLI_QUERY_PREDICATES.test(possibleValues)) {
       Optional<CallArgumentTree> argument = CheckUtils.argument(tree, QUERY, 0);
       return argument.isPresent() && isSuspiciousArgument(argument.get().value());
@@ -136,17 +136,17 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
+  private static boolean isSuspiciousPrepareStatement(FunctionCallTree tree, TreeValues possibleValues) {
     Optional<CallArgumentTree> argument = CheckUtils.argument(tree, STATEMENT, 0);
     return PDO_PREPARE_PREDICATE.test(possibleValues) && argument.isPresent() && isSuspiciousArgument(argument.get().value());
   }
 
-  private boolean isSuspiciousArgument(ExpressionTree expression) {
+  private static boolean isSuspiciousArgument(ExpressionTree expression) {
     return (expression.is(Tree.Kind.EXPANDABLE_STRING_LITERAL) && isSuspiciousExpandableString((ExpandableStringLiteralTree) expression))
       || (expression.is(CONCATENATION) && isSuspiciousConcat((BinaryExpressionTree) expression));
   }
 
-  private boolean isSuspiciousExpandableString(ExpandableStringLiteralTree tree) {
+  private static boolean isSuspiciousExpandableString(ExpandableStringLiteralTree tree) {
     for (ExpressionTree element : tree.expressions()) {
       if (!element.is(VARIABLE_IDENTIFIER) || isSuspiciousVariable((VariableIdentifierTree) element)) {
         return true;
@@ -156,7 +156,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return false;
   }
 
-  private boolean isSuspiciousConcat(BinaryExpressionTree tree) {
+  private static boolean isSuspiciousConcat(BinaryExpressionTree tree) {
     boolean isSuspicious = false;
 
     Deque<ExpressionTree> operands = new ArrayDeque<>();
@@ -182,7 +182,7 @@ public class QueryUsageCheck extends PHPVisitorCheck {
     return isSuspicious;
   }
 
-  private boolean isSuspiciousVariable(VariableIdentifierTree variable) {
+  private static boolean isSuspiciousVariable(VariableIdentifierTree variable) {
     return !CheckUtils.assignedValue(variable).is(LITERALS);
   }
 }
