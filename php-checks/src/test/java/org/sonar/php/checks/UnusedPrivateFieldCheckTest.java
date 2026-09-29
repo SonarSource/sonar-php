@@ -25,4 +25,9 @@ class UnusedPrivateFieldCheckTest {
   void shouldRaiseExpectedIssues() {
     CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheck.php");
   }
+
+  @Test
+  void shouldSuppressUnusedPrivateMembersOnDynamicAccess() {
+    CheckVerifier.verify(new UnusedPrivateFieldCheck(), "UnusedPrivateFieldCheckDynamic.php");
+  }
 }
