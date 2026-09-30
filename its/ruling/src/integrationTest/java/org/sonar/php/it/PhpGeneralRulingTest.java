@@ -105,7 +105,8 @@ public class PhpGeneralRulingTest {
     ORCHESTRATOR.getServer().provisionProject(project, project);
     ORCHESTRATOR.getServer().associateProjectToQualityProfile(project, "php", "rules");
     File litsDifferencesFile = FileLocation.of("build/differences").getFile();
-    File projectLocation = FileLocation.of("../sources/src/" + project).getFile();
+    // Project directories are symbolic links into the php-test-sources submodule, resolve them so the scanner indexes the actual files
+    File projectLocation = FileLocation.of("../sources/" + project).getFile().toPath().toRealPath().toFile();
 
     SonarScanner build = RulingHelper.prepareScanner(
       projectLocation,
