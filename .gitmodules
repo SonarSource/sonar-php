@@ -1,5 +1,5 @@
-[submodule "its/sources"]
-	path = its/sources
+[submodule "its/php-test-sources"]
+	path = its/php-test-sources
 	url = https://github.com/SonarSource/php-test-sources.git
 [submodule "build-logic/common"]
 	path = build-logic/common

@@ -113,7 +113,7 @@ public class PhpPrAnalysisTest {
   }
 
   private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile) throws IOException {
-    FileUtils.copyDirectory(new File("../sources_pr_analysis", "base"), tempFile);
+    FileUtils.copyDirectory(new File("../sources/prAnalysis", "base"), tempFile);
 
     SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected/prAnalysis/base", litsDifferencesFile);
     ORCHESTRATOR.executeBuild(build);
@@ -138,7 +138,7 @@ public class PhpPrAnalysisTest {
 
   private void setUpChanges(File tempDirectory, String scenario, List<String> deletedFiles) throws IOException {
     Arrays.stream(tempDirectory.listFiles(f -> deletedFiles.contains(f.getName()))).forEach(File::delete);
-    FileUtils.copyDirectory(new File("../sources_pr_analysis", scenario), tempDirectory);
+    FileUtils.copyDirectory(new File("../sources/prAnalysis", scenario), tempDirectory);
   }
 
   private static String profile(String name, List<String> ruleKeys) {
