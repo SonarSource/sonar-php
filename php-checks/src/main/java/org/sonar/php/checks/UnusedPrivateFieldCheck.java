@@ -355,7 +355,7 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
       return currentNamespace.isEmpty() ? normalized : (currentNamespace + "\\" + normalized);
     }
 
-    private boolean isDoctrineMapping(String name) {
+    private static boolean isDoctrineMapping(String name) {
       String normalized = (name.startsWith("\\") ? name.substring(1) : name).toLowerCase(Locale.ROOT);
       return normalized.startsWith(DOCTRINE_MAPPING_NAMESPACE)
         && DOCTRINE_PROPERTY_MAPPINGS.contains(normalized.substring(DOCTRINE_MAPPING_NAMESPACE.length()));
