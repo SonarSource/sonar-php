@@ -234,9 +234,6 @@
 13,
 15
 ],
-"PHP_CodeSniffer:src/Standards/PSR1/Tests/Files/SideEffectsUnitTest.2.inc": [
-19
-],
 "PHP_CodeSniffer:src/Standards/PSR1/Tests/Methods/CamelCapsMethodNameUnitTest.inc": [
 30,
 31,
@@ -313,7 +310,6 @@
 75,
 76,
 77,
-79,
 88,
 89,
 91,
@@ -375,7 +371,6 @@
 7,
 8,
 9,
-16,
 30,
 31,
 32,
