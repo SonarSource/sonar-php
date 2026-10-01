@@ -125,6 +125,7 @@ function function11() {} // Compliant - has a bare line comment above
 #
 function function12() {} // Compliant - has a bare hash comment above
 
+// Property promotion initializes the promoted properties even when the constructor body has no statements.
 class Php8Class
 {
   public function __construct(private $a) {} // Compliant
@@ -132,4 +133,16 @@ class Php8Class
   public function __construct($a, private $b) {} // Compliant
 
   public function __construct($a) {} // Noncompliant
+}
+
+class UtilityWithConstructorParameter {
+  private function __construct($value) {} // Noncompliant
+}
+
+class UtilityWithPublicConstructor {
+  public function __construct() {} // Noncompliant
+}
+
+class Utility {
+  private function __construct() {} // Compliant
 }

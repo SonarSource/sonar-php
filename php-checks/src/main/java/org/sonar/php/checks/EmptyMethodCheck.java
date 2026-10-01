@@ -19,6 +19,8 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.tree.CompilationUnitTree;
@@ -50,7 +52,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
     if (tree.body().is(Kind.BLOCK) && !(hasContent((BlockTree) tree.body()) || isClassAbstract(tree)
-      || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree))) {
+      || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree) || isPrivateParameterlessConstructor(tree))) {
       commitIssue(tree, "method");
     }
 
@@ -73,8 +75,8 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   }
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION));
-    return classTree != null && classTree.isAbstract();
+    return TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION)) instanceof ClassDeclarationTree classTree
+      && classTree.isAbstract();
   }
 
   private static boolean hasContent(BlockTree tree) {
@@ -87,8 +89,16 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     return trivia != null;
   }
 
+  // A parameterless private constructor is a common PHP idiom to control instantiation,
+  // including static factories and utility classes. Don't require additional comments.
+  private static boolean isPrivateParameterlessConstructor(MethodDeclarationTree tree) {
+    return "__construct".equalsIgnoreCase(tree.name().text())
+      && tree.parameters().parameters().isEmpty()
+      && CheckUtils.hasModifier(tree.modifiers(), PHPKeyword.PRIVATE.getValue());
+  }
+
   private static boolean isConstructorPropertyPromotion(MethodDeclarationTree tree) {
-    return tree.name().text().equalsIgnoreCase("__construct") && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
+    return "__construct".equalsIgnoreCase(tree.name().text()) && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
   }
 
   private void commitIssue(FunctionTree tree, String type) {
