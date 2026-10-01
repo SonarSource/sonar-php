@@ -17,7 +17,6 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
-import java.util.regex.Pattern;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
@@ -38,12 +37,9 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Add a comment explaining why this %s is empty, throw an Exception or complete the implementation.";
 
-  private static final int MIN_WORD_CHARS = 3;
-  private static final Pattern VALUABLE_COMMENT_PATTERN = Pattern.compile("\\w{" + MIN_WORD_CHARS + "}");
-
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree)
+    if (tree.body().is(Kind.BLOCK) && !(hasContent((BlockTree) tree.body()) || isClassAbstract(tree)
       || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree))) {
       commitIssue(tree, "method");
     }
@@ -53,7 +49,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!(hasValuableBody(tree.body()) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
+    if (!(hasContent(tree.body()) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
       commitIssue(tree, "function");
     }
 
@@ -63,7 +59,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   private static boolean hasCommentAbove(SyntaxToken token) {
     int beforeDeclarationLine = token.line() - 1;
     SyntaxTrivia trivia = getLast(token.trivias(), null);
-    return trivia != null && beforeDeclarationLine == trivia.endLine() && isValuableComment(trivia);
+    return trivia != null && beforeDeclarationLine == trivia.endLine();
   }
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
@@ -71,18 +67,14 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
     return classTree != null && classTree.isAbstract();
   }
 
-  private static boolean hasValuableBody(BlockTree tree) {
+  private static boolean hasContent(BlockTree tree) {
     if (!tree.statements().isEmpty()) {
       return true;
     }
 
-    // Check whether there is a valuable comment in method body
+    // Comments are attached to the closing brace when the body has no statements.
     SyntaxTrivia trivia = getLast(tree.closeCurlyBraceToken().trivias(), null);
-    return trivia != null && isValuableComment(trivia);
-  }
-
-  private static boolean isValuableComment(SyntaxToken trivia) {
-    return VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find();
+    return trivia != null;
   }
 
   private static boolean isConstructorPropertyPromotion(MethodDeclarationTree tree) {

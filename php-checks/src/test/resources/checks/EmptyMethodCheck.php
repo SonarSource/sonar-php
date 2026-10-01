@@ -25,7 +25,19 @@ class TestClass {
 
   public function method7() { /** Comment */ } // Compliant
 
-  public function method8() { /**/ } // Noncompliant
+  public function method8() { /**/ } // Compliant
+
+  public function methodWithBareLineComment() { //
+  } // Compliant
+
+  public function methodWithBareHashComment() { #
+  } // Compliant
+
+  public function methodWithNoOp() { // no-op
+  } // Compliant
+
+  public function methodWithUnicode() { // 意図的
+  } // Compliant
 
   public function method9() {throw new Exception();} // Compliant
 
@@ -89,7 +101,7 @@ function function8() {} // Compliant
 /**
  * Co
  */
-function function9() {} // Noncompliant
+function function9() {} // Compliant
 
 /*
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommententtCommentCommentCommentCommentCommentCommentCommentCommentent
@@ -101,6 +113,17 @@ function function9() {} // Noncompliant
  * CommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommentCommententtCommentCommentCommentCommentCommentCommentCommentCommentent
  */
 function function10() {} // Compliant - is related to https://jira.sonarsource.com/browse/SONARPHP-1022
+
+function function11(): void // Compliant
+{
+  // no-op
+}
+
+//
+function function11() {} // Compliant - has a bare line comment above
+
+#
+function function12() {} // Compliant - has a bare hash comment above
 
 class Php8Class
 {
