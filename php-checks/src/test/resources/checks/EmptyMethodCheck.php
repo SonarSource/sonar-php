@@ -1,7 +1,7 @@
 <?php
 
 class TestClass {
-  public function method1() { } // Noncompliant {{Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.}}
+  public function method1() { } // Noncompliant {{Add a comment explaining why this method is empty, throw an Exception or complete the implementation.}}
 
   public function method2() {
     echo 1;
@@ -65,7 +65,7 @@ interface TestInterface {
   public function interfaceMethod(); // Compliant
 }
 
-function function1() { } // Noncompliant {{Add a nested comment explaining why this function is empty, throw an Exception or complete the implementation.}}
+function function1() { } // Noncompliant {{Add a comment explaining why this function is empty, throw an Exception or complete the implementation.}}
 function function2() { echo 1; } // Compliant
 function function3() { throw new Exception(); } // Compliant
 function function4() { /* TODO */ } // Compliant
