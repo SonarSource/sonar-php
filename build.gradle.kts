@@ -79,6 +79,6 @@ sonar {
     property("sonar.links.ci", "https://github.com/SonarSource/sonar-php/actions")
     property("sonar.links.scm", "https://github.com/SonarSource/sonar-php")
     property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARPHP")
-    property("sonar.sca.exclusions", "its/sources/**,its/php-test-sources/**")
+    property("sonar.sca.exclusions", "its/sources/**")
   }
 }
