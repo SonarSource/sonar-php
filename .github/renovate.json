@@ -76,7 +76,7 @@
         "git-submodules"
       ],
       "matchDepNames": [
-        "its/php-test-sources"
+        "its/sources"
       ],
       "enabled": false
     }
