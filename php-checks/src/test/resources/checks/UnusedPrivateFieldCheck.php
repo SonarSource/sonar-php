@@ -136,3 +136,39 @@ class MySingleton {
     return MySingleton::$instance;
   }
 }
+
+class InstantiatesPropertyClass {
+  private string $className; // Compliant
+
+  public function __construct(private string $promotedClassName) { // Compliant
+  }
+
+  public function create() {
+    new $this->className();
+    new $this->promotedClassName();
+  }
+}
+
+class CallsMethodNotProperty {
+  private $method; // Noncompliant
+
+  private function method() {
+  }
+
+  public function call() {
+    $this->method();
+  }
+}
+
+class UnusedMessages {
+  private const UNUSED = 'value'; // Noncompliant {{Remove this unused "UNUSED" private field.}}
+  private $field; // Noncompliant {{Remove this unused "$field" private field.}}
+
+  public function __construct(
+    private readonly string $forwarded, // Noncompliant {{Remove property promotion from this "$forwarded" parameter, since the field it creates is not used elsewhere in the class.}}
+    private string $unusedPromotion, // Noncompliant {{Remove this unused "$unusedPromotion" private field.}}
+    public string $publicPromotion // Compliant. This rule is only about private fields.
+  ) {
+    echo $forwarded;
+  }
+}
