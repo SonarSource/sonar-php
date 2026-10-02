@@ -17,17 +17,26 @@
 package org.sonar.php.checks;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import org.sonar.check.Rule;
 import org.sonar.php.tree.TreeUtils;
+import org.sonar.php.tree.impl.PHPTree;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.Symbol.Kind;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
+import org.sonar.plugins.php.api.tree.ScriptTree;
 import org.sonar.plugins.php.api.tree.Tree;
+import org.sonar.plugins.php.api.tree.declaration.AttributeGroupTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.ClassPropertyDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.HasAttributes;
 import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
+import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
@@ -40,14 +49,36 @@ import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
+import org.sonar.plugins.php.api.tree.statement.NamespaceStatementTree;
+import org.sonar.plugins.php.api.tree.statement.UseStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 @Rule(key = "S1068")
 public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Remove this unused \"%s\" private field.";
+  private static final String FIELD_MESSAGE = "Remove this unused \"%s\" private field.";
+  private static final String PROMOTED_PROPERTY_MESSAGE = "Remove property promotion from this \"%s\" parameter, since the field it creates is not used elsewhere in the class.";
 
   private static final Set<String> constantUsedBeforeInit = new HashSet<>();
+  private final PersistenceMapping persistenceMapping = new PersistenceMapping();
+
+  @Override
+  public void visitScript(ScriptTree tree) {
+    persistenceMapping.reset();
+    super.visitScript(tree);
+  }
+
+  @Override
+  public void visitNamespaceStatement(NamespaceStatementTree tree) {
+    persistenceMapping.enterNamespace(tree);
+    super.visitNamespaceStatement(tree);
+  }
+
+  @Override
+  public void visitUseStatement(UseStatementTree tree) {
+    persistenceMapping.recordImports(tree);
+    super.visitUseStatement(tree);
+  }
 
   @Override
   public void visitMemberAccess(MemberAccessTree tree) {
@@ -63,14 +94,44 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
     super.visitClassDeclaration(tree);
 
     MemberAccessCollector accesses = MemberAccessCollector.collect(tree, context().symbolTable());
-    for (Symbol fieldSymbol : getFieldSymbolsForCurrentClass(tree)) {
+    List<Symbol> fields = getFieldSymbolsForCurrentClass(tree);
+    boolean enumShapedClass = isEnumShapedClass(tree, fields);
+    for (Symbol fieldSymbol : fields) {
       if (fieldSymbol.hasModifier("private") && fieldSymbol.usages().isEmpty() && !constantUsedBeforeInit.contains(fieldSymbol.name())
-        && !accesses.mayAccess(fieldSymbol)) {
-        context().newIssue(this, fieldSymbol.declaration(), String.format(MESSAGE, fieldSymbol.name()));
+        && !persistenceMapping.isMappedProperty(fieldSymbol)
+        && !accesses.mayAccess(fieldSymbol)
+        && !(enumShapedClass && TreeUtils.findAncestorWithKind(fieldSymbol.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null)) {
+        context().newIssue(this, fieldSymbol.declaration(), messageFor(fieldSymbol));
       }
     }
 
     constantUsedBeforeInit.clear();
+  }
+
+  // Based on user feedback, private constants in enum-like classes can cause false positives.
+  // Before PHP 8.1 introduced native enums, libraries like php-enum
+  // (https://github.com/myclabs/php-enum) provided enum implementations.
+  // One pattern is a subclass of Enum with private class constants, no properties.
+  // The enum library then reads the private constants via reflection and creates
+  // accessor methods.
+  //
+  // User feedback shows the same pattern with other base classes named Enum, so
+  // this heuristic recognizes any such base class.
+  private boolean isEnumShapedClass(ClassDeclarationTree tree, List<Symbol> fields) {
+    return tree.superClass() != null && "enum".equals(getFullyQualifiedName(tree.superClass()).simpleName())
+      && fields.stream().allMatch(field -> TreeUtils.findAncestorWithKind(field.declaration(), Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION) != null);
+  }
+
+  private String messageFor(Symbol symbol) {
+    String format = isPromotedPropertyUsedAsParameter(symbol) ? PROMOTED_PROPERTY_MESSAGE : FIELD_MESSAGE;
+    return String.format(format, symbol.name());
+  }
+
+  private boolean isPromotedPropertyUsedAsParameter(Symbol symbol) {
+    Tree parameter = TreeUtils.findAncestorWithKind(symbol.declaration(), Tree.Kind.PARAMETER);
+    return parameter instanceof ParameterTree promoted && promoted.isPropertyPromotion()
+      && context().symbolTable().getSymbols(Symbol.Kind.PARAMETER).stream()
+        .anyMatch(candidate -> candidate.declaration() == symbol.declaration() && !candidate.usages().isEmpty());
   }
 
   private List<Symbol> getFieldSymbolsForCurrentClass(ClassDeclarationTree tree) {
@@ -221,6 +282,114 @@ public class UnusedPrivateFieldCheck extends PHPVisitorCheck {
 
     boolean mayAccess(String memberName) {
       return hasUnresolvedDynamicAccess || knownNames.contains(memberName);
+    }
+  }
+
+  private static final class PersistenceMapping {
+    private static final String DOCTRINE_MAPPING_NAMESPACE = "doctrine\\orm\\mapping\\";
+    private static final Set<String> DOCTRINE_PROPERTY_MAPPINGS = Set.of(
+      "column", "id", "generatedvalue", "sequencegenerator", "customidgenerator", "version", "embedded",
+      "onetoone", "onetomany", "manytoone", "manytomany", "joincolumn", "joincolumns", "jointable", "orderby");
+
+    private final Map<String, String> imports = new HashMap<>();
+    private String currentNamespace = "";
+
+    void reset() {
+      imports.clear();
+      currentNamespace = "";
+    }
+
+    void enterNamespace(NamespaceStatementTree statement) {
+      imports.clear();
+      currentNamespace = statement.namespaceName() == null ? "" : statement.namespaceName().qualifiedName();
+    }
+
+    void recordImports(UseStatementTree statement) {
+      if (statement.useTypeToken() != null) {
+        return;
+      }
+      String prefix = statement.prefix() == null ? "" : (statement.prefix().qualifiedName() + "\\");
+      statement.clauses().stream()
+        .filter(clause -> clause.useTypeToken() == null)
+        .forEach(clause -> {
+          String qualifiedName = prefix + clause.namespaceName().qualifiedName();
+          String alias = clause.alias() == null ? clause.namespaceName().unqualifiedName() : clause.alias().text();
+          imports.put(alias.toLowerCase(Locale.ROOT), qualifiedName.toLowerCase(Locale.ROOT));
+        });
+    }
+
+    boolean isMappedProperty(Symbol symbol) {
+      Tree declaration = symbol.declaration();
+      while (declaration != null && !(declaration instanceof ClassPropertyDeclarationTree) && !declaration.is(Tree.Kind.PARAMETER)) {
+        declaration = declaration.getParent();
+      }
+      if (declaration == null || declaration.is(Tree.Kind.CLASS_CONSTANT_PROPERTY_DECLARATION)) {
+        return false;
+      }
+      HasAttributes property = (HasAttributes) declaration;
+      for (AttributeGroupTree group : property.attributeGroups()) {
+        if (group.attributes().stream().anyMatch(attribute -> isDoctrineMapping(resolveAnnotation(attribute.name().fullName())))) {
+          return true;
+        }
+      }
+      return ((PHPTree) declaration).getFirstToken().trivias().stream()
+        .anyMatch(trivia -> trivia.text().startsWith("/**") && hasMappingAnnotation(trivia.text()));
+    }
+
+    private boolean hasMappingAnnotation(String comment) {
+      int start = 0;
+      while ((start = comment.indexOf('@', start)) >= 0) {
+        int end = start + 1;
+        while (end < comment.length()) {
+          char c = comment.charAt(end);
+          if (Character.isLetterOrDigit(c) || c == '_' || c == '\\') {
+            end++;
+          } else {
+            break;
+          }
+        }
+        if (end > start + 1) {
+          String name = comment.substring(start + 1, end);
+          if (isDoctrineMapping(resolveAnnotation(name)) || isUnimportedDoctrineMapping(name)) {
+            return true;
+          }
+        }
+        start = end;
+      }
+      return false;
+    }
+
+    private boolean isUnimportedDoctrineMapping(String name) {
+      // Doctrine also looks up unimported qualified annotation names as global class names.
+      int separator = name.indexOf('\\');
+      return separator > 0
+        && !imports.containsKey(name.substring(0, separator).toLowerCase(Locale.ROOT))
+        && isDoctrineMapping(name);
+    }
+
+    private String resolveAnnotation(String name) {
+      String normalized = name.startsWith("\\") ? name.substring(1) : name;
+      if (name.startsWith("\\")) {
+        return normalized;
+      }
+      String namespacePrefix = "namespace\\";
+      if (normalized.regionMatches(true, 0, namespacePrefix, 0, namespacePrefix.length())) {
+        String relativeName = normalized.substring(namespacePrefix.length());
+        return currentNamespace.isEmpty() ? relativeName : (currentNamespace + "\\" + relativeName);
+      }
+      int separator = normalized.indexOf('\\');
+      String first = separator < 0 ? normalized : normalized.substring(0, separator);
+      String imported = imports.get(first.toLowerCase(Locale.ROOT));
+      if (imported != null) {
+        return imported + (separator < 0 ? "" : normalized.substring(separator));
+      }
+      return currentNamespace.isEmpty() ? normalized : (currentNamespace + "\\" + normalized);
+    }
+
+    private static boolean isDoctrineMapping(String name) {
+      String normalized = (name.startsWith("\\") ? name.substring(1) : name).toLowerCase(Locale.ROOT);
+      return normalized.startsWith(DOCTRINE_MAPPING_NAMESPACE)
+        && DOCTRINE_PROPERTY_MAPPINGS.contains(normalized.substring(DOCTRINE_MAPPING_NAMESPACE.length()));
     }
   }
 
