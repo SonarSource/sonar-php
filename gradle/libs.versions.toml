@@ -2,22 +2,22 @@
 assertj = "3.27.7"
 plexus-utils = "4.1.0"
 awaitility = "4.3.0"
-ch-qos-logback-logback = "1.6.3"
+ch-qos-logback-logback = "1.6.4"
 jackson = "2.22.3"
 jsr305 = "3.0.2"
 junit = "6.1.3"
-mockito = "5.23.0"
+mockito = "5.24.0"
 sonar-commons = "2.33.0.5369"
 sonar-orchestrator = "6.4.3.4676"
 # Before updating the plugin-api version, make sure to check the compatibility matrix and stick to the lowest denominator
 # https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility
 sonar-plugin-api = "14.0.0.4498"
 sonar-scanner-engine = "13.14.0.6149"
-sonarlint = "12.0.0.87449"
+sonarlint = "12.0.2.87499"
 sonarqube = "26.9.0.129388"
 sslr = "1.26.0.4194"
 staxmate = "2.0.1"
-woodstox = "7.2.2"
+woodstox = "7.3.0"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
