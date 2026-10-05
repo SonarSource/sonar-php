@@ -2,8 +2,8 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :php-frontend:dependencies --write-locks
-ch.qos.logback:logback-classic:1.6.3=testRuntimeClasspath
-ch.qos.logback:logback-core:1.6.3=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.4=testRuntimeClasspath
+ch.qos.logback:logback-core:1.6.4=testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.10.1=testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testFixturesCompileClasspath,testFixturesRuntimeClasspath,testRuntimeClasspath
 com.google.code.gson:gson:2.14.0=testCompileClasspath,testRuntimeClasspath
@@ -50,7 +50,7 @@ org.junit.platform:junit-platform-engine:6.1.3=testRuntimeClasspath
 org.junit.platform:junit-platform-launcher:6.1.3=testRuntimeClasspath
 org.junit:junit-bom:6.1.0=testFixturesRuntimeClasspath
 org.junit:junit-bom:6.1.3=testCompileClasspath,testRuntimeClasspath
-org.mockito:mockito-core:5.23.0=testCompileClasspath,testRuntimeClasspath
+org.mockito:mockito-core:5.24.0=testCompileClasspath,testRuntimeClasspath
 org.objenesis:objenesis:3.3=testRuntimeClasspath
 org.opentest4j:opentest4j:1.3.0=testCompileClasspath,testRuntimeClasspath
 org.ow2.asm:asm-commons:9.10.1=jacocoAnt
