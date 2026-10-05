@@ -150,7 +150,7 @@ The "Ruling Test" is a special integration test that launches the analysis of a 
 ./gradlew its:ruling:integrationTest
 ```
 
-The sources of the ruling projects are in the `its/sources` submodule under `src/<project-key>`. Check out the submodule
+The sources of the ruling projects are in the `its/sources` submodule under `<project-key>`. Check out the submodule
 before running the integration tests.
 
 This test gives you the opportunity to examine the issues created by each rule and make sure they're what you expect. You can inspect new/lost issues by checking the SonarQube local URL mentioned in the logs at the end of the analysis.
@@ -160,7 +160,7 @@ sonar-php/its/ruling/build/actual/
 ```
 into the directory with the expected issues
 ```
-sonar-php/its/ruling/src/integrationTest/resources/expected/
+sonar-php/its/ruling/src/test/resources/expected/
 ```
 
 ### Rule Descriptions
