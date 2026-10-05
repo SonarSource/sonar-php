@@ -19,8 +19,11 @@ package org.sonar.php.checks;
 import java.util.Collections;
 import java.util.regex.Pattern;
 import org.sonar.check.Rule;
+import org.sonar.php.api.PHPKeyword;
+import org.sonar.php.checks.utils.CheckUtils;
 import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.impl.PHPTree;
+import org.sonar.plugins.php.api.tree.CompilationUnitTree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
 import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.FunctionDeclarationTree;
@@ -30,21 +33,26 @@ import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxTrivia;
 import org.sonar.plugins.php.api.tree.statement.BlockTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonar.plugins.php.api.visitors.PhpFile;
 
 import static org.sonar.php.utils.collections.ListUtils.getLast;
 
 @Rule(key = "S1186")
 public class EmptyMethodCheck extends PHPVisitorCheck {
 
-  private static final String MESSAGE = "Add a nested comment explaining why this %s is empty, throw an Exception or complete the implementation.";
+  private static final String MESSAGE = "Add a comment explaining why this %s is empty, throw an Exception or complete the implementation.";
 
-  private static final int MIN_WORD_CHARS = 3;
-  private static final Pattern VALUABLE_COMMENT_PATTERN = Pattern.compile("\\w{" + MIN_WORD_CHARS + "}");
+  @Override
+  public void visitCompilationUnit(CompilationUnitTree tree) {
+    if (!StubFileDetector.isStub(context().getPhpFile(), tree)) {
+      super.visitCompilationUnit(tree);
+    }
+  }
 
   @Override
   public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    if (tree.body().is(Kind.BLOCK) && !(hasValuableBody((BlockTree) tree.body()) || isClassAbstract(tree)
-      || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree))) {
+    if (tree.body().is(Kind.BLOCK) && !(hasContent((BlockTree) tree.body()) || isClassAbstract(tree)
+      || hasCommentAbove(((PHPTree) tree).getFirstToken()) || isConstructorPropertyPromotion(tree) || isPrivateParameterlessConstructor(tree))) {
       commitIssue(tree, "method");
     }
 
@@ -53,7 +61,7 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    if (!(hasValuableBody(tree.body()) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
+    if (!(hasContent(tree.body()) || hasCommentAbove(((PHPTree) tree).getFirstToken()))) {
       commitIssue(tree, "function");
     }
 
@@ -63,34 +71,62 @@ public class EmptyMethodCheck extends PHPVisitorCheck {
   private static boolean hasCommentAbove(SyntaxToken token) {
     int beforeDeclarationLine = token.line() - 1;
     SyntaxTrivia trivia = getLast(token.trivias(), null);
-    return trivia != null && beforeDeclarationLine == trivia.endLine() && isValuableComment(trivia);
+    return trivia != null && beforeDeclarationLine == trivia.endLine();
   }
 
   private static boolean isClassAbstract(MethodDeclarationTree tree) {
-    ClassDeclarationTree classTree = (ClassDeclarationTree) TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION));
-    return classTree != null && classTree.isAbstract();
+    return TreeUtils.findAncestorWithKind(tree, Collections.singletonList(Kind.CLASS_DECLARATION)) instanceof ClassDeclarationTree classTree
+      && classTree.isAbstract();
   }
 
-  private static boolean hasValuableBody(BlockTree tree) {
+  private static boolean hasContent(BlockTree tree) {
     if (!tree.statements().isEmpty()) {
       return true;
     }
 
-    // Check whether there is a valuable comment in method body
+    // Comments are attached to the closing brace when the body has no statements.
     SyntaxTrivia trivia = getLast(tree.closeCurlyBraceToken().trivias(), null);
-    return trivia != null && isValuableComment(trivia);
+    return trivia != null;
   }
 
-  private static boolean isValuableComment(SyntaxToken trivia) {
-    return VALUABLE_COMMENT_PATTERN.matcher(trivia.text()).find();
+  // A parameterless private constructor is a common PHP idiom to control instantiation,
+  // including static factories and utility classes. Don't require additional comments.
+  private static boolean isPrivateParameterlessConstructor(MethodDeclarationTree tree) {
+    return "__construct".equalsIgnoreCase(tree.name().text())
+      && tree.parameters().parameters().isEmpty()
+      && CheckUtils.hasModifier(tree.modifiers(), PHPKeyword.PRIVATE.getValue());
   }
 
   private static boolean isConstructorPropertyPromotion(MethodDeclarationTree tree) {
-    return tree.name().text().equalsIgnoreCase("__construct") && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
+    return "__construct".equalsIgnoreCase(tree.name().text()) && tree.parameters().parameters().stream().anyMatch(p -> p.visibility() != null);
   }
 
   private void commitIssue(FunctionTree tree, String type) {
     context().newIssue(this, tree, String.format(MESSAGE, type));
+  }
+
+  // API stubs describe declarations, so their empty bodies do not represent missing implementations.
+  // Recognize the conventional .stub.php suffix and file-level generation markers.
+  private static class StubFileDetector {
+    private static final Pattern GENERATION_MARKER = Pattern.compile("(?m)^[ \\t]*(?:/\\*\\*|\\*)[ \\t]*@generate-(?:class|function)-entries(?=[ \\t]|\\*/|$)");
+
+    private static boolean isStub(PhpFile file, CompilationUnitTree tree) {
+      // PHP's stub guide names .stub.php as the conventional filename suffix:
+      // https://github.com/php/php-src/blob/d7f966e073be8b1ad4bd829d60b0dfa730f53dda/docs/source/miscellaneous/stubs.rst#L49-L56
+      return file.filename().endsWith(".stub.php") || hasGenerationMarker(tree);
+    }
+
+    // File-level generation tags are documented in the PHP stub guide:
+    // https://github.com/php/php-src/blob/master/docs/source/miscellaneous/stubs.rst
+    private static boolean hasGenerationMarker(CompilationUnitTree tree) {
+      if (tree.script() == null || tree.script().statements().isEmpty()) {
+        return false;
+      }
+      var leadingComments = ((PHPTree) tree.script().statements().get(0)).getFirstToken().trivias();
+      return leadingComments.stream()
+        .map(SyntaxTrivia::text)
+        .anyMatch(comment -> comment.startsWith("/**") && GENERATION_MARKER.matcher(comment).find());
+    }
   }
 
 }

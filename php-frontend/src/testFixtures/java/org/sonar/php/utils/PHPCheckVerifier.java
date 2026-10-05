@@ -108,8 +108,10 @@ public class PHPCheckVerifier {
         @Override
         public void visitTrivia(SyntaxTrivia trivia) {
           super.visitTrivia(trivia);
-          int suffixLength = trivia.text().startsWith("//") ? 0 : 2;
-          verifier.addComment(path(context().getPhpFile()), trivia.line(), trivia.column() + 1, trivia.text(), 2, suffixLength);
+          String comment = trivia.text();
+          int prefixLength = comment.startsWith("#") ? 1 : 2;
+          int suffixLength = comment.startsWith("/*") ? 2 : 0;
+          verifier.addComment(path(context().getPhpFile()), trivia.line(), trivia.column() + 1, comment, prefixLength, suffixLength);
         }
       };
       commentVisitor.analyze(phpFile, tree);
