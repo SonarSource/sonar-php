@@ -15,7 +15,7 @@
 </p>
 
 <!-- sonar-marketing:start -->
-<!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository CODEOWNERS review accuracy and merge changes. -->
+<!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository maintainers review accuracy and merge changes. -->
 
 # Code quality and security for PHP
 
