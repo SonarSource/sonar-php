@@ -1,4 +1,10 @@
-# Code Quality and Security for PHP 
+<!-- Sonar Marketing hosts these approved brand assets on its Kentico Kontent CDN (assets-eu-01.kc-usercontent.com). Shared URLs are intentional; consult Marketing before replacing them. -->
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://assets-eu-01.kc-usercontent.com/ef593040-b591-0198-9506-ed88b30bc023/a23fc7ba-23f0-489a-829d-ed88c0748521/Sonar_Logo_Dark%20Backgrounds.svg">
+    <img src="https://assets-eu-01.kc-usercontent.com/ef593040-b591-0198-9506-ed88b30bc023/82c13eba-d95c-4bb8-8007-7ce77c14e043/Sonar_Logo_Light%20Backgrounds.svg" alt="Sonar logo" width="400">
+  </picture>
+</p>
 
 <p align="center">
   <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
@@ -8,8 +14,16 @@
   <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
 </p>
 
-This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform.It will allow you to produce stable and easily supported projects with [integrated code quality and security](https://www.sonarsource.com/solutions/for-developers/?utm_medium=referral&utm_source=github&utm_campaign=clean-code&utm_content=sonar-php) by helping you find and correct bugs, vulnerabilities and smells in your code.
+<!-- sonar-marketing:start -->
+<!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository CODEOWNERS review accuracy and merge changes. -->
 
+# Code quality and security for PHP
+
+The SonarQube analyzer for PHP inspects PHP code for bugs, vulnerabilities, and maintainability issues. This repository contains the analyzer implementation and documentation for developers working on it.
+
+To learn more about Sonar’s PHP analysis, visit the [Sonar website](https://www.sonarsource.com/knowledge/languages/php/).
+
+<!-- sonar-marketing:end -->
 
 # Features
 * 200+ rules
