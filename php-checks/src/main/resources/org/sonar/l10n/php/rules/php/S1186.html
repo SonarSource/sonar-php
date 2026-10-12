@@ -8,10 +8,27 @@ functionality and are misleading to others as they might think the function impl
   <li>The method is an intentionally-blank override. In this case a nested comment should explain the reason for the blank override.</li>
 </ul>
 <h3>Exceptions</h3>
-<p>This rule doesn’t raise an issue on empty methods in abstract classes.</p>
+<p>This rule doesn’t raise an issue in the following cases:</p>
+<ul>
+  <li>Empty methods in abstract classes: They can provide optional hooks for subclasses.</li>
+  <li>Constructors with promoted properties: The constructor is needed to initialize the promoted properties, even when its body is empty.</li>
+  <li>Parameterless private constructors: They prevent direct instantiation of classes that expose only static methods, such as utility or factory
+  classes.</li>
+  <li>Empty functions and methods in PHP API stub files: They declare an API without providing an implementation. This includes files ending in
+  <code>.stub.php</code> and files with a leading PHPDoc <code>@generate-function-entries</code> or <code>@generate-class-entries</code> tag, as
+  described in the <a href="https://github.com/php/php-src/blob/master/docs/source/miscellaneous/stubs.rst">PHP stub guide</a>.</li>
+</ul>
 <pre>
 abstract class Animal {
   public function speak() {}  // default implementation ignored
+}
+
+class Person {
+  public function __construct(private string $name) {}  // constructor with promoted property ignored
+}
+
+class Utility {
+  private function __construct() {}  // private constructor without parameters ignored
 }
 </pre>
 <h2>How to fix it</h2>
