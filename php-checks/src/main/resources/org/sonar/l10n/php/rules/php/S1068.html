@@ -11,4 +11,8 @@ class MyClass {
   }
 }
 </pre>
+<h3>Exceptions</h3>
+<p>Private properties mapped by an ORM are ignored. This exception applies to Doctrine ORM mapping attributes and annotations.</p>
+<p>Private constants in classes extending an enum base class are ignored when the class declares no properties. Enum libraries such as
+<code>myclabs/php-enum</code> can access these constants through reflection.</p>
 
