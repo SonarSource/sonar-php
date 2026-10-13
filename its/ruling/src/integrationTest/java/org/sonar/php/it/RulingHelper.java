@@ -54,6 +54,11 @@ public class RulingHelper {
   }
 
   static SonarScanner prepareScanner(File path, String projectKey, String expectedIssueLocation, File litsDifferencesFile, String... keyValueProperties) {
+    return prepareScannerWithDumpKey(path, projectKey, projectKey, expectedIssueLocation, litsDifferencesFile, keyValueProperties);
+  }
+
+  static SonarScanner prepareScannerWithDumpKey(File path, String projectKey, String dumpProjectKey, String expectedIssueLocation,
+    File litsDifferencesFile, String... keyValueProperties) {
     var sonarScanner = SonarScanner.create(path, keyValueProperties)
       .setProperty("sonar.scanner.skipJreProvisioning", "true")
       .setProjectKey(projectKey)
@@ -62,7 +67,7 @@ public class RulingHelper {
       .setSourceEncoding("UTF-8")
       .setSourceDirs(".")
       .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/" + expectedIssueLocation).getFile().getAbsolutePath())
-      .setProperty("sonar.lits.dump.new", FileLocation.of("build/actual/" + projectKey).getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.new", FileLocation.of("build/actual/" + dumpProjectKey).getFile().getAbsolutePath())
       .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
       .setProperty("sonar.internal.analysis.failFast", "true")
       .setDebugLogs(VERBOSE_LOGS)
