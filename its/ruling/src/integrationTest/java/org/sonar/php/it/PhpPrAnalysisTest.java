@@ -72,13 +72,15 @@ public class PhpPrAnalysisTest {
   @MethodSource("parameters")
   void prAnalysisLogs(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
     File litsDifferencesFile = FileLocation.of("build/differences").getFile();
+    String dumpProjectKey = PROJECT_KEY + "-logs-" + scenario;
 
     // Analyze base commit
-    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile);
+    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
 
     // Analyze the changed branch
     setUpChanges(tempDirectory, scenario, deletedFiles);
-    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected/prAnalysis/" + scenario, litsDifferencesFile)
+    SonarScanner build = RulingHelper.prepareScannerWithDumpKey(tempDirectory, PROJECT_KEY, dumpProjectKey + "-pr",
+      "expected/prAnalysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.pullrequest.key", "1")
       .setProperty("sonar.pullrequest.branch", "incremental");
 
@@ -90,9 +92,10 @@ public class PhpPrAnalysisTest {
   @MethodSource("parameters")
   void prAnalysisIssues(String scenario, int expectedTotalFiles, int expectedSkipped, List<String> deletedFiles) throws IOException {
     File litsDifferencesFile = FileLocation.of("build/differences").getFile();
+    String dumpProjectKey = PROJECT_KEY + "-issues-" + scenario;
 
     // Analyze base commit
-    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile);
+    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
 
     // Analyze the changed branch
 
@@ -101,7 +104,8 @@ public class PhpPrAnalysisTest {
     // (if we set up a PR Analysis, LITS will fail comparing all the expected issues).
     // Thus, in the test we perform branch analysis, and we manually enable incremental analysis for testing purposes.
     setUpChanges(tempDirectory, scenario, deletedFiles);
-    SonarScanner build = RulingHelper.prepareScanner(tempDirectory, PROJECT_KEY, "expected/prAnalysis/" + scenario, litsDifferencesFile)
+    SonarScanner build = RulingHelper.prepareScannerWithDumpKey(tempDirectory, PROJECT_KEY, dumpProjectKey + "-branch",
+      "expected/prAnalysis/" + scenario, litsDifferencesFile)
       .setProperty("sonar.php.skipUnchanged", "true");
 
     BuildResult result = ORCHESTRATOR.executeBuild(build);
@@ -112,10 +116,10 @@ public class PhpPrAnalysisTest {
     assertPrAnalysisLogs(result, expectedTotalFiles, expectedSkipped);
   }
 
-  private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile) throws IOException {
+  private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile, String dumpProjectKey) throws IOException {
     FileUtils.copyDirectory(new File("../sources_pr_analysis", "base"), tempFile);
 
-    SonarScanner build = RulingHelper.prepareScanner(tempFile, PROJECT_KEY, "expected/prAnalysis/base", litsDifferencesFile);
+    SonarScanner build = RulingHelper.prepareScannerWithDumpKey(tempFile, PROJECT_KEY, dumpProjectKey, "expected/prAnalysis/base", litsDifferencesFile);
     ORCHESTRATOR.executeBuild(build);
 
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
