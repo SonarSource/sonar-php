@@ -179,6 +179,13 @@ into the directory with the expected issues
 sonar-php/its/ruling/src/test/resources/expected/<projectKey>/
 ```
 
+PR-analysis tests retain the SonarQube project key `prAnalysis` to reuse the base-analysis cache and compare the existing component keys.
+Each scan has a unique dump project key under `its/ruling/build/actual/`: `prAnalysis-logs-<scenario>-base`,
+`prAnalysis-logs-<scenario>-pr`, `prAnalysis-issues-<scenario>-base`, or `prAnalysis-issues-<scenario>-branch`,
+where `<scenario>` is `added`, `changed`, or `deleted`. Only the branch issue dumps should update
+`its/ruling/src/test/resources/expected/prAnalysis/<scenario>/`; base dumps correspond to `expected/prAnalysis/base/`.
+The PR log-test dumps contain PR-only issues and must not replace the full branch expectations.
+
 ### Rule Descriptions
 
 #### Update Rule Descriptions
