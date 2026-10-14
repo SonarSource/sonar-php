@@ -2,10 +2,10 @@
 
 <p align="center">
   <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
-  <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
-  <img alt="Coverage" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
+  <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
+  <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
   <img alt="Maven Central" src="https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin">
-  <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
+  <img alt="License" src="https://img.shields.io/badge/license-SSALv1-blue">
 </p>
 
 This SonarSource project is a [static code analyzer](https://en.wikipedia.org/wiki/Static_program_analysis) for PHP language used as an extension for the [SonarQube](https://www.sonarqube.org/) platform.It will allow you to produce stable and easily supported projects with [integrated code quality and security](https://www.sonarsource.com/solutions/for-developers/?utm_medium=referral&utm_source=github&utm_campaign=clean-code&utm_content=sonar-php) by helping you find and correct bugs, vulnerabilities and smells in your code.
