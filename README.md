@@ -8,10 +8,10 @@
 
 <p align="center">
   <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
-  <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
-  <img alt="Coverage" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
+  <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
+  <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
   <img alt="Maven Central" src="https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin">
-  <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
+  <img alt="License" src="https://img.shields.io/badge/license-SSALv1-blue">
 </p>
 
 <!-- sonar-marketing:start -->
