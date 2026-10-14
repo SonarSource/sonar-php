@@ -76,6 +76,12 @@
       "matchManagers": [
         "git-submodules"
       ],
+      "minimumReleaseAge": null
+    },
+    {
+      "matchManagers": [
+        "git-submodules"
+      ],
       "matchDepNames": [
         "its/sources"
       ],
