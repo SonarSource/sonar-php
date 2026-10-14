@@ -48,7 +48,7 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     super.visitAssignmentExpression(assignment);
   }
 
-  private void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
+  private static void handleListAssignment(ListExpressionTree lhs, ExpressionTree rhs) {
     List<ExpressionTree> values = new ArrayList<>();
     if (rhs.is(Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION)) {
       List<ArrayPairTree> valueArrayParis = ((ArrayInitializerTree) rhs).arrayPairs();
@@ -74,14 +74,14 @@ public class AssignmentExpressionVisitor extends PHPVisitorCheck {
     }
   }
 
-  private void assign(Tree lhs, ExpressionTree rhs) {
+  private static void assign(Tree lhs, ExpressionTree rhs) {
     SymbolImpl symbol = getSymbol(lhs);
     if (symbol != null) {
       symbol.assignValue(rhs);
     }
   }
 
-  private void assignToUnknown(Tree lhs) {
+  private static void assignToUnknown(Tree lhs) {
     SymbolImpl symbol = getSymbol(lhs);
     if (symbol != null) {
       symbol.assignUnknown();

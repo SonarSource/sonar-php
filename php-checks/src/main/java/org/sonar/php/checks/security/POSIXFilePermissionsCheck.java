@@ -73,7 +73,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
     }
   }
 
-  private int resolveArgument(CallArgumentTree argument, int defaultValue) {
+  private static int resolveArgument(CallArgumentTree argument, int defaultValue) {
     ExpressionTree argumentExpressionTree = CheckUtils.assignedValue(argument.value());
     if (argumentExpressionTree.is(Kind.REGULAR_STRING_LITERAL, Kind.NUMERIC_LITERAL)) {
       String literal = ((LiteralTree) argumentExpressionTree).value();
