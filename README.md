@@ -6,13 +6,15 @@
   </picture>
 </p>
 
-<p align="center">
-  <img alt="Build" src="https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master">
-  <img alt="Quality Gate Status" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status">
-  <img alt="Coverage" src="https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage">
-  <img alt="Maven Central" src="https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin">
-  <img alt="GitHub" src="https://img.shields.io/github/license/SonarSource/sonar-php">
-</p>
+<div align="center">
+
+[![Build Status](https://github.com/SonarSource/sonar-php/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SonarSource/sonar-php/actions/workflows/build.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=alert_status)](https://sonarcloud.io/project/overview?id=org.sonarsource.php%3Aphp)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.sonarsource.php%3Aphp&metric=coverage)](https://sonarcloud.io/component_measures?id=org.sonarsource.php%3Aphp&metric=coverage)
+[![Maven Central](https://img.shields.io/maven-central/v/org.sonarsource.php/sonar-php-plugin)](https://central.sonatype.com/artifact/org.sonarsource.php/sonar-php-plugin)
+[![License](https://img.shields.io/badge/license-SSALv1-blue)](LICENSE.txt)
+
+</div>
 
 <!-- sonar-marketing:start -->
 <!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository maintainers review accuracy and merge changes. -->
