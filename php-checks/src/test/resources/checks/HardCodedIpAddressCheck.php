@@ -74,3 +74,42 @@ $serverAddress = "2001:0db8:0a0b::::0000:0001";
 
 // Broadcast addresses should be ignored
 const broadCastIpV4 = "255.255.255.255";
+
+namespace VersionComparison {
+  use function version_compare as compare_versions;
+
+  version_compare('1.2.3.4', '2.3.4.5', '8.8.8.8'); // Compliant
+  compare_versions(version2: '2.3.4.5', version1: ('1.2.3.4')); // Compliant
+  version_compare('1.2.3.4', ...$versions); // Compliant
+  version_compare('1.2.3.4' . '/endpoint', $version); // Noncompliant
+  version_compare(parse('1.2.3.4'), $version); // Noncompliant
+  $obj->version_compare('1.2.3.4', $version); // Noncompliant
+  // FN: IPv6 comparison data is unlikely; we suppress all literals passed directly to version_compare.
+  version_compare('2003:db8:a0b:12f0::1', $version); // Compliant
+}
+
+namespace ClassNameSuffix {
+  use function get_class as class_name;
+
+  get_class($obj) . '::add'; // Compliant
+  (class_name($obj)) . (('::feed')); // Compliant
+  get_class(new Foo(version_compare('1.2.3.4', $version))) . '::add'; // Compliant
+
+  // FN: These suffixes do not name class members; the broad suffix exemption accepts them for simplicity.
+  // There is no reason anyone would actually use IPs here.
+  get_class($obj) . '::add/path'; // Compliant
+  get_class($obj) . '::2'; // Compliant
+  get_class($obj) . '8.8.8.8'; // Compliant
+
+  get_class($obj) . '::add' . '/path'; // Compliant
+  $prefix . ((get_class($obj) . '::add')); // Compliant
+  get_class($obj) . '::add' . '8.8.8.8'; // Noncompliant
+  //                          ^^^^^^^^^
+  $obj->get_class() . '::add'; // Noncompliant
+  get_class(connect('8.8.8.8')) . '::add'; // Noncompliant
+  //                ^^^^^^^^^
+
+  get_class($obj) . some_wrapper('::add'); // Noncompliant
+
+  $unknown = '::add'; // Noncompliant
+}
