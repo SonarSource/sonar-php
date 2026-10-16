@@ -7,6 +7,7 @@
     "before 4am on Monday"
   ],
   "rebaseWhen": "conflicted",
+  "minimumReleaseAge": "5 days",
   "cloneSubmodules": true,
   "cloneSubmodulesFilter": [
     "build-logic/common"
@@ -70,6 +71,19 @@
       "groupName": "sonar-plugin-api",
       "groupSlug": "sonar-plugin-api",
       "prHeader": "**Before updating the plugin-api version, make sure to check the [compatibility matrix](https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility) and stick to the lowest denominator.**"
+    },
+    {
+      "matchPackageNames": [
+        "org.sonarsource*",
+        "com.sonarsource*"
+      ],
+      "minimumReleaseAge": null
+    },
+    {
+      "matchManagers": [
+        "git-submodules"
+      ],
+      "minimumReleaseAge": null
     },
     {
       "matchManagers": [
