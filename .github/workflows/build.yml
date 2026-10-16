@@ -214,6 +214,9 @@ jobs:
       - *cache-orchestrator
       - *orchestrator-secrets
       - name: Run QA Ruling Tests
+        id: ruling
+        # Let the ruling results be uploaded before failing the job (see "Fail on ruling differences")
+        continue-on-error: true
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
@@ -243,6 +246,53 @@ jobs:
         with:
           name: qa-ruling-reports-${{ matrix.PHP_PROJECT }}
           path: '**/build/reports/**/*'
+      - name: Prepare ruling artifact
+        if: always() && steps.ruling.outcome == 'failure'
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@master
+        with:
+          artifact-name: actual_ruling_${{ matrix.PHP_PROJECT }}
+      - name: Fail on ruling differences
+        if: always() && steps.ruling.outcome == 'failure'
+        run: |
+          echo "::error::QA Ruling tests failed"
+          exit 1
+
+  ruling_update_notify:
+    needs: [ qa_ruling ]
+    runs-on: github-ubuntu-latest-s
+    name: Ruling Update and Notify
+    if: ${{ !cancelled() && needs.qa_ruling.result != 'skipped' }}
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # Check out the PR head rather than the merge commit, so that the action can detect its own auto-update commits
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Detect ruling failures
+        id: ruling-status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QA_RULING_RESULT: ${{ needs.qa_ruling.result }}
+        run: |
+          # Matrix jobs cannot reliably report a combined output, so rely on the uploaded actual_* artifacts instead
+          ACTUAL_ARTIFACTS=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
+            --jq '.artifacts[].name | select(startswith("actual_"))' | wc -l)
+          if [ "$ACTUAL_ARTIFACTS" -gt 0 ]; then
+            echo "ruling-failed=true" >> "$GITHUB_OUTPUT"
+          elif [ "$QA_RULING_RESULT" = "success" ]; then
+            echo "ruling-failed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::QA Ruling failed without producing ruling results, skipping ruling update"
+          fi
+      - name: Update ruling and notify
+        if: steps.ruling-status.outputs.ruling-failed != ''
+        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@master
+        with:
+          ruling-failed: ${{ steps.ruling-status.outputs.ruling-failed }}
 
   qa_pr_analysis:
     needs: [ build ]
