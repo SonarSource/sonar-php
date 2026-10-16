@@ -2,11 +2,11 @@
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
 # To regenerate this file, run: ./gradlew :php-checks:dependencies --write-locks
-ch.qos.logback:logback-classic:1.6.4=testRuntimeClasspath
-ch.qos.logback:logback-core:1.6.4=testRuntimeClasspath
-com.github.spotbugs:spotbugs-annotations:4.10.1=testRuntimeClasspath
+ch.qos.logback:logback-classic:1.6.5=testRuntimeClasspath
+ch.qos.logback:logback-core:1.6.5=testRuntimeClasspath
+com.github.spotbugs:spotbugs-annotations:4.10.4=testRuntimeClasspath
 com.google.code.findbugs:jsr305:3.0.2=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-commons-codec:commons-codec:1.22.0=testRuntimeClasspath
+commons-codec:commons-codec:1.22.1=testRuntimeClasspath
 commons-io:commons-io:2.22.0=testRuntimeClasspath
 junit:junit:4.13.2=testCompileClasspath,testRuntimeClasspath
 net.bytebuddy:byte-buddy-agent:1.17.7=testCompileClasspath,testRuntimeClasspath
@@ -42,6 +42,6 @@ org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.33.0.5369=testCom
 org.sonarsource.analyzer-commons:sonar-regex-parsing:2.33.0.5369=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api-test-fixtures:14.1.0.5543=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:14.1.0.5543=compileClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.sonarqube:sonar-plugin-api-impl:26.9.0.129388=testRuntimeClasspath
+org.sonarsource.sonarqube:sonar-plugin-api-impl:26.10.0.132816=testRuntimeClasspath
 org.sonarsource.sslr:sslr-core:1.26.0.4194=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 empty=annotationProcessor,testAnnotationProcessor
