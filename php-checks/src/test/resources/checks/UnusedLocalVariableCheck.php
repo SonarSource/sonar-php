@@ -401,3 +401,90 @@ function intentionally_unused_captures() {
   consume(function () use (&$_reference) { // Compliant
   });
 }
+
+function reference_read_in_sibling_closure() {
+  $value = 'initial'; // Compliant
+  consume(function () use (&$value) { // Compliant
+    $value = 'updated';
+  });
+  consume(function () use ($value) { // Compliant
+    echo $value;
+  });
+  $unused = 1; // Noncompliant
+}
+
+function reference_read_by_sibling_reference() {
+  $value = 0; // Compliant
+  consume(function () use (&$value) { // Compliant
+    $value = 7;
+  });
+  consume(function () use (&$value) { // Compliant
+    echo $value;
+  });
+}
+
+function nested_reference_read_in_enclosing_function() {
+  $value = 0; // Compliant
+  $outer = function () use (&$value) { // Compliant
+    $inner = function () use (&$value) { // Compliant
+      $value = 7;
+    };
+    $inner();
+  };
+  $outer();
+  return $value;
+}
+
+function nested_reference_read_in_sibling_closure() {
+  $value = 0; // Compliant
+  consume(function () use (&$value) { // Compliant
+    consume(function () use (&$value) { // Compliant
+      $value = 7;
+    });
+  });
+  consume(function () use ($value) { // Compliant
+    consume(function () use ($value) { // Compliant
+      echo $value;
+    });
+  });
+}
+
+function unused_nested_reference() {
+  $value = 0; // Noncompliant
+  consume(function () use (&$value) { // Noncompliant
+    consume(function () use (&$value) { // Noncompliant
+      $value = 7;
+    });
+  });
+}
+
+function unused_sibling_references() {
+  $value = 0; // Noncompliant
+  consume(function () use (&$value) { // Noncompliant
+    $value = 7;
+  });
+  consume(function () use (&$value) { // Noncompliant
+    $value = 8;
+  });
+}
+
+function reference_to_value_capture_does_not_change_outer_value() {
+  $value = 0; // Compliant
+  consume(function () use ($value) { // Noncompliant
+    consume(function () use (&$value) { // Noncompliant
+      $value = 7;
+    });
+  });
+  return $value;
+}
+
+function unrelated_sibling_capture() {
+  $written = 0; // Noncompliant
+  $read = 1; // Compliant
+  consume(function () use (&$written) { // Noncompliant
+    $written = 7;
+  });
+  consume(function () use ($read) { // Compliant
+    echo $read;
+  });
+}
