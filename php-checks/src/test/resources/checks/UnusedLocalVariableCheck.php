@@ -363,3 +363,9 @@ function simple_for() {
     stmt();
   }
 }
+
+function intentionally_unused_locals() {
+  $_ = 1; // Compliant
+  $_unused = 1; // Compliant
+  $unused_local = 1; // Noncompliant
+}
