@@ -17,10 +17,10 @@
 package org.sonar.php.checks;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.php.symbols.Symbols;
@@ -33,6 +33,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonarsource.analyzer.commons.appsec.IpAddressClassifier;
 
 import static org.sonar.php.checks.utils.CheckUtils.skipParenthesis;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
@@ -40,46 +41,9 @@ import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 @Rule(key = "S1313")
 public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
 
-  private static final String LOOPBACK_IPV4 = "^127(?:\\.\\d+){0,2}\\.\\d+$";
-  private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
-  private static final String LOOPBACK_IPV4_MAPPED_TO_IPV6 = "^(::(?i)ffff(:0{1,4})?):127$";
-  private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6 + "|" + LOOPBACK_IPV4_MAPPED_TO_IPV6);
-
-  private static final String PROTOCOL = "((\\w+:)?\\/\\/)?";
-  public static final String IP_V4 = "(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}(?![\\w\\.])";
-
-  // @spotless:off
-  public static final String IP_V6 = "\\[?(" +
-    "([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|" +         // 1:2:3:4:5:6:7:8
-    "([0-9a-fA-F]{1,4}:){1,7}:|"+                         // 1::                              1:2:3:4:5:6:7::
-    "([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|" +        // 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-    "([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|"+  // 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-    "([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|"+  // 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-    "([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|"+  // 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-    "([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|"+  // 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-    "[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|"+       // 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-    ":((:[0-9a-fA-F]{1,4}){1,7})|"+                     // ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8
-    "fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|"+     // fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
-    "::(ffff(:0{1,4}){0,1}:){0,1}" +
-    "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}" +
-    "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|" +          //::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255  (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-    "([0-9a-fA-F]{1,4}:){1,4}:" +
-    "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}" +
-    "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])"+           // 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-    ")(?![\\w:])";
-  // @spotless:on
-
-  private static final Pattern IP_PATTERN = Pattern.compile(String.format("%s(?<ip>((%s)|(%s)))", PROTOCOL, IP_V4, IP_V6));
-
-  private static final List<String> RESERVED_IP_PREFIXES = List.of(
-    "192.0.2.",
-    "198.51.100.",
-    "203.0.113.",
-    "2001:0db8:",
-    "2001:db8:");
-
+  private static final Pattern URL_PREFIX = Pattern.compile("^(?:\\w+:)?//");
+  private static final Pattern ADDRESS_TOKEN = Pattern.compile("[\\w.:\\[\\]%+/-]+", Pattern.UNICODE_CHARACTER_CLASS);
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
-  private static final String BROADCAST_IPV4 = "255.255.255.255";
 
   private final Set<LiteralTree> candidates = new HashSet<>();
 
@@ -101,43 +65,71 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFile
   @Override
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      String literalValue = trimQuotes(tree.value());
-
-      if (!couldBeIpAddress(literalValue)) {
-        return;
-      }
-
-      Matcher matcher = IP_PATTERN.matcher(literalValue);
-      if (matcher.lookingAt()) {
-        String ip = matcher.group("ip");
-        if (isSensitive(ip)) {
-          candidates.add(tree);
-        }
+      String ip = extractAddress(trimQuotes(tree.value()));
+      if (ip != null && IpAddressClassifier.parse(ip).map(parsed -> !parsed.isS1313Exempt()).orElse(false)) {
+        candidates.add(tree);
       }
     }
     super.visitLiteral(tree);
   }
 
-  private static boolean couldBeIpAddress(String value) {
-    // An IPv4 cannot start with a dot thus the ">". A v6 one can start with ":".
-    return value.indexOf('.') > 0 || value.indexOf(':') >= 0;
+  @Nullable
+  private static String extractAddress(String value) {
+    Matcher protocol = URL_PREFIX.matcher(value);
+    String host = value;
+    if (protocol.find()) {
+      host = value.substring(protocol.end());
+      int path = host.indexOf('/');
+      if (path >= 0) {
+        host = host.substring(0, path);
+      }
+    }
+    Matcher token = ADDRESS_TOKEN.matcher(host);
+    if (!token.lookingAt()) {
+      return null;
+    }
+    String address = token.group();
+    int slash = address.indexOf('/');
+    String cidr = "";
+    if (slash >= 0) {
+      String suffix = address.substring(slash);
+      if (suffix.matches("/\\d+")) {
+        cidr = suffix;
+      }
+      address = address.substring(0, slash);
+    }
+    if (address.startsWith("[")) {
+      int closing = address.indexOf(']');
+      if (closing < 0) {
+        return null;
+      }
+      String suffix = address.substring(closing + 1);
+      if (!suffix.isEmpty() && !isPort(suffix)) {
+        return null;
+      }
+      address = address.substring(1, closing);
+    }
+    if (address.indexOf('[') >= 0 || address.indexOf(']') >= 0) {
+      return null;
+    }
+    // Strip the numeric port from IPv4 endpoints such as 8.8.8.8:8080; IPv6 colons belong to the address.
+    int colon = address.indexOf(':');
+    if (colon > 0 && address.substring(0, colon).indexOf('.') >= 0 && isPort(address.substring(colon))) {
+      address = address.substring(0, colon);
+    }
+    return address + cidr;
   }
 
-  private static boolean isSensitive(String ip) {
-    return !isLoopback(ip) && !isBroadcast(ip) && !isReservedIP(ip);
-  }
-
-  private static boolean isLoopback(String ip) {
-    ip = ip.replace("[", "");
-    return LOOPBACK_IP.matcher(ip).find();
-  }
-
-  private static boolean isBroadcast(String ip) {
-    return BROADCAST_IPV4.equals(ip);
-  }
-
-  private static boolean isReservedIP(String ip) {
-    return RESERVED_IP_PREFIXES.stream().anyMatch(ip::startsWith);
+  private static boolean isPort(String suffix) {
+    if (suffix.length() <= 1 || suffix.charAt(0) != ':'
+      || !suffix.substring(1).chars().allMatch(character -> character >= '0' && character <= '9')) {
+      return false;
+    }
+    try {
+      return Integer.parseInt(suffix.substring(1)) <= 65535;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 
   private static boolean isBuiltinFunction(FunctionCallTree call, QualifiedName expectedName) {
