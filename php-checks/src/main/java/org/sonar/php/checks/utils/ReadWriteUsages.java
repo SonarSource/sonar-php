@@ -22,27 +22,52 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import org.sonar.php.tree.TreeUtils;
 import org.sonar.php.tree.symbols.Scope;
+import org.sonar.php.tree.symbols.SymbolImpl;
 import org.sonar.plugins.php.api.symbols.Symbol;
 import org.sonar.plugins.php.api.symbols.SymbolTable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
+import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
+import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
+import org.sonar.plugins.php.api.tree.expression.LiteralTree;
+import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
+import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
+import org.sonar.plugins.php.api.tree.expression.VariableVariableTree;
 import org.sonar.plugins.php.api.tree.lexical.SyntaxToken;
 import org.sonar.plugins.php.api.tree.statement.ForEachStatementTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class ReadWriteUsages {
+
+  private static final Set<String> FUNCTIONS_WITH_POTENTIAL_INDIRECT_LOCAL_ACCESS = Set.of(
+    "eval",
+    // With collision flags such as EXTR_SKIP, extract() observes existing locals matching array keys.
+    "extract",
+    "get_defined_vars",
+    "include",
+    "include_once",
+    "require",
+    "require_once");
 
   private final SymbolTable symbolTable;
   private final Set<SyntaxToken> writes = new HashSet<>();
@@ -50,6 +75,8 @@ public class ReadWriteUsages {
   private final Set<SyntaxToken> declarations = new HashSet<>();
   private final Map<Symbol, List<Symbol>> inheritedVariablesByParent = new HashMap<>();
   private final Map<Symbol, Symbol> parentSymbolByInheritedReference = new HashMap<>();
+  private final Set<Symbol> dynamicallyReadSymbols = new HashSet<>();
+  private final Set<Scope> scopesWithUnresolvedDynamicReads = new HashSet<>();
 
   public ReadWriteUsages(Tree tree, SymbolTable symbolTable) {
     this.symbolTable = symbolTable;
@@ -81,6 +108,9 @@ public class ReadWriteUsages {
   }
 
   private boolean hasReadUsage(Symbol symbol) {
+    if (dynamicallyReadSymbols.contains(symbol) || scopesWithUnresolvedDynamicReads.contains(((SymbolImpl) symbol).scope())) {
+      return true;
+    }
     List<SyntaxToken> allReferences = new ArrayList<>();
     allReferences.add(symbol.declaration().token());
     allReferences.addAll(symbol.usages());
@@ -89,6 +119,19 @@ public class ReadWriteUsages {
   }
 
   private class UsageVisitor extends PHPVisitorCheck {
+    @Override
+    public void visitFunctionCall(FunctionCallTree tree) {
+      if (!(tree.getParent() instanceof NewExpressionTree) && tree.callee() instanceof NamespaceNameTree callee
+        && FUNCTIONS_WITH_POTENTIAL_INDIRECT_LOCAL_ACCESS.contains(callee.qualifiedName().toLowerCase(Locale.ROOT))) {
+        Scope scope = symbolTable.getScopeFor(TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds()));
+        if (scope != null) {
+          // shortcut: all locals may be observed; resolve call effects if more precision is needed.
+          scopesWithUnresolvedDynamicReads.add(scope);
+        }
+      }
+      super.visitFunctionCall(tree);
+    }
+
     @Override
     public void visitVariableDeclaration(VariableDeclarationTree tree) {
       visitAssignedVariable(tree.identifier());
@@ -120,6 +163,73 @@ public class ReadWriteUsages {
       }
       visitAssignedVariable(tree.value());
       super.visitForEachStatement(tree);
+    }
+
+    @Override
+    public void visitVariableVariable(VariableVariableTree tree) {
+      if (tree.dollarTokens().size() > 1 || (isLocalVariableLookup(tree) && !isWriteOnly(tree))) {
+        visitDynamicRead(tree);
+      }
+      super.visitVariableVariable(tree);
+    }
+
+    @Override
+    public void visitCompoundVariable(CompoundVariableTree tree) {
+      if (!isDirectInterpolation(tree) && isLocalVariableLookup(tree) && !isWriteOnly(tree)) {
+        visitDynamicRead(tree);
+      }
+      super.visitCompoundVariable(tree);
+    }
+
+    // Recognizes string interpolation such as ${foo} and ${foo[0]}, which reads $foo directly.
+    // In contrast, "${$name}" reads the local whose name is stored in $name.
+    private static boolean isDirectInterpolation(CompoundVariableTree tree) {
+      ExpressionTree name = tree.variableExpression();
+      while (name instanceof ArrayAccessTree access) {
+        name = access.object();
+      }
+      return (name instanceof NameIdentifierTree || name instanceof NamespaceNameTree)
+        && (tree.getParent() instanceof ExpandableStringLiteralTree || tree.getParent() instanceof HeredocStringLiteralTree);
+    }
+
+    // Marks the local named by a string literal as read,
+    // or all locals in the scope as read if the name is unresolved.
+    private void visitDynamicRead(VariableTree tree) {
+      Scope scope = symbolTable.getScopeFor(TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds()));
+      if (scope == null) {
+        return;
+      }
+      ExpressionTree name = CheckUtils.skipParenthesis(tree.variableExpression());
+      if (name instanceof LiteralTree literal && literal.is(Kind.REGULAR_STRING_LITERAL) && !literal.value().contains("\\")) {
+        Symbol symbol = scope.getSymbol("$" + CheckUtils.trimQuotes(literal), Symbol.Kind.VARIABLE, Symbol.Kind.PARAMETER);
+        if (symbol != null) {
+          dynamicallyReadSymbols.add(symbol);
+        }
+      } else {
+        // shortcut: unresolved names may read any local, add name resolution if more precision is needed.
+        scopesWithUnresolvedDynamicReads.add(scope);
+      }
+    }
+
+    // Checks whether the outermost lookup selects a local variable.
+    // Example::$$name() and Example::$$name(...) look up a local variable;
+    // Example::$$name and new Example::$$name() look up a static property.
+    private static boolean isLocalVariableLookup(Tree tree) {
+      if (tree.getParent() instanceof MemberAccessTree member && member.isStatic() && member.member() == tree) {
+        return (member.getParent() instanceof CallableConvertTree callable && callable.expression() == member)
+          || (member.getParent() instanceof FunctionCallTree call && call.callee() == member && !(call.getParent() instanceof NewExpressionTree));
+      }
+      return true;
+    }
+
+    // Identifies variable occurrences that are written without reading their previous value.
+    // E.g., $a in $a = 1 is write-only, but $a in $a += 1 is not.
+    private static boolean isWriteOnly(Tree tree) {
+      Tree target = tree.getParent() instanceof ReferenceVariableTree ? tree.getParent() : tree;
+      Tree parent = target.getParent();
+      return (parent instanceof AssignmentExpressionTree assignment && assignment.variable() == target && assignment.is(Kind.ASSIGNMENT, Kind.ASSIGNMENT_BY_REFERENCE))
+        || (parent instanceof ForEachStatementTree forEach && (forEach.key() == target || forEach.value() == target))
+        || (parent instanceof ArrayAssignmentPatternElementTree element && element.variable() == target);
     }
 
     private void visitAssignedVariable(Tree tree) {
