@@ -169,7 +169,6 @@ jobs:
       - name: Run QA Plugin Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
@@ -216,7 +215,6 @@ jobs:
       - name: Run QA Ruling Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
@@ -263,7 +261,6 @@ jobs:
       - name: Run PR Analysis Integration Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
