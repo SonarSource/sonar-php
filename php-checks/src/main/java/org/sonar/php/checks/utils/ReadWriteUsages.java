@@ -57,9 +57,17 @@ public class ReadWriteUsages {
   }
 
   public boolean isRead(Symbol symbol) {
+    return isRead(symbol, new HashSet<>());
+  }
+
+  private boolean isRead(Symbol symbol, Set<Symbol> visited) {
+    if (!visited.add(symbol)) {
+      return false;
+    }
+    Symbol parent = parentSymbolByInheritedReference.get(symbol);
     return hasReadUsage(symbol)
-      || inheritedVariablesByParent.getOrDefault(symbol, Collections.emptyList()).stream().anyMatch(this::isRead)
-      || hasParentWhichIsRead(symbol);
+      || inheritedVariablesByParent.getOrDefault(symbol, Collections.emptyList()).stream().anyMatch(inherited -> isRead(inherited, visited))
+      || (parent != null && isRead(parent, visited));
   }
 
   public List<SyntaxToken> getWritesSorted(Symbol symbol) {
@@ -77,11 +85,6 @@ public class ReadWriteUsages {
     allReferences.addAll(symbol.usages());
     return allReferences.stream()
       .anyMatch(t -> (!writes.contains(t) && !declarations.contains(t)) || readAssignment.contains(t));
-  }
-
-  private boolean hasParentWhichIsRead(Symbol symbol) {
-    Symbol parent = parentSymbolByInheritedReference.get(symbol);
-    return parent != null && hasReadUsage(parent);
   }
 
   private class UsageVisitor extends PHPVisitorCheck {
