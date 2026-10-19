@@ -56,6 +56,12 @@ tasks.register("writeAllLockFiles") {
 }
 
 subprojects {
+  tasks.withType<Test>().configureEach {
+    providers.environmentVariable("ARTIFACTORY_RESOLVE_URL").orNull?.let {
+      systemProperty("orchestrator.artifactory.url", it)
+    }
+  }
+
   configurations.all {
     resolutionStrategy.eachDependency {
       if (requested.group == "ch.qos.logback") {
