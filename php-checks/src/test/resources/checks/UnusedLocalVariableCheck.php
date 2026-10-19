@@ -363,3 +363,41 @@ function simple_for() {
     stmt();
   }
 }
+
+function intentionally_unused_locals($values) {
+  $_ = 1; // Compliant
+  $_unused = 1; // Compliant
+  $__unused = 1; // Compliant
+  $unused_local = 1; // Noncompliant
+  $unused_ = 1; // Noncompliant
+  static $_cached; // Compliant
+  list($_first, $_second) = $values; // Compliant
+
+  foreach ($values as $_value) { // Compliant
+  }
+  foreach ($values as &$_reference) { // Compliant
+  }
+  foreach ($values as $_key => $_value) { // Compliant
+  }
+  foreach ($values as $unusedKey => $_value) { // Noncompliant
+  }
+  foreach ($values as $unusedValue) { // Noncompliant
+  }
+}
+
+function retained_objects() {
+  $_guard = acquireScopeGuard(); // Compliant
+  $_object = new ScopeGuard(); // Compliant
+  $guard = acquireScopeGuard(); // Noncompliant
+  $object = new ScopeGuard(); // Noncompliant
+  performWork();
+}
+
+function intentionally_unused_captures() {
+  $_value = 1; // Compliant
+  $_reference = 2; // Compliant
+  consume(function () use ($_value) { // Compliant
+  });
+  consume(function () use (&$_reference) { // Compliant
+  });
+}
