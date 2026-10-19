@@ -164,15 +164,14 @@ jobs:
         id: secrets
         with:
           secrets: |
-            development/artifactory/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - name: Run QA Plugin Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
+          artifactory-reader-role: private-reader
           deploy-pull-request: false
           skip-tests: false
           use-develocity: true
@@ -216,10 +215,10 @@ jobs:
       - name: Run QA Ruling Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
+          artifactory-reader-role: private-reader
           deploy-pull-request: false
           skip-tests: false
           use-develocity: true
@@ -263,10 +262,10 @@ jobs:
       - name: Run PR Analysis Integration Tests
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
-          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           KEEP_ORCHESTRATOR_RUNNING: "true"
         with:
+          artifactory-reader-role: private-reader
           deploy-pull-request: false
           skip-tests: false
           use-develocity: true
