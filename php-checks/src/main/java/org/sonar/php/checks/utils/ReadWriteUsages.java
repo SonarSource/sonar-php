@@ -36,15 +36,18 @@ import org.sonar.plugins.php.api.tree.declaration.VariableDeclarationTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAccessTree;
 import org.sonar.plugins.php.api.tree.expression.ArrayAssignmentPatternElementTree;
 import org.sonar.plugins.php.api.tree.expression.AssignmentExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.CompoundVariableTree;
 import org.sonar.plugins.php.api.tree.expression.ExpandableStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
+import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.HeredocStringLiteralTree;
 import org.sonar.plugins.php.api.tree.expression.LexicalVariablesTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.tree.expression.MemberAccessTree;
 import org.sonar.plugins.php.api.tree.expression.NameIdentifierTree;
+import org.sonar.plugins.php.api.tree.expression.NewExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.ReferenceVariableTree;
 import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.tree.expression.VariableTree;
@@ -140,7 +143,7 @@ public class ReadWriteUsages {
 
     @Override
     public void visitVariableVariable(VariableVariableTree tree) {
-      if (tree.dollarTokens().size() > 1 || (!isStaticMemberName(tree) && !isWriteOnly(tree))) {
+      if (tree.dollarTokens().size() > 1 || (!isStaticPropertyName(tree) && !isWriteOnly(tree))) {
         visitDynamicRead(tree);
       }
       super.visitVariableVariable(tree);
@@ -148,7 +151,7 @@ public class ReadWriteUsages {
 
     @Override
     public void visitCompoundVariable(CompoundVariableTree tree) {
-      if (!isDirectInterpolation(tree) && !isStaticMemberName(tree) && !isWriteOnly(tree)) {
+      if (!isDirectInterpolation(tree) && !isStaticPropertyName(tree) && !isWriteOnly(tree)) {
         visitDynamicRead(tree);
       }
       super.visitCompoundVariable(tree);
@@ -181,8 +184,10 @@ public class ReadWriteUsages {
       }
     }
 
-    private static boolean isStaticMemberName(Tree tree) {
-      return tree.getParent() instanceof MemberAccessTree member && member.isStatic() && member.member() == tree;
+    private static boolean isStaticPropertyName(Tree tree) {
+      return tree.getParent() instanceof MemberAccessTree member && member.isStatic() && member.member() == tree
+        && !(member.getParent() instanceof CallableConvertTree callable && callable.expression() == member)
+        && !(member.getParent() instanceof FunctionCallTree call && call.callee() == member && !(call.getParent() instanceof NewExpressionTree));
     }
 
     private static boolean isWriteOnly(Tree tree) {

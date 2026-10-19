@@ -136,6 +136,53 @@ function ordinary_dynamic_static_property($name) {
   Example::$$name = 2;
 }
 
+function dynamic_static_method($name) {
+  $method = 'foo'; // Compliant
+  return Example::$$name();
+}
+
+function compound_dynamic_static_method($name) {
+  $method = 'foo'; // Compliant
+  return Example::${$name}();
+}
+
+function literal_dynamic_static_method() {
+  $method = 'foo'; // Compliant
+  $unused = 1; // Noncompliant
+  return Example::${'method'}();
+}
+
+function dynamic_static_callable($name) {
+  $method = 'foo'; // Compliant
+  return Example::$$name(...);
+}
+
+function compound_dynamic_static_callable($name) {
+  $method = 'foo'; // Compliant
+  return Example::${$name}(...);
+}
+
+function literal_dynamic_static_callable() {
+  $method = 'foo'; // Compliant
+  $unused = 1; // Noncompliant
+  return Example::${'method'}(...);
+}
+
+function dynamic_static_property_constructor($name) {
+  $unused = 1; // Noncompliant
+  return new Example::$$name();
+}
+
+function compound_dynamic_static_property_constructor($name) {
+  $unused = 1; // Noncompliant
+  return new Example::${$name}();
+}
+
+function literal_dynamic_static_property_constructor() {
+  $className = 'MissingClass'; // Noncompliant
+  return new Example::${'className'}();
+}
+
 function dynamic_local_as_property_name($object, $name) {
   $propertyName = 'property'; // Compliant
   return $object->$$name;
