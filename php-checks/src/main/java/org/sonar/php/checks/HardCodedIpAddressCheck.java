@@ -121,8 +121,15 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFile
   }
 
   private static boolean isPort(String suffix) {
-    return suffix.length() > 1 && suffix.charAt(0) == ':'
-      && suffix.substring(1).chars().allMatch(character -> character >= '0' && character <= '9');
+    if (suffix.length() <= 1 || suffix.charAt(0) != ':'
+      || !suffix.substring(1).chars().allMatch(character -> character >= '0' && character <= '9')) {
+      return false;
+    }
+    try {
+      return Integer.parseInt(suffix.substring(1)) <= 65535;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 
   private static boolean isBuiltinFunction(FunctionCallTree call, QualifiedName expectedName) {

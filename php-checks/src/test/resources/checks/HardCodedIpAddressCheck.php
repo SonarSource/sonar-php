@@ -89,6 +89,17 @@ $ip = "8.8.8.8/api"; // Noncompliant
 $ip = "10.1.2.3/"; // Noncompliant
 $ip = "1.2.3.4:8080/foo"; // Noncompliant
 
+// Ports range from 0 to 65535.
+$ip = "8.8.8.8:0"; // Noncompliant
+$ip = "8.8.8.8:65535"; // Noncompliant
+$ip = "8.8.8.8:00080"; // Noncompliant
+$ip = "8.8.8.8:65536"; // Compliant
+$ip = "8.8.8.8:99999999999999999999"; // Compliant
+$ip = "8.8.8.8:-1"; // Compliant
+$ip = "8.8.8.8:"; // Compliant
+$ip = "[2003::1]:65535"; // Noncompliant
+$ip = "[2003::1]:65536"; // Compliant
+
 // Don't raise on strings that are not IPs
 $ip = "8.8.8.8-foo"; // Compliant
 $ip = "8.8.8.8:bad"; // Compliant
