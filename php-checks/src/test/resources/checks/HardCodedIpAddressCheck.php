@@ -45,7 +45,8 @@ $serverAddress = "2003:db8:3:4::192.0.2.33";                    // Noncompliant
 $serverAddress = "1234:::1";                                    // Compliant - no IPv6
 $serverAddress = '0:1234:dc0:41:216:3eff:fe67:3e01';            // Noncompliant
 
-
+$url = "http://[2003:db8:a0b:12f0::1]/index.html";              // Noncompliant
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // 2001:db8::/32 is for documentation
 $url = "http://[2001:db8:a0b:12f0::1]/index.html";              // Compliant
 
