@@ -33,6 +33,6 @@ org.slf4j:slf4j-api:2.0.18=compileClasspath,testCompileClasspath,testRuntimeClas
 org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:2.33.0.5369=testRuntimeClasspath
 org.sonarsource.analyzer-commons:sonar-regex-parsing:2.33.0.5369=compileClasspath,testCompileClasspath,testRuntimeClasspath
 org.sonarsource.api.plugin:sonar-plugin-api:14.1.0.5543=compileClasspath,testCompileClasspath,testRuntimeClasspath
-org.sonarsource.sonarqube:sonar-plugin-api-impl:26.10.0.132816=testCompileClasspath,testRuntimeClasspath
+org.sonarsource.sonarqube:sonar-plugin-api-impl:26.10.0.133078=testCompileClasspath,testRuntimeClasspath
 org.sonarsource.sslr:sslr-core:1.26.0.4194=compileClasspath,testCompileClasspath,testRuntimeClasspath
 empty=annotationProcessor,runtimeClasspath,shadow,testAnnotationProcessor
