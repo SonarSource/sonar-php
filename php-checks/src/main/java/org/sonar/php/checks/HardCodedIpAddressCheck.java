@@ -18,9 +18,6 @@ package org.sonar.php.checks;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 import org.sonar.check.Rule;
 import org.sonar.php.checks.utils.TestFileExcludedCheck;
 import org.sonar.php.symbols.Symbols;
@@ -33,6 +30,7 @@ import org.sonar.plugins.php.api.tree.expression.BinaryExpressionTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
 import org.sonar.plugins.php.api.tree.expression.LiteralTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
+import org.sonarsource.analyzer.commons.appsec.IpAddressCandidateExtractor;
 import org.sonarsource.analyzer.commons.appsec.IpAddressClassifier;
 
 import static org.sonar.php.checks.utils.CheckUtils.skipParenthesis;
@@ -41,8 +39,6 @@ import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 @Rule(key = "S1313")
 public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFileExcludedCheck {
 
-  private static final Pattern URL_PREFIX = Pattern.compile("^(?:\\w+:)?//");
-  private static final Pattern ADDRESS_TOKEN = Pattern.compile("[\\w.:\\[\\]%+/-]+", Pattern.UNICODE_CHARACTER_CLASS);
   private static final String MESSAGE = "Make sure using this hardcoded IP address is safe here.";
 
   private final Set<LiteralTree> candidates = new HashSet<>();
@@ -65,71 +61,13 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFile
   @Override
   public void visitLiteral(LiteralTree tree) {
     if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      String ip = extractAddress(trimQuotes(tree.value()));
-      if (ip != null && IpAddressClassifier.parse(ip).map(parsed -> !parsed.isS1313Exempt()).orElse(false)) {
+      if (IpAddressCandidateExtractor.extract(trimQuotes(tree.value()))
+        .flatMap(IpAddressClassifier::parse)
+        .map(parsed -> !parsed.isAllowedToBeHardcoded()).orElse(false)) {
         candidates.add(tree);
       }
     }
     super.visitLiteral(tree);
-  }
-
-  @Nullable
-  private static String extractAddress(String value) {
-    Matcher protocol = URL_PREFIX.matcher(value);
-    String host = value;
-    if (protocol.find()) {
-      host = value.substring(protocol.end());
-      int path = host.indexOf('/');
-      if (path >= 0) {
-        host = host.substring(0, path);
-      }
-    }
-    Matcher token = ADDRESS_TOKEN.matcher(host);
-    if (!token.lookingAt()) {
-      return null;
-    }
-    String address = token.group();
-    int slash = address.indexOf('/');
-    String cidr = "";
-    if (slash >= 0) {
-      String suffix = address.substring(slash);
-      if (suffix.matches("/\\d+")) {
-        cidr = suffix;
-      }
-      address = address.substring(0, slash);
-    }
-    if (address.startsWith("[")) {
-      int closing = address.indexOf(']');
-      if (closing < 0) {
-        return null;
-      }
-      String suffix = address.substring(closing + 1);
-      if (!suffix.isEmpty() && !isPort(suffix)) {
-        return null;
-      }
-      address = address.substring(1, closing);
-    }
-    if (address.indexOf('[') >= 0 || address.indexOf(']') >= 0) {
-      return null;
-    }
-    // Strip the numeric port from IPv4 endpoints such as 8.8.8.8:8080; IPv6 colons belong to the address.
-    int colon = address.indexOf(':');
-    if (colon > 0 && address.substring(0, colon).indexOf('.') >= 0 && isPort(address.substring(colon))) {
-      address = address.substring(0, colon);
-    }
-    return address + cidr;
-  }
-
-  private static boolean isPort(String suffix) {
-    if (suffix.length() <= 1 || suffix.charAt(0) != ':'
-      || !suffix.substring(1).chars().allMatch(character -> character >= '0' && character <= '9')) {
-      return false;
-    }
-    try {
-      return Integer.parseInt(suffix.substring(1)) <= 65535;
-    } catch (NumberFormatException e) {
-      return false;
-    }
   }
 
   private static boolean isBuiltinFunction(FunctionCallTree call, QualifiedName expectedName) {
