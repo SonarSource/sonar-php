@@ -2,7 +2,7 @@ name: Production Edge Pilot
 on:
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   id-token: write
 jobs:
   qa:
