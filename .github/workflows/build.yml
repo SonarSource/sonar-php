@@ -75,7 +75,12 @@ jobs:
           private_status=$(curl --silent --show-error --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "$module_url")
           zip_status=$(curl --silent --show-error --head --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "$zip_url")
           printf 'PILOT metadata GET: public-reader=%s private-reader=%s; private distribution HEAD=%s\n' "$public_status" "$private_status" "$zip_status"
-          test "$private_status" = 200
+          pom_status=$(curl --silent --show-error --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "${module_url%.module}.pom")
+          jar_status=$(curl --silent --show-error --head --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "${module_url%.module}.jar")
+          printf 'PILOT private-reader required artifacts: POM=%s JAR=%s\n' "$pom_status" "$jar_status"
+          [[ "$private_status" = 200 || "$private_status" = 404 ]]
+          test "$pom_status" = 200
+          test "$jar_status" = 200
           test "$zip_status" = 200
       - name: Run existing plugin QA with production-aware action
         uses: SonarSource/ci-github-actions/build-gradle@34a5cd54a008a57fb8e78ca41af265ab7cba66de
