@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.check.Rule;
@@ -221,11 +222,10 @@ public class HardCodedCredentialsInFunctionCallsCheck extends FunctionArgumentCh
     }
 
     private static Set<Integer> retrieveSensitiveIndices(JSONArray array) {
-      Set<Integer> indices = new HashSet<>();
-      for (Object index : array) {
-        indices.add(toInteger(index));
-      }
-      return indices;
+      Stream<?> elements = array.stream();
+      return elements
+        .map(JsonSensitiveFunctionsReader::toInteger)
+        .collect(Collectors.toCollection(HashSet::new));
     }
 
     static Integer toInteger(Object value) {

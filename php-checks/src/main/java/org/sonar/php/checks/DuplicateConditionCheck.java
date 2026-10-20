@@ -28,7 +28,6 @@ import org.sonar.plugins.php.api.tree.expression.ExpressionTree;
 import org.sonar.plugins.php.api.tree.statement.CaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.ElseifClauseTree;
 import org.sonar.plugins.php.api.tree.statement.IfStatementTree;
-import org.sonar.plugins.php.api.tree.statement.SwitchCaseClauseTree;
 import org.sonar.plugins.php.api.tree.statement.SwitchStatementTree;
 
 @Rule(key = DuplicateConditionCheck.KEY)
@@ -41,13 +40,10 @@ public class DuplicateConditionCheck extends AbstractDuplicateBranchCheck {
   public void visitSwitchStatement(SwitchStatementTree tree) {
     super.visitSwitchStatement(tree);
 
-    List<ExpressionTree> expressions = new ArrayList<>();
-
-    for (SwitchCaseClauseTree switchCaseClauseTree : tree.cases()) {
-      if (switchCaseClauseTree.is(Kind.CASE_CLAUSE)) {
-        expressions.add(((CaseClauseTree) switchCaseClauseTree).expression());
-      }
-    }
+    List<ExpressionTree> expressions = tree.cases().stream()
+      .filter(switchCaseClauseTree -> switchCaseClauseTree.is(Kind.CASE_CLAUSE))
+      .map(switchCaseClauseTree -> ((CaseClauseTree) switchCaseClauseTree).expression())
+      .toList();
 
     checkForEquality(expressions, "case");
   }

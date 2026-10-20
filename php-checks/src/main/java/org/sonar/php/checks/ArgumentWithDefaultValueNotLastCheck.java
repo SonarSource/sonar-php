@@ -18,6 +18,7 @@ package org.sonar.php.checks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.sonar.check.Rule;
 import org.sonar.php.utils.collections.ListUtils;
 import org.sonar.plugins.php.api.tree.SeparatedList;
@@ -74,11 +75,9 @@ public class ArgumentWithDefaultValueNotLastCheck extends PHPVisitorCheck {
   }
 
   private static String getNameListString(List<ParameterTree> params) {
-    List<String> parameterNames = new ArrayList<>();
-    for (ParameterTree parameter : params) {
-      parameterNames.add("\"" + parameter.variableIdentifier().variableExpression().text() + "\"");
-    }
-    return String.join(", ", parameterNames);
+    return params.stream()
+      .map(parameter -> "\"" + parameter.variableIdentifier().variableExpression().text() + "\"")
+      .collect(Collectors.joining(", "));
   }
 
 }
