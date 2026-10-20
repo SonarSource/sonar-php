@@ -30,6 +30,7 @@ jobs:
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - uses: SonarSource/ci-github-actions/config-gradle@34a5cd54a008a57fb8e78ca41af265ab7cba66de
         with:
+          artifactory-reader-role: private-reader
           disable-caching: 'true'
           use-develocity: 'false'
       - name: Prepare private Orchestrator configuration
@@ -55,6 +56,27 @@ jobs:
             println 'PILOT build resolution is production Edge; deployment URL remains SaaS'
           }
           GRADLE
+      - uses: SonarSource/vault-action-wrapper@v3
+        id: public_probe
+        with:
+          secrets: |
+            development/artifactory-edge-prod/token/{REPO_OWNER_NAME_DASH}-public-reader username | PUBLIC_READER_USERNAME;
+            development/artifactory-edge-prod/token/{REPO_OWNER_NAME_DASH}-public-reader access_token | PUBLIC_READER_TOKEN;
+      - name: Compare production reader access
+        shell: bash
+        env:
+          PUBLIC_READER_USERNAME: ${{ fromJSON(steps.public_probe.outputs.vault).PUBLIC_READER_USERNAME }}
+          PUBLIC_READER_TOKEN: ${{ fromJSON(steps.public_probe.outputs.vault).PUBLIC_READER_TOKEN }}
+        run: |
+          set -euo pipefail
+          module_url="$ARTIFACTORY_RESOLVE_URL/sonarsource/org/eclipse/lsp4j/org.eclipse.lsp4j.jsonrpc/1.0.0/org.eclipse.lsp4j.jsonrpc-1.0.0.module"
+          zip_url="$ARTIFACTORY_RESOLVE_URL/sonarsource/com/sonarsource/sonarqube/sonarqube-enterprise-lw/2026.5.2.132813/sonarqube-enterprise-lw-2026.5.2.132813.zip"
+          public_status=$(curl --silent --show-error --max-time 60 --user "$PUBLIC_READER_USERNAME:$PUBLIC_READER_TOKEN" -o /dev/null -w '%{http_code}' "$module_url")
+          private_status=$(curl --silent --show-error --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "$module_url")
+          zip_status=$(curl --silent --show-error --head --max-time 60 --user "$ARTIFACTORY_USERNAME:$ARTIFACTORY_ACCESS_TOKEN" -o /dev/null -w '%{http_code}' "$zip_url")
+          printf 'PILOT metadata GET: public-reader=%s private-reader=%s; private distribution HEAD=%s\n' "$public_status" "$private_status" "$zip_status"
+          test "$private_status" = 200
+          test "$zip_status" = 200
       - name: Run existing plugin QA with production-aware action
         uses: SonarSource/ci-github-actions/build-gradle@34a5cd54a008a57fb8e78ca41af265ab7cba66de
         env:
@@ -64,6 +86,7 @@ jobs:
           deploy-pull-request: 'false'
           skip-tests: 'false'
           use-develocity: 'false'
+          artifactory-reader-role: private-reader
           disable-caching: 'true'
           sonar-platform: none
           gradle-args: >-
