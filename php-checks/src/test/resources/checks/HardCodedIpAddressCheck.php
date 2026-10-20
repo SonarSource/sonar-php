@@ -78,7 +78,8 @@ const broadCastIpV4 = "255.255.255.255";
 
 $ip = "3fff::1"; // Compliant
 $ip = "::"; // Compliant
-$ip = "ff02::1"; // Compliant
+$ip = "ff02::1"; // Noncompliant
+$ip = "224.0.0.1"; // Noncompliant
 $ip = "10.0.0.1"; // Noncompliant
 
 // Extract the complete host, including dotted IPv6 tails, brackets, zones, and ports.
@@ -88,6 +89,8 @@ $ip = "[2003::1%eth0"; // Compliant
 $ip = "8.8.8.8/api"; // Noncompliant
 $ip = "10.1.2.3/"; // Noncompliant
 $ip = "1.2.3.4:8080/foo"; // Noncompliant
+$ip = "git+ssh://1.2.3.4/path"; // Noncompliant
+$ip = "http://1.2.3.4?query"; // Noncompliant
 
 // Ports range from 0 to 65535.
 $ip = "8.8.8.8:0"; // Noncompliant
