@@ -18,6 +18,7 @@ package org.sonar.php.checks.phpini;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.php.ini.PhpIniIssue;
 import org.sonar.php.ini.tree.Directive;
@@ -39,13 +40,10 @@ public class PhpIniFiles {
     String directiveMessage, @Nullable String fileMessage) {
 
     List<Directive> directives = phpIniFile.directivesForName(directiveName);
-    List<PhpIniIssue> issues = new ArrayList<>();
-
-    for (Directive directive : directives) {
-      if (!requiredValue.matchesValue(directive)) {
-        issues.add(newIssue(directiveMessage).line(directive.name().line()));
-      }
-    }
+    List<PhpIniIssue> issues = directives.stream()
+      .filter(directive -> !requiredValue.matchesValue(directive))
+      .map(directive -> newIssue(directiveMessage).line(directive.name().line()))
+      .collect(Collectors.toCollection(ArrayList::new));
 
     if (fileMessage != null && directives.isEmpty()) {
       issues.add(newIssue(fileMessage));

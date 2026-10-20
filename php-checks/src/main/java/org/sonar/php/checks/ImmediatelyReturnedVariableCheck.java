@@ -119,13 +119,12 @@ public class ImmediatelyReturnedVariableCheck extends AbstractStatementsCheck {
   }
 
   private static List<String> getVariablesFromList(ListExpressionTree listExpressionTree) {
-    List<String> names = new ArrayList<>();
-    for (Optional<ArrayAssignmentPatternElementTree> element : listExpressionTree.elements()) {
-      if (element.isPresent() && element.get().variable().is(Kind.VARIABLE_IDENTIFIER)) {
-        names.add(((VariableIdentifierTree) element.get().variable()).variableExpression().text());
-      }
-    }
-    return names;
+    return listExpressionTree.elements().stream()
+      .flatMap(Optional::stream)
+      .map(ArrayAssignmentPatternElementTree::variable)
+      .filter(variable -> variable.is(Kind.VARIABLE_IDENTIFIER))
+      .map(variable -> ((VariableIdentifierTree) variable).variableExpression().text())
+      .toList();
   }
 
   @Nullable
