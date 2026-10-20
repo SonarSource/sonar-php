@@ -2,6 +2,10 @@
 
 namespace DynamicLocalReads;
 
+echo $$name;
+echo ${'value'};
+include 'included.php';
+
 function finite_dynamic_reads() {
   $first = 3; // Compliant
   $second = 4; // Compliant

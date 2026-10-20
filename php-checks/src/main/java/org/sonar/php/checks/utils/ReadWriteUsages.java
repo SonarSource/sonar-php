@@ -123,7 +123,8 @@ public class ReadWriteUsages {
     public void visitFunctionCall(FunctionCallTree tree) {
       if (!(tree.getParent() instanceof NewExpressionTree) && tree.callee() instanceof NamespaceNameTree callee
         && FUNCTIONS_WITH_POTENTIAL_INDIRECT_LOCAL_ACCESS.contains(callee.qualifiedName().toLowerCase(Locale.ROOT))) {
-        Scope scope = symbolTable.getScopeFor(TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds()));
+        Tree function = TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds());
+        Scope scope = function == null ? null : symbolTable.getScopeFor(function);
         if (scope != null) {
           // shortcut: all locals may be observed; resolve call effects if more precision is needed.
           scopesWithUnresolvedDynamicReads.add(scope);
@@ -195,7 +196,8 @@ public class ReadWriteUsages {
     // Marks the local named by a string literal as read,
     // or all locals in the scope as read if the name is unresolved.
     private void visitDynamicRead(VariableTree tree) {
-      Scope scope = symbolTable.getScopeFor(TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds()));
+      Tree function = TreeUtils.findAncestorWithKind(tree, CheckUtils.getFunctionKinds());
+      Scope scope = function == null ? null : symbolTable.getScopeFor(function);
       if (scope == null) {
         return;
       }

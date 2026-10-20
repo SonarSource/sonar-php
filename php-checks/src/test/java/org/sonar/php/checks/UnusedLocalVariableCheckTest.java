@@ -27,7 +27,7 @@ class UnusedLocalVariableCheckTest {
   }
 
   @Test
-  void dynamic_reads() throws Exception {
+  void dynamic_reads() {
     CheckVerifier.verify(new UnusedLocalVariableCheck(), "UnusedLocalVariableCheckDynamicReads.php");
   }
 }
