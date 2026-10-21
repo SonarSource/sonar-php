@@ -39,10 +39,9 @@ import org.sonar.plugins.php.api.tree.expression.VariableIdentifierTree;
 import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 import org.sonarsource.analyzer.commons.EntropyDetector;
 import org.sonarsource.analyzer.commons.HumanLanguageDetector;
+import org.sonarsource.analyzer.commons.appsec.IpAddressClassifier;
 import org.sonarsource.analyzer.commons.appsec.SecretClassifier;
 
-import static org.sonar.php.checks.HardCodedIpAddressCheck.IP_V4;
-import static org.sonar.php.checks.HardCodedIpAddressCheck.IP_V6;
 import static org.sonar.php.checks.utils.CheckUtils.trimQuotes;
 
 @Rule(key = "S6418")
@@ -56,7 +55,6 @@ public final class HardCodedSecretCheck extends PHPVisitorCheck implements TestF
   private static final String FIRST_ACCEPTED_CHARACTER = "[\\w.+/~$:&-]";
   private static final String FOLLOWING_ACCEPTED_CHARACTER = "[=\\w.+/~$:&-]";
   private static final Pattern SECRET_PATTERN = Pattern.compile(FIRST_ACCEPTED_CHARACTER + "(" + FOLLOWING_ACCEPTED_CHARACTER + "|\\\\\\\\" + FOLLOWING_ACCEPTED_CHARACTER + ")++");
-  private static final Pattern IP_PATTERN = Pattern.compile("%s|%s".formatted(IP_V4, IP_V6));
 
   @RuleProperty(
     key = "secretWords",
@@ -239,15 +237,11 @@ public final class HardCodedSecretCheck extends PHPVisitorCheck implements TestF
     if (literal.length() < MINIMUM_CREDENTIAL_LENGTH || !SECRET_PATTERN.matcher(literal).matches()) {
       return false;
     }
-    return isRandom(literal) && isNotIpV6(literal) && !SecretClassifier.isKnownNonSecret(literal);
+    return isRandom(literal) && IpAddressClassifier.parse(literal).isEmpty() && !SecretClassifier.isKnownNonSecret(literal);
   }
 
   private boolean isRandom(String literal) {
     return entropyDetector().hasEnoughEntropy(literal) && HumanLanguageDetector.humanLanguageScore(literal) < maxLanguageScore();
-  }
-
-  private static boolean isNotIpV6(String literal) {
-    return !IP_PATTERN.matcher(literal).matches();
   }
 
   private static boolean isExcludedLiteral(String followingString) {
