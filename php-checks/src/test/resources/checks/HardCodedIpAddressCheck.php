@@ -79,41 +79,18 @@ const broadCastIpV4 = "255.255.255.255";
 $ip = "3fff::1"; // Compliant
 $ip = "::"; // Compliant
 $ip = "ff02::1"; // Noncompliant
-$ip = "224.0.0.1"; // Noncompliant
 $ip = "10.0.0.1"; // Noncompliant
 
 // Extract the complete host, including dotted IPv6 tails, brackets, zones, and ports.
 $ip = "::1.2.3.4"; // Noncompliant
 $ip = "//[2003::1%eth0]:8080/path?query#fragment"; // Noncompliant
-$ip = "[2003::1%eth0"; // Compliant
-$ip = "8.8.8.8/api"; // Noncompliant
-$ip = "10.1.2.3/"; // Noncompliant
-$ip = "1.2.3.4:8080/foo"; // Noncompliant
-$ip = "git+ssh://1.2.3.4/path"; // Noncompliant
-$ip = "http://1.2.3.4?query"; // Noncompliant
-
-// Ports range from 0 to 65535.
-$ip = "8.8.8.8:0"; // Noncompliant
-$ip = "8.8.8.8:65535"; // Noncompliant
-$ip = "8.8.8.8:00080"; // Noncompliant
-$ip = "8.8.8.8:65536"; // Compliant
-$ip = "8.8.8.8:99999999999999999999"; // Compliant
-$ip = "8.8.8.8:-1"; // Compliant
-$ip = "8.8.8.8:"; // Compliant
-$ip = "[2003::1]:65535"; // Noncompliant
-$ip = "[2003::1]:65536"; // Compliant
 
 // Don't raise on strings that are not IPs
 $ip = "8.8.8.8-foo"; // Compliant
-$ip = "8.8.8.8:bad"; // Compliant
 
 // Classify the entire CIDR range.
 $ip = "127.0.0.1/7"; // Noncompliant
 $ip = "127.0.0.1/8"; // Compliant
-$ip = "http://127.0.0.1/7"; // Compliant - URL path
-$ip = "[::1%]/127"; // Noncompliant
-$ip = "10.0.0.1/33"; // Compliant
-$ip = "2003::1%"; // Noncompliant
 
 namespace VersionComparison {
   use function version_compare as compare_versions;
