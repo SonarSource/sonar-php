@@ -18,6 +18,14 @@ clarity and efficiency.</p>
 </ul>
 <p>In summary, unused local variables can make your code less readable, more confusing, and harder to maintain, and they can potentially lead to bugs
 or inefficient memory use. Therefore, it is best to remove them.</p>
+<h3>Exceptions</h3>
+<p>Variables whose names start with an underscore after PHP’s <code>$</code> sigil, such as $_unused, are exempt. This convention indicates that the
+variable is intentionally not read.</p>
+<pre>
+foreach ($items as $_unused) { // Compliant
+  processNextItem();
+}
+</pre>
 <h2>How to fix it</h2>
 <p>The fix for this issue is straightforward. Once you ensure the unused variable is not part of an incomplete implementation leading to bugs, you
 just need to remove it.</p>
@@ -50,4 +58,10 @@ private function process_request() {
     $this-&gt;validate_input();
 }
 </pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li>PHPStan - <a href="https://phpstan.org/error-identifiers/variable.unused">Unused variables and the underscore-prefix exemption</a></li>
+  <li>Psalm - <a href="https://psalm.dev/docs/running_psalm/issues/UnusedVariable/">UnusedVariable and the underscore-prefix exemption</a></li>
+</ul>
 
