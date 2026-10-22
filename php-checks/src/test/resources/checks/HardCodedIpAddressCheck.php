@@ -45,9 +45,10 @@ $serverAddress = "2003:db8:3:4::192.0.2.33";                    // Noncompliant
 $serverAddress = "1234:::1";                                    // Compliant - no IPv6
 $serverAddress = '0:1234:dc0:41:216:3eff:fe67:3e01';            // Noncompliant
 
-
-$url = "http://[2001:db8:a0b:12f0::1]/index.html";              // Noncompliant
+$url = "http://[2003:db8:a0b:12f0::1]/index.html";              // Noncompliant
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// 2001:db8::/32 is for documentation
+$url = "http://[2001:db8:a0b:12f0::1]/index.html";              // Compliant
 
 $randomText = "sdfsdfsdf asda sd::2";
 $randomText = "sdfsdfsdf asda 8.8.8.8";
@@ -74,6 +75,22 @@ $serverAddress = "2001:0db8:0a0b::::0000:0001";
 
 // Broadcast addresses should be ignored
 const broadCastIpV4 = "255.255.255.255";
+
+$ip = "3fff::1"; // Compliant
+$ip = "::"; // Compliant
+$ip = "ff02::1"; // Noncompliant
+$ip = "10.0.0.1"; // Noncompliant
+
+// Extract the complete host, including dotted IPv6 tails, brackets, zones, and ports.
+$ip = "::1.2.3.4"; // Noncompliant
+$ip = "//[2003::1%eth0]:8080/path?query#fragment"; // Noncompliant
+
+// Don't raise on strings that are not IPs
+$ip = "8.8.8.8-foo"; // Compliant
+
+// Classify the entire CIDR range.
+$ip = "127.0.0.1/7"; // Noncompliant
+$ip = "127.0.0.1/8"; // Compliant
 
 namespace VersionComparison {
   use function version_compare as compare_versions;
