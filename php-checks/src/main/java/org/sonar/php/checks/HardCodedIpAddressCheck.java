@@ -60,12 +60,11 @@ public class HardCodedIpAddressCheck extends PHPVisitorCheck implements TestFile
 
   @Override
   public void visitLiteral(LiteralTree tree) {
-    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)) {
-      if (IpAddressCandidateExtractor.extract(trimQuotes(tree.value()))
+    if (tree.is(Tree.Kind.REGULAR_STRING_LITERAL)
+      && IpAddressCandidateExtractor.extract(trimQuotes(tree.value()))
         .flatMap(IpAddressClassifier::parse)
         .map(parsed -> !parsed.isAllowedToBeHardcoded()).orElse(false)) {
-        candidates.add(tree);
-      }
+      candidates.add(tree);
     }
     super.visitLiteral(tree);
   }
