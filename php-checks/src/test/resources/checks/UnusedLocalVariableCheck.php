@@ -1,5 +1,7 @@
 <?php
 
+namespace {
+
 /**
  *  BASIC VARIABLE
  */
@@ -361,5 +363,31 @@ function simple_for() {
   for ($six = 0, $seven = 42; $six <= 10; $six++) { // Noncompliant
 //               ^^^^^^
     stmt();
+  }
+}
+
+}
+
+namespace UnderscorePrefixEscapeHatch {
+  // Only the $_ prefix exempts these variables. 
+  function intentionally_unused_locals() {
+    $_ = 1; // Compliant
+    $_unused = 1; // Compliant
+    $unused_local = 1; // Noncompliant
+  }
+
+  // A real-world use case showing the usefulness of the underscore escape hatch
+  function exhaust_generator_for_side_effects(\Generator $steps) {
+    foreach ($steps as $_unused) { // Compliant - only the generator's side effects matter.
+    }
+    foreach ($steps as $unused) { // Noncompliant
+    }
+  }
+
+  // A real-world use case showing the usefulness of the underscore escape hatch
+  function retain_guard_until_scope_exit() {
+    $_guard = new ScopeGuard(); // Compliant - retain the lock until this function returns.
+    $guard = new ScopeGuard(); // Noncompliant
+    performWork();
   }
 }
