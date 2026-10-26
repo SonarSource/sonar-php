@@ -91,6 +91,8 @@ $ip = "8.8.8.8-foo"; // Compliant
 // Classify the entire CIDR range.
 $ip = "127.0.0.1/7"; // Noncompliant
 $ip = "127.0.0.1/8"; // Compliant
+$ip = "0.0.0.0/0"; // Compliant
+$ip = "::/0"; // Compliant
 
 namespace VersionComparison {
   use function version_compare as compare_versions;
