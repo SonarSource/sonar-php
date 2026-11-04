@@ -376,7 +376,7 @@ public class TreeFactory {
     return new ScriptTreeImpl(anythingButOpeningTagToken, Collections.emptyList());
   }
 
-  public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, Optional<InternalSyntaxToken> spacing, InternalSyntaxToken eofToken) {
+  public CompilationUnitTree compilationUnit(Optional<ScriptTree> script, InternalSyntaxToken eofToken) {
     return new CompilationUnitTreeImpl(script.orNull(), eofToken);
   }
 

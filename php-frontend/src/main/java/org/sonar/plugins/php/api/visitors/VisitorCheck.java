@@ -246,11 +246,11 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitEnumCase(EnumCaseTree tree);
 
-  /**
+  /*
    * [ END ] Statement
    */
 
-  /**
+  /*
    * [ START ] Expression
    */
   void visitThrowExpression(ThrowExpressionTree tree);
