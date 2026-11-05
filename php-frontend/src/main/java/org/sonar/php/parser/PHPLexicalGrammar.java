@@ -388,7 +388,12 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       PHPKeyword tokenType = PHPKeyword.values()[i];
 
       // PHP keywords are case insensitive
-      b.rule(tokenType).is(SPACING, caseInsensitive(tokenType.getValue()), b.nextNot(b.regexp(LexicalConstant.IDENTIFIER_PART))).skip();
+      // Promotion modifiers followed immediately by a namespace separator belong to a qualified type name.
+      Object keywordContinuation = switch (tokenType) {
+        case PUBLIC, PROTECTED, PRIVATE, FINAL, READONLY -> b.firstOf(b.regexp(LexicalConstant.IDENTIFIER_PART), "\\");
+        default -> b.regexp(LexicalConstant.IDENTIFIER_PART);
+      };
+      b.rule(tokenType).is(SPACING, caseInsensitive(tokenType.getValue()), b.nextNot(keywordContinuation)).skip();
       if (i > 1) {
         if (tokenType == PHPKeyword.READONLY) {
           // Readonly is only a keyword when it is not used as a function name. SONARPHP-1266
