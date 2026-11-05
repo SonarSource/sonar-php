@@ -36,6 +36,7 @@ import org.sonar.plugins.php.api.tree.declaration.ClassDeclarationTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassMemberTree;
 import org.sonar.plugins.php.api.tree.declaration.ClassTree;
 import org.sonar.plugins.php.api.tree.declaration.MethodDeclarationTree;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.expression.AnonymousClassTree;
 import org.sonar.plugins.php.api.tree.expression.CallableConvertTree;
 import org.sonar.plugins.php.api.tree.expression.FunctionCallTree;
@@ -87,9 +88,9 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   @Override
   public void visitCallableConvert(CallableConvertTree tree) {
-    if (tree.expression().is(Tree.Kind.OBJECT_MEMBER_ACCESS)) {
+    if (tree.expression().is(Tree.Kind.OBJECT_MEMBER_ACCESS, Tree.Kind.CLASS_MEMBER_ACCESS)) {
       var memberAccessTree = (MemberAccessTree) tree.expression();
-      if (isThis(memberAccessTree.object()) && memberAccessTree.member().is(Tree.Kind.NAME_IDENTIFIER)) {
+      if ((isThis(memberAccessTree.object()) || isSelfOrStatic(memberAccessTree.object())) && memberAccessTree.member().is(Tree.Kind.NAME_IDENTIFIER)) {
         methodsUsedInFirstClassCallables.add(((NameIdentifierTree) memberAccessTree.member()).text().toLowerCase(Locale.ROOT));
       }
     }
@@ -210,6 +211,11 @@ public class UnusedPrivateMethodCheck extends PHPVisitorCheck {
 
   private static boolean isMagicMethod(String methodName) {
     return methodName.startsWith("__");
+  }
+
+  private static boolean isSelfOrStatic(Tree object) {
+    return (object instanceof NamespaceNameTree namespaceName && "self".equalsIgnoreCase(namespaceName.fullName()))
+      || (object instanceof NameIdentifierTree name && "static".equalsIgnoreCase(name.text()));
   }
 
   private static boolean isThis(Tree object) {

@@ -291,3 +291,39 @@ class MagicMethodCall7Impl extends MagicMethodCall7
   {
   }
 }
+
+class UsageInStaticFirstClassCallable
+{
+  public function foo()
+  {
+    return self::bar(...);
+  }
+
+  private static function bar() // Compliant - used through a first-class callable
+  {
+  }
+}
+
+class UsageInLateStaticFirstClassCallable
+{
+  public function foo()
+  {
+    return static::BAR(...);
+  }
+
+  private static function bar() // Compliant - method names are case insensitive
+  {
+  }
+}
+
+class UsageInOtherClassFirstClassCallable
+{
+  public function foo()
+  {
+    return Query::bar(...);
+  }
+
+  private static function bar() // Noncompliant
+  {
+  }
+}
