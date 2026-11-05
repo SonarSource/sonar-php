@@ -388,9 +388,9 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
       PHPKeyword tokenType = PHPKeyword.values()[i];
 
       // PHP keywords are case insensitive
-      // Promotion modifiers followed immediately by a namespace separator belong to a qualified type name.
+      // Modifier keywords followed immediately by a namespace separator belong to a qualified type name.
       Object keywordContinuation = switch (tokenType) {
-        case PUBLIC, PROTECTED, PRIVATE, FINAL, READONLY -> b.firstOf(b.regexp(LexicalConstant.IDENTIFIER_PART), "\\");
+        case PUBLIC, PROTECTED, PRIVATE, FINAL, READONLY, STATIC, ABSTRACT -> b.firstOf(b.regexp(LexicalConstant.IDENTIFIER_PART), "\\");
         default -> b.regexp(LexicalConstant.IDENTIFIER_PART);
       };
       b.rule(tokenType).is(SPACING, caseInsensitive(tokenType.getValue()), b.nextNot(keywordContinuation)).skip();
