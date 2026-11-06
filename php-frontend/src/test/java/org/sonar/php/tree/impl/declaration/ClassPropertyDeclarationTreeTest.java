@@ -19,6 +19,9 @@ package org.sonar.php.tree.impl.declaration;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.php.tree.impl.PHPTree;
@@ -97,6 +100,29 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
 
       .notMatches("const $a;")
       .notMatches("A;");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"Public", "Private", "Protected", "Final", "Readonly", "Static", "Abstract", "sTaTiC", "aBsTrAcT"})
+  void shouldPreserveKeywordInPropertyTypeName(String namespace) {
+    ClassPropertyDeclarationTree tree = parse("public " + namespace + "\\Foo $x;", PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.modifierTokens()).extracting(SyntaxToken::text).containsExactly("public");
+    assertThat(((NamespaceNameTree) ((TypeTree) tree.declaredType()).typeName()).fullName()).isEqualTo(namespace + "\\Foo");
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "public static \\Foo $x;, \\Foo, static",
+    "public static/* comment */\\Foo $x;, \\Foo, static",
+    "public static Static\\Foo $x;, Static\\Foo, static",
+    "public abstract \\Foo $x { get; }, \\Foo, abstract",
+    "public abstract/* comment */\\Foo $x { get; }, \\Foo, abstract",
+    "public abstract Abstract\\Foo $x { get; }, Abstract\\Foo, abstract"
+  })
+  void shouldPreservePropertyModifierBeforeQualifiedType(String declaration, String expectedType, String modifier) {
+    ClassPropertyDeclarationTree tree = parse(declaration, PHPLexicalGrammar.CLASS_VARIABLE_DECLARATION);
+    assertThat(tree.modifierTokens()).extracting(SyntaxToken::text).containsExactly("public", modifier);
+    assertThat(((NamespaceNameTree) ((TypeTree) tree.declaredType()).typeName()).fullName()).isEqualTo(expectedType);
   }
 
   @Test

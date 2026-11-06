@@ -17,13 +17,18 @@
 package org.sonar.php.tree.impl.declaration;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.parser.PHPLexicalGrammar;
 import org.sonar.plugins.php.api.tree.Tree.Kind;
+import org.sonar.plugins.php.api.tree.declaration.NamespaceNameTree;
 import org.sonar.plugins.php.api.tree.declaration.ParameterTree;
 import org.sonar.plugins.php.api.tree.declaration.TypeTree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class ParameterTreeTest extends PHPTreeModelTest {
 
@@ -122,4 +127,36 @@ class ParameterTreeTest extends PHPTreeModelTest {
     assertThat(tree.visibility()).isNull();
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"Public", "Private", "Protected", "Final", "Readonly", "pRiVaTe"})
+  void shouldNotTreatNamespaceSegmentAsPromotionModifier(String namespace) {
+    ParameterTree tree = parse(namespace + "\\Foo $foo", PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.visibility()).isNull();
+    assertThat(tree.isPropertyPromotion()).isFalse();
+    assertThat(((NamespaceNameTree) ((TypeTree) tree.declaredType()).typeName()).fullName()).isEqualTo(namespace + "\\Foo");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"Public", "Private", "Protected", "Final", "Readonly", "pRiVaTe", "\\Public", "\\Private", "\\Protected", "Repositories"})
+  void shouldParseMethodWithQualifiedParameterType(String namespace) {
+    assertThatCode(() -> parse("public function foo(" + namespace + "\\Foo $foo) {}", PHPLexicalGrammar.METHOD_DECLARATION))
+      .doesNotThrowAnyException();
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "private Public\\Foo $foo, Public\\Foo",
+    "private Private\\Foo $foo, Private\\Foo",
+    "private Protected\\Foo $foo, Protected\\Foo",
+    "private Final\\Foo $foo, Final\\Foo",
+    "private Readonly\\Foo $foo, Readonly\\Foo",
+    "private \\Foo $foo, \\Foo",
+    "private/* comment */\\Foo $foo, \\Foo"
+  })
+  void shouldSupportPromotedPropertyWithQualifiedType(String parameter, String expectedType) {
+    ParameterTree tree = parse(parameter, PHPLexicalGrammar.PARAMETER);
+    assertThat(tree.isPropertyPromotion()).isTrue();
+    assertThat(tree.visibility().text()).isEqualTo("private");
+    assertThat(((NamespaceNameTree) ((TypeTree) tree.declaredType()).typeName()).fullName()).isEqualTo(expectedType);
+  }
 }

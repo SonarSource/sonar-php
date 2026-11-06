@@ -238,6 +238,19 @@ class PHPSensorTest {
   }
 
   @Test
+  void cpdTokensShouldBeGeneratedForVisibilityKeywordParameterTypes() {
+    String fileName = "visibilityKeywordParameterTypes.php";
+    String componentKey = "moduleKey:" + fileName;
+
+    PHPSensor phpSensor = createSensor();
+    analyseSingleFile(phpSensor, fileName);
+
+    assertThat(logTester.logs(Level.WARN)).noneMatch(message -> message.contains("Unable to parse file"));
+    assertThat(context.cpdTokens(componentKey)).extracting(TokensLine::getValue).contains(
+      "publicfunctionfoo(Public\\FooRepository$public,Private\\FooRepository$private,Protected\\FooRepository$protected):void");
+  }
+
+  @Test
   void cpdTokenShouldBeValidForReadonlyPropertyPromotion() {
     String fileName = "readonlyPropertyPromotion.php";
     String componentKey = "moduleKey:" + fileName;
