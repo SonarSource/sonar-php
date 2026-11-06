@@ -260,7 +260,7 @@ jobs:
     needs: [ qa_ruling ]
     runs-on: github-ubuntu-latest-s
     name: Ruling Update and Notify
-    if: ${{ !cancelled() && needs.qa_ruling.result != 'skipped' }}
+    if: ${{ github.event_name == 'pull_request' && !cancelled() && needs.qa_ruling.result != 'skipped' }}
     permissions:
       actions: read
       contents: write
