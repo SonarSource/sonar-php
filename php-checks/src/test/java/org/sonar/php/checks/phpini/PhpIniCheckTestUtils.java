@@ -41,7 +41,7 @@ public class PhpIniCheckTestUtils {
   private PhpIniCheckTestUtils() {
   }
 
-  private static final Pattern LINE_END_COMMENT = Pattern.compile(".*;\\s*Noncompliant(?:\\s*\\{\\{(.*)\\}\\})?.*");
+  private static final Pattern LINE_END_COMMENT = Pattern.compile(";\\s*+Noncompliant(?:\\s*+\\{\\{(.*)\\}\\})?");
 
   public static void check(PhpIniCheck check, File file) {
     PhpFile inputFile = TestUtils.getFile(file);
@@ -63,7 +63,7 @@ public class PhpIniCheckTestUtils {
     int lineNumber = 1;
     for (String line : lines) {
       Matcher matcher = LINE_END_COMMENT.matcher(line);
-      if (matcher.matches()) {
+      if (matcher.find()) {
         String expectedMessage = null;
         if (matcher.groupCount() > 0) {
           expectedMessage = matcher.group(1);
