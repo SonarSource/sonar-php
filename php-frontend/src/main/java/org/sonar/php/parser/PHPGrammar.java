@@ -200,7 +200,7 @@ public class PHPGrammar {
 
   public CompilationUnitTree COMPILATION_UNIT() {
     return b.<CompilationUnitTree>nonterminal(PHPLexicalGrammar.COMPILATION_UNIT).is(
-      f.compilationUnit(b.optional(SCRIPT()), b.optional(b.token(PHPLexicalGrammar.SPACING)), b.token(PHPLexicalGrammar.EOF)));
+      f.compilationUnit(b.optional(SCRIPT()), b.token(PHPLexicalGrammar.EOF)));
   }
 
   public ScriptTree SCRIPT() {

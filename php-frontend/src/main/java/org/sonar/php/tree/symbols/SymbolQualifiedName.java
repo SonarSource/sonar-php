@@ -79,15 +79,15 @@ public class SymbolQualifiedName implements QualifiedName {
     if (namespaceNameTree.namespaces().isEmpty()) {
       throw new IllegalStateException("Unable to resolve " + namespaceNameTree + " which has only aliased name");
     }
-    List<String> nameElements = new ArrayList<>(this.nameElements);
+    List<String> resolvedNameElements = new ArrayList<>(this.nameElements);
     // skip the first element of the namespace, because it's an alias
     namespaceNameTree.namespaces()
       .stream()
       .skip(1)
       .map(NameIdentifierTree::text)
-      .forEach(nameElements::add);
-    nameElements.add(namespaceNameTree.name().text());
-    return new SymbolQualifiedName(nameElements);
+      .forEach(resolvedNameElements::add);
+    resolvedNameElements.add(namespaceNameTree.name().text());
+    return new SymbolQualifiedName(resolvedNameElements);
   }
 
   SymbolQualifiedName resolve(String name) {
