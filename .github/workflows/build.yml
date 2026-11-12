@@ -247,7 +247,7 @@ jobs:
           path: '**/build/reports/**/*'
       - name: Prepare ruling artifact
         if: always() && steps.ruling.outcome == 'failure'
-        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@master
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@v1
         with:
           artifact-name: actual_ruling_${{ matrix.PHP_PROJECT }}
       - name: Fail on ruling differences
@@ -289,7 +289,7 @@ jobs:
           fi
       - name: Update ruling and notify
         if: steps.ruling-status.outputs.ruling-failed != ''
-        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@master
+        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@v1
         with:
           ruling-failed: ${{ steps.ruling-status.outputs.ruling-failed }}
 
