@@ -63,7 +63,7 @@ public class LoopExecutingAtMostOnceCheck extends PHPVisitorCheck {
     Tree.Kind.SWITCH_STATEMENT,
     Tree.Kind.ALTERNATIVE_SWITCH_STATEMENT);
 
-  private Map<Tree, List<Tree>> jumpsByLoop = new HashMap<>();
+  private final Map<Tree, List<Tree>> jumpsByLoop = new HashMap<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {

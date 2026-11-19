@@ -45,11 +45,11 @@ public class SelfKeywordUsageCheck extends PHPVisitorCheck {
   /**
    * Use stacks in order to handle nested classes.
    */
-  private Deque<Boolean> isFinalClassStack = new ArrayDeque<>();
+  private final Deque<Boolean> isFinalClassStack = new ArrayDeque<>();
 
-  private Deque<Set<String>> finalOrPrivateMethodsStack = new ArrayDeque<>();
+  private final Deque<Set<String>> finalOrPrivateMethodsStack = new ArrayDeque<>();
 
-  private Deque<Set<String>> privatePropertiesStack = new ArrayDeque<>();
+  private final Deque<Set<String>> privatePropertiesStack = new ArrayDeque<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {

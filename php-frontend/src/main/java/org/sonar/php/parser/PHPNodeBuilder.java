@@ -37,7 +37,7 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 public class PHPNodeBuilder implements NodeBuilder {
 
   public static final char BYTE_ORDER_MARK = '\uFEFF';
-  private int lineOffset;
+  private final int lineOffset;
 
   public PHPNodeBuilder(int lineOffset) {
     this.lineOffset = lineOffset;

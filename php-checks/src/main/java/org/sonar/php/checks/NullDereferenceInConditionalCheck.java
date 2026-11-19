@@ -139,8 +139,8 @@ public class NullDereferenceInConditionalCheck extends PHPVisitorCheck {
   private static class NullExpressionUsageVisitor extends PHPVisitorCheck {
 
     private final NullDereferenceInConditionalCheck check;
-    private ExpressionTree nullExpression;
-    private CheckContext context;
+    private final ExpressionTree nullExpression;
+    private final CheckContext context;
 
     public NullExpressionUsageVisitor(ExpressionTree nullExpression, CheckContext context, NullDereferenceInConditionalCheck check) {
       this.nullExpression = nullExpression;

@@ -38,7 +38,7 @@ public class NamespaceAndUseStatementCheck extends PHPVisitorCheck implements Fo
   private static final String BLANK_LINE_USE_MESSAGE = "Add a blank line after this \"use\" declaration.";
   private static final String USE_AFTER_NAMESPACE_MESSAGE = "Move the use declarations after the namespace declarations.";
 
-  private List<UseStatementTree> useStatements = new ArrayList<>();
+  private final List<UseStatementTree> useStatements = new ArrayList<>();
   private StatementTree nextStatement = null;
   private FormattingStandardCheck check = null;
 
