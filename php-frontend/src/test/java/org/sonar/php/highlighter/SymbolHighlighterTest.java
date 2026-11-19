@@ -50,7 +50,7 @@ class SymbolHighlighterTest {
   public File tempFolder;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     file = new File(tempFolder, "file");
   }
 
