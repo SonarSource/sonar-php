@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class NestedTernaryOperatorsCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new NestedTernaryOperatorsCheck(), "NestedTernaryOperatorsCheck.php");
   }
 

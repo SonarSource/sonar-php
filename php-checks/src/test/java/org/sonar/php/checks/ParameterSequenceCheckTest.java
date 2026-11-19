@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ParameterSequenceCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/ParameterSequenceCheck.php");
     CheckVerifier.verify(new ParameterSequenceCheck(), "ParameterSequenceCheck/A.php", "ParameterSequenceCheck/B.php");
   }

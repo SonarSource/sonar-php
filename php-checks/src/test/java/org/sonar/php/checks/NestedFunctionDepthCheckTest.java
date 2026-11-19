@@ -29,12 +29,12 @@ class NestedFunctionDepthCheckTest {
   private NestedFunctionDepthCheck check = new NestedFunctionDepthCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME));
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       issue(5),

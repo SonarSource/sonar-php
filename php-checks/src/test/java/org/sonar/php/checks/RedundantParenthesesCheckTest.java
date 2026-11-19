@@ -22,7 +22,7 @@ import org.sonar.plugins.php.TestUtils;
 
 class RedundantParenthesesCheckTest {
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     PHPCheckTest.check(new RedundantParenthesesCheck(), TestUtils.getCheckFile("RedundantParenthesesCheck.php"));
   }
 
