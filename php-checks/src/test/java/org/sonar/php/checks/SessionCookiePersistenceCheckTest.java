@@ -29,17 +29,17 @@ class SessionCookiePersistenceCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void phpini() throws Exception {
+  void phpini() {
     check(check, new File(dir, "session_cookie_persistence.ini"));
   }
 
   @Test
-  void emptyPhpini() throws Exception {
+  void emptyPhpini() {
     check(check, new File(dir, "empty.ini"), Collections.emptyList());
   }
 
   @Test
-  void programmatic() throws Exception {
+  void programmatic() {
     CheckVerifier.verify(check, "SessionCookiePersistence.php");
   }
 

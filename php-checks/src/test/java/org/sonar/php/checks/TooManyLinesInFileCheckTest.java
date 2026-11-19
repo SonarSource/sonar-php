@@ -34,7 +34,7 @@ class TooManyLinesInFileCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 2;
     PHPCheckTest.check(check, TestUtils.getCheckFile(fileName), Collections.singletonList(new LineIssue(
       check,

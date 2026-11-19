@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class SelfAssignmentCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new SelfAssignmentCheck(), "SelfAssignmentCheck.php");
   }
 }

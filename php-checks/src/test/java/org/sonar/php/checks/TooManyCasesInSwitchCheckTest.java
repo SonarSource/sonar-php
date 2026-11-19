@@ -26,12 +26,12 @@ class TooManyCasesInSwitchCheckTest {
   private TooManyCasesInSwitchCheck check = new TooManyCasesInSwitchCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 3;
     CheckVerifier.verify(check, FILE_NAME);
   }

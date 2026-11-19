@@ -24,12 +24,12 @@ class TooManyReturnCheckTest {
   private TooManyReturnCheck check = new TooManyReturnCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, "TooManyReturnCheck/default.php");
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 2;
     CheckVerifier.verify(check, "TooManyReturnCheck/custom.php");
   }
