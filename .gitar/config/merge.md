@@ -6,10 +6,8 @@ Enable auto-merge only for a PR that meets all of these conditions:
 - Gitar's own whole-PR risk assessment of the latest commit is **Low risk**. If no risk
   assessment is available, this condition is not met.
 - It has no unresolved review threads or comments.
-- Gitar has approved it.
-- It does not modify any file under `.gitar/`, `.github/`, `.claude/`, `gradle/wrapper/` or
-  `build-logic/`, nor the files `.mcp.json`, `.gitmodules`, `mise.toml`, `gradlew`, `gradlew.bat`
-  or `.pre-commit-config.yaml`.
+- Gitar has approved it under the criteria in `.gitar/config/approve.md`, which also lists the paths
+  a PR must not touch.
 - It is not a draft.
 
 If auto-merge is already enabled and a new commit or comment makes any condition false (for
