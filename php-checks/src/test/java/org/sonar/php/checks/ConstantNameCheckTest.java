@@ -30,12 +30,12 @@ class ConstantNameCheckTest {
   private ConstantNameCheck check = new ConstantNameCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.format = "^[A-Z][a-z]*$";
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Arrays.asList(
       new LineIssue(check, 9, "Rename this constant \"FOO\" to match the regular expression " + check.format + "."),

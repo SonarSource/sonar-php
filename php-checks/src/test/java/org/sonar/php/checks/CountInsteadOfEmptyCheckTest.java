@@ -21,7 +21,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 class CountInsteadOfEmptyCheckTest {
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new CountInsteadOfEmptyCheck(), "CountInsteadOfEmptyCheck.php");
   }
 }

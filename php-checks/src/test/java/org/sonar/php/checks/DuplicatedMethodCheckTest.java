@@ -34,7 +34,7 @@ class DuplicatedMethodCheckTest {
   private final ActionParser<Tree> parser = PHPParserBuilder.createParser(PHPLexicalGrammar.TOP_STATEMENT);
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new DuplicatedMethodCheck(), "DuplicatedMethodCheck.php");
   }
 

@@ -30,12 +30,12 @@ class ClassNameCheckTest {
   private static final String FILE = "ClassNameCheck.php";
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE));
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.format = "^[a-z][a-zA-Z0-9]*$";
     List<PhpIssue> expectedIssues = new LinkedList<>();
     expectedIssues.add(new LineIssue(check, 9, "Rename class \"MyClass\" to match the regular expression " + check.format + "."));

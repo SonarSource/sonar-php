@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ConcatenatedStringLiteralCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ConcatenatedStringLiteralCheck(), "ConcatenatedStringLiteralCheck.php");
   }
 

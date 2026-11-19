@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ConstructorDeclarationCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ConstructorDeclarationCheck(), "ConstructorDeclarationCheck.php");
     CheckVerifier.verifyNoIssue(new ConstructorDeclarationCheck(), "ConstructorDeclarationInNamespaceCheck.php");
   }
