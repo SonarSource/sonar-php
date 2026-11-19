@@ -22,17 +22,17 @@ import org.sonar.plugins.php.CheckVerifier;
 class UselessExpressionStatementCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new UselessExpressionStatementCheck(), "UselessExpressionStatementCheck.php");
   }
 
   @Test
-  void testWithPartialUselessStatements() throws Exception {
+  void testWithPartialUselessStatements() {
     CheckVerifier.verify(new UselessExpressionStatementCheck(), "UselessExpressionStatementCheckPartial.php");
   }
 
   @Test
-  void testNoIssueInFileWith_html() throws Exception {
+  void testNoIssueInFileWith_html() {
     CheckVerifier.verifyNoIssue(new UselessExpressionStatementCheck(), "UselessExpressionStatementCheckHTML.php");
   }
 }

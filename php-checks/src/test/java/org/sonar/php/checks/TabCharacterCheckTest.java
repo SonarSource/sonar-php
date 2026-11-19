@@ -29,7 +29,7 @@ import org.sonar.plugins.php.api.visitors.PhpIssue;
 class TabCharacterCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     PHPCheck check = new TabCharacterCheck();
 
     List<PhpIssue> issue = Collections.singletonList(new FileIssue(check, "Replace all tab characters in this file by sequences of white-spaces."));
@@ -37,7 +37,7 @@ class TabCharacterCheckTest {
   }
 
   @Test
-  void testOk() throws Exception {
+  void testOk() {
     PHPCheck check = new TabCharacterCheck();
     CheckVerifier.verifyNoIssueIgnoringExpected(check, "TabCharacterCheck/TabCharacterCheck_ok.php");
   }

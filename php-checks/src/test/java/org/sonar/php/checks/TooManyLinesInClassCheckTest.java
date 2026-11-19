@@ -24,12 +24,12 @@ class TooManyLinesInClassCheckTest {
   private TooManyLinesInClassCheck check = new TooManyLinesInClassCheck();
 
   @Test
-  void testDefault() throws Exception {
+  void testDefault() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, "TooManyLinesInClassCheck.php");
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.maximumLinesThreshold = 5;
     CheckVerifier.verify(check, "TooManyLinesInClassCheck.php");
   }

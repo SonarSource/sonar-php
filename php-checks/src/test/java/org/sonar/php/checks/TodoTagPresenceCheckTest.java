@@ -31,7 +31,7 @@ class TodoTagPresenceCheckTest {
   private static final PHPCheck CHECK = new TodoTagPresenceCheck();
 
   @Test
-  void test() throws Exception {
+  void test() {
     PhpFile file = TestUtils.getCheckFile("TodoTagPresenceCheck.php");
 
     List<PhpIssue> issues = Arrays.asList(

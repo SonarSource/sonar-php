@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class UncatchableExceptionCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new UncatchableExceptionCheck(), "UncatchableExceptionCheck/unbracketed_namespace.php");
     CheckVerifier.verify(new UncatchableExceptionCheck(), "UncatchableExceptionCheck/bracketed_namespace.php");
   }

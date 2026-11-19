@@ -30,7 +30,7 @@ class TrailingCommentCheckTest {
   private String fileName = "TrailingCommentCheck.php";
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     List<PhpIssue> issues = Arrays.asList(
       newIssue(4),
       newIssue(5));
@@ -39,7 +39,7 @@ class TrailingCommentCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.legalCommentPattern = "";
     List<PhpIssue> issues = Arrays.asList(
       newIssue(4),

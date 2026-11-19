@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class SleepFunctionUsageCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new SleepFunctionUsageCheck(), "SleepFunctionUsageCheck.php");
   }
 }

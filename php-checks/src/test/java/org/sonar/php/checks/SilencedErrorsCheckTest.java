@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class SilencedErrorsCheckTest {
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(new SilencedErrorsCheck(), "SilencedErrorsCheck.php");
   }
 
