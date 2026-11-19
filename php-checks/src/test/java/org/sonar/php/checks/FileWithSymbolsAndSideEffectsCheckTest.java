@@ -34,42 +34,42 @@ class FileWithSymbolsAndSideEffectsCheckTest {
     new FileIssue(check, "Refactor this file to either declare symbols or cause side effects, but not both."));
 
   @Test
-  void ok() throws Exception {
+  void ok() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  void okWithDefineAndClosingHtml() throws Exception {
+  void okWithDefineAndClosingHtml() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_define.php");
   }
 
   @Test
-  void okNoSymbol() throws Exception {
+  void okNoSymbol() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_no_symbol.php");
   }
 
   @Test
-  void koEcho() throws Exception {
+  void koEcho() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_echo.php"), issue);
   }
 
   @Test
-  void koExpressionStatement() throws Exception {
+  void koExpressionStatement() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_expression_statement.php"), issue);
   }
 
   @Test
-  void koYield() throws Exception {
+  void koYield() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_yield.php"), issue);
   }
 
   @Test
-  void koInlineHtml() throws Exception {
+  void koInlineHtml() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_inline_html.php"), issue);
   }
 
   @Test
-  void koUnsetVariable() throws Exception {
+  void koUnsetVariable() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko_unset_variable.php"), issue);
   }
 

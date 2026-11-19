@@ -30,12 +30,12 @@ class FieldNameCheckTest {
   private FieldNameCheck check = new FieldNameCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.format = "^[A-Z][a-zA-Z0-9]*$";
     String format = check.format;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), List.of(

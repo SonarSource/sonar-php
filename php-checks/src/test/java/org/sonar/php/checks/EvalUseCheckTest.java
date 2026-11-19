@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class EvalUseCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new EvalUseCheck(), "EvalUseCheck.php");
   }
 

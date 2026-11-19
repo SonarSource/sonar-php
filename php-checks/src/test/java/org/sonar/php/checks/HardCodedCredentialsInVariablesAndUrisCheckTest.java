@@ -22,12 +22,12 @@ import org.sonar.plugins.php.CheckVerifier;
 class HardCodedCredentialsInVariablesAndUrisCheckTest {
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(new HardCodedCredentialsInVariablesAndUrisCheck(), "HardCodedCredentialsInVariablesAndUrisCheck.php");
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     HardCodedCredentialsInVariablesAndUrisCheck check = new HardCodedCredentialsInVariablesAndUrisCheck();
     check.credentialWords = "marmalade,bazooka";
     CheckVerifier.verify(check, "HardCodedCredentialsInVariablesAndUrisCheckCustom.php");

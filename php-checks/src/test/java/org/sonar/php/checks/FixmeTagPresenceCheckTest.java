@@ -31,7 +31,7 @@ class FixmeTagPresenceCheckTest {
   private static final PHPCheck CHECK = new FixmeTagPresenceCheck();
 
   @Test
-  void test() throws Exception {
+  void test() {
     PhpFile file = TestUtils.getCheckFile("FixmeTagPresenceCheck.php");
 
     List<PhpIssue> issues = Arrays.asList(

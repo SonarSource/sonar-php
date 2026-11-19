@@ -29,22 +29,22 @@ class InlineHTMLInFileCheckTest {
   private static final String TEST_DIR = "InlineHTMLInFileCheck/";
 
   @Test
-  void ok() throws Exception {
+  void ok() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  void okAsp() throws Exception {
+  void okAsp() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok_asp.php");
   }
 
   @Test
-  void okExcludedFile() throws Exception {
+  void okExcludedFile() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.phtml");
   }
 
   @Test
-  void ko() throws Exception {
+  void ko() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new FileIssue(check, "Remove the inline HTML in this file.")));
   }
 }

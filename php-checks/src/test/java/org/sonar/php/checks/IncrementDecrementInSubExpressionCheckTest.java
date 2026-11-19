@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class IncrementDecrementInSubExpressionCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new IncrementDecrementInSubExpressionCheck(), "IncrementDecrementInSubExpressionCheck.php");
   }
 }

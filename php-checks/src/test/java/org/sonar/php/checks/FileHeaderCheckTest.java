@@ -30,7 +30,7 @@ class FileHeaderCheckTest {
   private FileHeaderCheck check = new FileHeaderCheck();
 
   @Test
-  void test() throws Exception {
+  void test() {
     List<PhpIssue> issue = Collections.singletonList(new FileIssue(check, "Add or update the header of this file."));
     List<PhpIssue> noIssue = Collections.emptyList();
 
