@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UnsetVariableStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     UnsetVariableStatementTree tree = parse("unset($a, $b);", PHPLexicalGrammar.UNSET_VARIABLE_STATEMENT);
 
     assertThat(tree.is(Kind.UNSET_VARIABLE_STATEMENT)).isTrue();

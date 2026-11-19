@@ -20,7 +20,6 @@ import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +80,7 @@ class SymbolScannerTest {
   }
 
   @Test
-  void shouldCreateProjectSymbolDataFromCache() throws IOException, NoSuchAlgorithmException {
+  void shouldCreateProjectSymbolDataFromCache() {
     buildBaseProjectSymbolDataAndCache();
 
     previousCache = nextCache.copy();

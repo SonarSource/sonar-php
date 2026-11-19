@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ThrowStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     ThrowStatementTree tree = parse("throw $a ;", PHPLexicalGrammar.STATEMENT);
 
     assertThat(tree.is(Kind.THROW_STATEMENT)).isTrue();
