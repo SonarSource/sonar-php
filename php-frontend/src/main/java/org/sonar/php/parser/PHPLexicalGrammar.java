@@ -329,7 +329,7 @@ public enum PHPLexicalGrammar implements GrammarRuleKey {
     b.rule(INLINE_HTML).is(SPACING, b.regexp(LexicalConstant.PHP_END_TAG)).skip();
     b.rule(ANYTHING_BUT_START_TAG).is(SPACING, b.regexp(LexicalConstant.ANYTHING_BUT_START_TAG)).skip();
 
-    b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
+    b.rule(EOF).is(SPACING, b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
     b.rule(NULL).is(word(b, "null")).skip();
     b.rule(CLASS_CONSTANT).is(word(b, "__CLASS__")).skip();

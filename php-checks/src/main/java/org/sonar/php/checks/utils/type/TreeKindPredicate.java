@@ -24,7 +24,7 @@ public abstract class TreeKindPredicate<T> implements Predicate<TreeValues> {
 
   private final Tree.Kind kind;
 
-  public TreeKindPredicate(Tree.Kind kind) {
+  protected TreeKindPredicate(Tree.Kind kind) {
     this.kind = kind;
   }
 

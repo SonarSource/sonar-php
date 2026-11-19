@@ -173,8 +173,8 @@ public class UseOfUninitializedVariableCheck extends PHPVisitorCheck {
       .forEach(e -> reportOnFirstTree(e.getValue()));
   }
 
-  private static boolean isInitializedStaticVariable(String var, Set<String> uninitializedStaticVariables, BlockSummary endBlockSummary) {
-    return uninitializedStaticVariables.contains(var) && endBlockSummary.stateOnBlockStart.wasInitialized(var);
+  private static boolean isInitializedStaticVariable(String variable, Set<String> uninitializedStaticVariables, BlockSummary endBlockSummary) {
+    return uninitializedStaticVariables.contains(variable) && endBlockSummary.stateOnBlockStart.wasInitialized(variable);
   }
 
   private void reportOnFirstTree(Set<Tree> trees) {
