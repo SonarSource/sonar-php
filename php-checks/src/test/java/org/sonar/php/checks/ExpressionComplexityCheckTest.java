@@ -29,12 +29,12 @@ class ExpressionComplexityCheckTest {
   private ExpressionComplexityCheck check = new ExpressionComplexityCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 5;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LineIssue(check, 11, null)));
   }

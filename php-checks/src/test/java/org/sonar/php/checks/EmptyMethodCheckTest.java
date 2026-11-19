@@ -31,7 +31,7 @@ class EmptyMethodCheckTest {
   private static final String REPORTED_EMPTY_FUNCTIONS = "function applicationFunction() {} // NOK\n";
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new EmptyMethodCheck(), "EmptyMethodCheck.php");
   }
 

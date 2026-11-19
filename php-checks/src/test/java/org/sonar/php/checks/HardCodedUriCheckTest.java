@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class HardCodedUriCheckTest {
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(new HardCodedUriCheck(), "HardCodedUriCheck.php");
   }
 

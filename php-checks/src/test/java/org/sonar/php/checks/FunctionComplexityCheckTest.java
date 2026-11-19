@@ -29,7 +29,7 @@ class FunctionComplexityCheckTest {
   private final FunctionComplexityCheck check = new FunctionComplexityCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(
       new LineIssue(check, 3, "The Cyclomatic Complexity of this function \"ko\" is 28 which is greater than 20 authorized.")));
   }

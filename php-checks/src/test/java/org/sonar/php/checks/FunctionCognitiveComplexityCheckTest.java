@@ -24,13 +24,13 @@ class FunctionCognitiveComplexityCheckTest {
   private FunctionCognitiveComplexityCheck check = new FunctionCognitiveComplexityCheck();
 
   @Test
-  void test() throws Exception {
+  void test() {
     check.setThreshold(0);
     CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/zeroThreshold.php");
   }
 
   @Test
-  void defaultThreshold() throws Exception {
+  void defaultThreshold() {
     CheckVerifier.verify(check, "FunctionCognitiveComplexityCheck/default.php");
   }
 
