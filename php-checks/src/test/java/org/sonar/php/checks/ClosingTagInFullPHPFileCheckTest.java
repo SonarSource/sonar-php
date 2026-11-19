@@ -29,12 +29,12 @@ class ClosingTagInFullPHPFileCheckTest {
   private static final String TEST_DIR = "ClosingTagInFullPHPFileCheck/";
 
   @Test
-  void ok() throws Exception {
+  void ok() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  void ko() throws Exception {
+  void ko() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LineIssue(check, 11, "Remove this closing tag \"?>\".")));
   }
 }

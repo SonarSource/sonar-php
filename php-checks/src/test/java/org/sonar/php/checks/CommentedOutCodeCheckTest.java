@@ -30,7 +30,7 @@ class CommentedOutCodeCheckTest {
   private static final PHPCheck CHECK = new CommentedOutCodeCheck();
 
   @Test
-  void test() throws Exception {
+  void test() {
     List<PhpIssue> issues = Arrays.asList(
       newIssue(13),
       newIssue(18),

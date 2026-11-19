@@ -25,12 +25,12 @@ class ClassComplexityCheckTest {
   private ClassComplexityCheck check = new ClassComplexityCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verifyNoIssueIgnoringExpected(check, FILE_NAME);
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 5;
     CheckVerifier.verify(check, FILE_NAME);
   }

@@ -34,7 +34,7 @@ class CharacterBeforeOpeningPHPTagCheckTest {
   }
 
   @Test
-  void ko() throws Exception {
+  void ko() {
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko.php"), Collections.singletonList(new LineIssue(check, 1, "Remove the extra characters before the open tag.")));
   }
 

@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class CatchRethrowingCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new CatchRethrowingCheck(), "CatchRethrowingCheck.php");
   }
 }

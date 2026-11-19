@@ -21,7 +21,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 class ClassNamedLikeExceptionCheckTest {
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ClassNamedLikeExceptionCheck(), "ClassNamedLikeExceptionCheck/ClassNamedLikeExceptionCheck.php");
     CheckVerifier.verify(new ClassNamedLikeExceptionCheck(), "ClassNamedLikeExceptionCheck/A.php", "ClassNamedLikeExceptionCheck/B.php");
   }

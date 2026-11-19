@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class CallToIniSetCheckTest {
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     CheckVerifier.verify(new CallToIniSetCheck(), "CallToIniSetCheck.php");
   }
 

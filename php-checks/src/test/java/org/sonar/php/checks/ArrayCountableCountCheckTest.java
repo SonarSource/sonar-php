@@ -21,7 +21,7 @@ import org.sonar.plugins.php.CheckVerifier;
 
 class ArrayCountableCountCheckTest {
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ArrayCountableCountCheck(), "ArrayCountableCountCheck.php");
   }
 }
