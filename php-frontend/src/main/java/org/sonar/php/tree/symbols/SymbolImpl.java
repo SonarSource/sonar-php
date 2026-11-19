@@ -60,6 +60,7 @@ public class SymbolImpl implements Symbol {
     this.qualifiedName = qualifiedName;
     this.kind = kind;
     this.declaration = null;
+    this.scope = null;
   }
 
   @Override
