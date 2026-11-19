@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class NonEmptyCaseWithoutBreakCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new NonEmptyCaseWithoutBreakCheck(), "NonEmptyCaseWithoutBreakCheck.php");
   }
 }

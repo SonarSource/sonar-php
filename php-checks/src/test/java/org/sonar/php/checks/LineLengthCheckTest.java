@@ -30,7 +30,7 @@ class LineLengthCheckTest {
   private LineLengthCheck check = new LineLengthCheck();
 
   @Test
-  void defaultValue() throws Exception {
+  void defaultValue() {
     List<PhpIssue> issues = Collections.singletonList(
       new LineIssue(check, 4, "Split this 122 characters long line (which is greater than 120 authorized)."));
 
@@ -38,7 +38,7 @@ class LineLengthCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.maximumLineLength = 30;
     List<PhpIssue> issues = Arrays.asList(
       new LineIssue(check, 4, "Split this 122 characters long line (which is greater than 30 authorized)."),

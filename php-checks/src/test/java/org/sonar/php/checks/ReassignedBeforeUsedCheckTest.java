@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ReassignedBeforeUsedCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ReassignedBeforeUsedCheck(), "ReassignedBeforeUsedCheck.php");
   }
 }

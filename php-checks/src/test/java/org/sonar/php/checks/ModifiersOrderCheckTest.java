@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ModifiersOrderCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ModifiersOrderCheck(), "ModifiersOrderCheck.php");
   }
 

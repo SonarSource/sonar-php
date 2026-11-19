@@ -29,24 +29,24 @@ class MoreThanOneClassInFileCheckTest {
   private final MoreThanOneClassInFileCheck check = new MoreThanOneClassInFileCheck();
 
   @Test
-  void ok() throws Exception {
+  void ok() {
     CheckVerifier.verifyNoIssue(check, TEST_DIR + "ok.php");
   }
 
   @Test
-  void ko1() throws Exception {
+  void ko1() {
     String message = "There are 2 independent classes in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko1.php"), Collections.singletonList(new FileIssue(check, message).cost(1.0)));
   }
 
   @Test
-  void ko2() throws Exception {
+  void ko2() {
     String message = "There are 2 independent interfaces in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko2.php"), Collections.singletonList(new FileIssue(check, message).cost(1.0)));
   }
 
   @Test
-  void ko3() throws Exception {
+  void ko3() {
     String message = "There are 1 independent classes and 2 independent interfaces in this file; move all but one of them to other files.";
     PHPCheckTest.check(check, TestUtils.getCheckFile(TEST_DIR + "ko3.php"), Collections.singletonList(new FileIssue(check, message).cost(2.0)));
   }

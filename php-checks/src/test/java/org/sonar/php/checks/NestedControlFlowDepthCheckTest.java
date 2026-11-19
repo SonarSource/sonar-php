@@ -34,7 +34,7 @@ class NestedControlFlowDepthCheckTest {
   }
 
   @Test
-  void custom() throws Exception {
+  void custom() {
     check.max = 5;
     PHPCheckTest.check(check, TestUtils.getCheckFile(FILE_NAME), Collections.singletonList(new LineIssue(check, 32, null)));
   }
