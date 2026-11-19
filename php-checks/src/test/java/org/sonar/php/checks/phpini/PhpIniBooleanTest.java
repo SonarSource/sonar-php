@@ -25,7 +25,7 @@ import static org.sonar.php.checks.phpini.PhpIniBoolean.ON;
 class PhpIniBooleanTest {
 
   @Test
-  void variants() throws Exception {
+  void variants() {
     assertThat(ON.matchesValue("1")).isTrue();
     assertThat(ON.matchesValue("on")).isTrue();
     assertThat(ON.matchesValue("yes")).isTrue();
@@ -40,14 +40,14 @@ class PhpIniBooleanTest {
   }
 
   @Test
-  void caseInsensitive() throws Exception {
+  void caseInsensitive() {
     assertThat(ON.matchesValue("On")).isTrue();
     assertThat(ON.matchesValue("ON")).isTrue();
     assertThat(ON.matchesValue("yeS")).isTrue();
   }
 
   @Test
-  void quotedValue() throws Exception {
+  void quotedValue() {
     assertThat(ON.matchesValue("'on'")).isTrue();
     assertThat(ON.matchesValue("'1'")).isTrue();
     assertThat(ON.matchesValue("\"1\"")).isTrue();

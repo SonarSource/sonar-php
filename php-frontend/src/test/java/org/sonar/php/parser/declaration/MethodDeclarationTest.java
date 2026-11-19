@@ -24,7 +24,7 @@ import static org.sonar.php.utils.Assertions.assertThat;
 class MethodDeclarationTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     assertThat(PHPLexicalGrammar.METHOD_DECLARATION)
       .matches("function f ();")
       .matches("function f () {}")

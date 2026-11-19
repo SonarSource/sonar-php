@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CatchBlockTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CatchBlockTree tree = parse("catch (ExceptionType $e) {}", PHPLexicalGrammar.CATCH_BLOCK);
     assertThat(tree.is(Kind.CATCH_BLOCK)).isTrue();
     assertThat(tree.catchToken().text()).isEqualTo("catch");

@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CompoundVariableTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CompoundVariableTree tree = parse("${$a}", Kind.COMPOUND_VARIABLE_NAME);
 
     assertThat(tree.is(Kind.COMPOUND_VARIABLE_NAME)).isTrue();

@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LabelTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     LabelTree tree = parse("a:", PHPLexicalGrammar.STATEMENT);
 
     assertThat(tree.is(Kind.LABEL)).isTrue();

@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TraitPrecedenceTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     TraitPrecedenceTree tree = parse("NS1\\Class1::method1 insteadof Class2, Class3;", PHPLexicalGrammar.TRAIT_PRECEDENCE);
     assertThat(tree.is(Kind.TRAIT_PRECEDENCE)).isTrue();
     assertThat(tree.methodReference().method().text()).isEqualTo("method1");

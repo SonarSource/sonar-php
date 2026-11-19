@@ -22,7 +22,7 @@ import org.sonar.plugins.php.CheckVerifier;
 class ZipEntryCheckTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     CheckVerifier.verify(new ZipEntryCheck(), "ZipEntryCheck.php");
   }
 }

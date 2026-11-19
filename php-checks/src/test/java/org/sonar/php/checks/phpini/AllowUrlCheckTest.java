@@ -30,12 +30,12 @@ class AllowUrlCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void lineIssues() throws Exception {
+  void lineIssues() {
     check(check, new File(dir, "allow_url.ini"));
   }
 
   @Test
-  void fileIssue() throws Exception {
+  void fileIssue() {
     check(check, new File(dir, "empty.ini"), Collections.singletonList(
       issue("Disable \"allow_url_fopen\" explicitly; it is enabled by default.")));
   }
