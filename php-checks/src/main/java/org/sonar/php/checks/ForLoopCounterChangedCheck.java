@@ -43,7 +43,7 @@ public class ForLoopCounterChangedCheck extends PHPVisitorCheck {
     Kind.POSTFIX_INCREMENT,
     Kind.POSTFIX_DECREMENT};
 
-  private Deque<Set<String>> counterStack = new ArrayDeque<>();
+  private final Deque<Set<String>> counterStack = new ArrayDeque<>();
 
   @Override
   public void visitCompilationUnit(CompilationUnitTree tree) {

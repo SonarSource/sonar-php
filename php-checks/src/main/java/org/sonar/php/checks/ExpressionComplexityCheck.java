@@ -36,7 +36,7 @@ public class ExpressionComplexityCheck extends PHPSubscriptionCheck {
 
   public static final int DEFAULT = 3;
 
-  private Deque<ComplexExpression> expressions = new ArrayDeque<>();
+  private final Deque<ComplexExpression> expressions = new ArrayDeque<>();
 
   @RuleProperty(defaultValue = "" + DEFAULT)
   public int max = DEFAULT;

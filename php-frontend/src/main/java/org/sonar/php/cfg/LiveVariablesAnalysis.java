@@ -130,7 +130,7 @@ public class LiveVariablesAnalysis {
     /**
      * The Live-Out variables are variables which are needed by successors.
      */
-    private Set<Symbol> out = new HashSet<>();
+    private final Set<Symbol> out = new HashSet<>();
 
     private LiveVariables(CfgBlock block) {
       this.block = block;

@@ -44,8 +44,8 @@ public class UnusedLocalVariableCheck extends PHPVisitorCheck {
   public static final String KEY = "S1481";
   private static final String MESSAGE = "Remove this unused \"%s\" local variable.";
 
-  private List<IdentifierTree> exclusions = new ArrayList<>();
-  private Set<Tree> raisedIssueLocations = new HashSet<>();
+  private final List<IdentifierTree> exclusions = new ArrayList<>();
+  private final Set<Tree> raisedIssueLocations = new HashSet<>();
   private ReadWriteUsages usages;
 
   @Override

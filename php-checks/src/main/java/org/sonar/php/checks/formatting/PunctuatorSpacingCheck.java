@@ -34,7 +34,7 @@ public class PunctuatorSpacingCheck extends PHPVisitorCheck implements Formattin
 
   private FormattingStandardCheck check;
   private SyntaxToken previousToken = null;
-  private Deque<OpenParenthesisContext> openParenthesisLevel = new ArrayDeque<>();
+  private final Deque<OpenParenthesisContext> openParenthesisLevel = new ArrayDeque<>();
 
   private static class OpenParenthesisContext {
     final SyntaxToken openParenthesis;

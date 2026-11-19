@@ -55,10 +55,10 @@ import static org.sonar.plugins.php.api.tree.Tree.Kind.PIPE;
 
 public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
-  private CognitiveComplexity complexity = new CognitiveComplexity();
+  private final CognitiveComplexity complexity = new CognitiveComplexity();
 
-  private Set<IfStatementTree> ifStatementWithoutNesting = new HashSet<>();
-  private Set<ExpressionTree> nestedLogicalExpressions = new HashSet<>();
+  private final Set<IfStatementTree> ifStatementWithoutNesting = new HashSet<>();
+  private final Set<ExpressionTree> nestedLogicalExpressions = new HashSet<>();
 
   public static CognitiveComplexity complexity(FunctionTree functionTree) {
     CognitiveComplexityVisitor cognitiveComplexityVisitor = new CognitiveComplexityVisitor();
@@ -318,7 +318,7 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
   public static class CognitiveComplexity {
 
-    private List<ComplexityComponent> complexityComponents = new ArrayList<>();
+    private final List<ComplexityComponent> complexityComponents = new ArrayList<>();
     private int value = 0;
     private int level = 0;
 
@@ -355,8 +355,8 @@ public class CognitiveComplexityVisitor extends PHPVisitorCheck {
 
   public static class ComplexityComponent {
 
-    private Tree tree;
-    private int addedComplexity;
+    private final Tree tree;
+    private final int addedComplexity;
 
     private ComplexityComponent(Tree tree, int addedComplexity) {
       this.tree = tree;

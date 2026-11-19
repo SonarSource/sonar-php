@@ -27,7 +27,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class LineVisitor extends PHPVisitorCheck {
 
-  private Set<Integer> lines = new HashSet<>();
+  private final Set<Integer> lines = new HashSet<>();
 
   private LineVisitor(Tree tree) {
     tree.accept(this);

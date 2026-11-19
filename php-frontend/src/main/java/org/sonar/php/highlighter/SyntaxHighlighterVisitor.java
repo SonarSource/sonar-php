@@ -45,7 +45,7 @@ public class SyntaxHighlighterVisitor extends PHPVisitorCheck {
 
   private static final List<String> WORDS_TO_HIGHLIGHT = ListUtils.concat(Arrays.asList(PHPKeyword.getKeywordValues()), PHP_RESERVED_VARIABLES);
 
-  private NewHighlighting highlighting;
+  private final NewHighlighting highlighting;
 
   private SyntaxHighlighterVisitor(NewHighlighting highlighting) {
     this.highlighting = highlighting;

@@ -53,13 +53,13 @@ public class LocalVariableShadowsClassFieldCheck extends PHPVisitorCheck {
   private static final String MESSAGE = "Rename \"%s\" which has the same name as the field declared at line %s.";
   private static final String SECONDARY_MESSAGE = "Shadowed field.";
 
-  private Deque<ClassState> classStates = new ArrayDeque<>();
-  private Deque<FunctionTree> functions = new ArrayDeque<>();
+  private final Deque<ClassState> classStates = new ArrayDeque<>();
+  private final Deque<FunctionTree> functions = new ArrayDeque<>();
 
   private static class ClassState {
 
-    private Map<String, SyntaxToken> classFields = new HashMap<>();
-    private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
+    private final Map<String, SyntaxToken> classFields = new HashMap<>();
+    private final Deque<Set<String>> checkedVariables = new ArrayDeque<>();
     private String className = null;
 
     public void setClassName(@Nullable String name) {

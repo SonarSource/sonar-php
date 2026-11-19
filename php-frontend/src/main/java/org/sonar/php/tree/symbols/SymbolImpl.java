@@ -31,11 +31,11 @@ public class SymbolImpl implements Symbol {
   private final String name;
   private final IdentifierTree declaration;
   private QualifiedName qualifiedName;
-  private Kind kind;
-  private Scope scope;
-  private List<SyntaxToken> usages = new LinkedList<>();
-  private List<SyntaxToken> modifiers = new LinkedList<>();
-  private List<ExpressionTree> assignedValues = new LinkedList<>();
+  private final Kind kind;
+  private final Scope scope;
+  private final List<SyntaxToken> usages = new LinkedList<>();
+  private final List<SyntaxToken> modifiers = new LinkedList<>();
+  private final List<ExpressionTree> assignedValues = new LinkedList<>();
   private boolean assignedUnknown = false;
 
   SymbolImpl(IdentifierTree declaration, Kind kind, Scope scope) {

@@ -49,7 +49,7 @@ public class IndentationCheck extends PHPVisitorCheck implements FormattingCheck
   private static final String INTERFACE_INDENTATION = "Align all interfaces in this list at column \"%s\".";
 
   private FormattingStandardCheck check;
-  private Map<Integer, Integer> startColumnByLine = new HashMap<>();
+  private final Map<Integer, Integer> startColumnByLine = new HashMap<>();
 
   @Override
   public void checkFormat(FormattingStandardCheck formattingCheck, ScriptTree scriptTree) {

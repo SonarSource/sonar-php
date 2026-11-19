@@ -94,8 +94,8 @@ public class CORSPolicyCheck extends PHPVisitorCheck {
 
     private static final QualifiedName HEADER_FUNCTION_NAME = qualifiedName("header");
 
-    private FunctionCallTree functionCallTree;
-    private ExpressionTree callee;
+    private final FunctionCallTree functionCallTree;
+    private final ExpressionTree callee;
 
     private static final Set<QualifiedName> RESPONSE_CLASSES = new HashSet<>(Arrays.asList(
       qualifiedName("Symfony\\Component\\Httpfoundation\\Response"),
