@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EmptyStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     EmptyStatementTree tree = parse(";", PHPLexicalGrammar.EMPTY_STATEMENT);
 
     assertThat(tree.is(Kind.EMPTY_STATEMENT)).isTrue();

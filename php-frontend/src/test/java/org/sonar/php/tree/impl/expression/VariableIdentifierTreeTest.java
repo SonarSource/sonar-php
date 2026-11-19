@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class VariableIdentifierTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     VariableIdentifierTree tree = parse("$a", PHPLexicalGrammar.EXPRESSION);
 
     assertThat(tree.is(Kind.VARIABLE_IDENTIFIER)).isTrue();

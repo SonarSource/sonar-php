@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class InlineHTMLTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     InlineHTMLTree tree = parse("?>", PHPLexicalGrammar.INLINE_HTML_STATEMENT);
 
     assertThat(tree.is(Kind.INLINE_HTML)).isTrue();

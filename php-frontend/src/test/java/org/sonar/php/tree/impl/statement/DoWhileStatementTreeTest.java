@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DoWhileStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     DoWhileStatementTree tree = parse("do {} while ($a) ;", PHPLexicalGrammar.DO_WHILE_STATEMENT);
 
     assertThat(tree.is(Kind.DO_WHILE_STATEMENT)).isTrue();

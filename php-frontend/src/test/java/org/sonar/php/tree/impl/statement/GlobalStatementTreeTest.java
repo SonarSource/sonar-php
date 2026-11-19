@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GlobalStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     GlobalStatementTree tree = parse("global $a, $b;", PHPLexicalGrammar.GLOBAL_STATEMENT);
 
     assertThat(tree.is(Kind.GLOBAL_STATEMENT)).isTrue();

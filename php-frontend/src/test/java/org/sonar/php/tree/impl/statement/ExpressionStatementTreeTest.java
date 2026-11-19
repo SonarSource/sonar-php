@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExpressionStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     ExpressionStatementTree tree = parse("$a;", PHPLexicalGrammar.EXPRESSION_STATEMENT);
 
     assertThat(tree.is(Kind.EXPRESSION_STATEMENT)).isTrue();

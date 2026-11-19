@@ -20,7 +20,6 @@ import com.sonar.sslr.api.typed.ActionParser;
 import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester;
 import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder;
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -51,7 +50,7 @@ class SymbolHighlighterTest {
   public File tempFolder;
 
   @BeforeEach
-  public void setUp() throws IOException {
+  public void setUp() {
     file = new File(tempFolder, "file");
   }
 

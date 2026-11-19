@@ -40,7 +40,7 @@ class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
 
   @ParameterizedTest
   @MethodSource
-  void test(String code, String openingToken, String closingToken) throws Exception {
+  void test(String code, String openingToken, String closingToken) {
     HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.openingToken().text()).isEqualTo(openingToken);
     assertThat(tree.closingToken().text()).isEqualTo(closingToken);

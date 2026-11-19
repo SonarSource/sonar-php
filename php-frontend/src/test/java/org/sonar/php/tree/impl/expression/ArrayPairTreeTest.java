@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ArrayPairTreeTest extends PHPTreeModelTest {
 
   @Test
-  void value() throws Exception {
+  void value() {
     ArrayPairTree tree = parse("$val", Kind.ARRAY_PAIR);
 
     assertThat(tree.is(Kind.ARRAY_PAIR)).isTrue();

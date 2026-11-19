@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AssignmentExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     AssignmentExpressionTree tree = parse("$a %= $b", PHPLexicalGrammar.ASSIGNMENT_EXPRESSION);
     assertThat(tree.is(Kind.REMAINDER_ASSIGNMENT)).isTrue();
     assertThat(tree.variable().is(Kind.VARIABLE_IDENTIFIER)).isTrue();

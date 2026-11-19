@@ -62,7 +62,7 @@ public class WordPressConfigVerifier {
     return checkFile;
   }
 
-  private File configFile() throws IOException {
+  private File configFile() {
     return new File(folder, "wp-config.php");
   }
 }

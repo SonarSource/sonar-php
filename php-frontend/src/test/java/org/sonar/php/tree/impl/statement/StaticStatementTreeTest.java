@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StaticStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     StaticStatementTree tree = parse("static $a, $b = $c;", PHPLexicalGrammar.STATIC_STATEMENT);
 
     assertThat(tree.is(Kind.STATIC_STATEMENT)).isTrue();

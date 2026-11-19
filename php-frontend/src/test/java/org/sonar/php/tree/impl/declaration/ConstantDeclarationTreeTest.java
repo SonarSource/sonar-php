@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConstantDeclarationTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     ConstantDeclarationTree tree = parse("const A = 1, B = 2;", PHPLexicalGrammar.CONSTANT_DECLARATION);
     assertThat(tree.is(Kind.CONSTANT_DECLARATION)).isTrue();
     assertThat(tree.constToken().text()).isEqualTo("const");

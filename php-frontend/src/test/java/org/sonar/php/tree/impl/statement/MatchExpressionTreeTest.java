@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MatchExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     MatchExpressionTree tree = parse("match ($a) { 0,1 => 'Foo', default=>'bar'}", PHPLexicalGrammar.MATCH_EXPRESSION);
 
     assertThat(tree.is(Kind.MATCH_EXPRESSION)).isTrue();

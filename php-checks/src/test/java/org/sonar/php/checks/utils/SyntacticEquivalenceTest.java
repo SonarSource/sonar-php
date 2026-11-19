@@ -37,7 +37,7 @@ class SyntacticEquivalenceTest {
   }
 
   @Test
-  void areSyntacticallyEquivalent() throws Exception {
+  void areSyntacticallyEquivalent() {
     assertThat(areSyntacticallyEquivalent(null, null)).isTrue();
     assertThat(areSyntacticallyEquivalent(null, "1;")).isFalse();
     assertThat(areSyntacticallyEquivalent("$x;", null)).isFalse();

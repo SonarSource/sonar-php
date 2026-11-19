@@ -28,12 +28,12 @@ class EnableDlCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void lineIssues() throws Exception {
+  void lineIssues() {
     PhpIniCheckTestUtils.check(check, new File(dir, "enable_dl.ini"));
   }
 
   @Test
-  void fileIssue() throws Exception {
+  void fileIssue() {
     PhpIniCheckTestUtils.check(check, new File(dir, "empty.ini"), Collections.singletonList(
       issue("Explicitly set \"enable_dl\" to 0.")));
   }

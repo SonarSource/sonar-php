@@ -30,12 +30,12 @@ class OpenBasedirCheckTest {
   private File dir = new File("src/test/resources/checks/phpini");
 
   @Test
-  void lineIssues() throws Exception {
+  void lineIssues() {
     check(check, new File(dir, "open_basedir.ini"));
   }
 
   @Test
-  void fileIssue() throws Exception {
+  void fileIssue() {
     check(check, new File(dir, "empty.ini"), Collections.singletonList(issue("Set \"open_basedir\".")));
   }
 

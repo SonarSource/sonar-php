@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExpandableStringCharactersTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     ExpandableStringCharactersTreeImpl tree = parse("characters with spaces", Kind.EXPANDABLE_STRING_CHARACTERS);
 
     assertThat(tree.is(Kind.EXPANDABLE_STRING_CHARACTERS)).isTrue();

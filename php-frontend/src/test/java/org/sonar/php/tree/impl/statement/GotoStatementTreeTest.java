@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GotoStatementTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     GotoStatementTree tree = parse(" goto a ;", PHPLexicalGrammar.GOTO_STATEMENT);
 
     assertThat(tree.is(Kind.GOTO_STATEMENT)).isTrue();

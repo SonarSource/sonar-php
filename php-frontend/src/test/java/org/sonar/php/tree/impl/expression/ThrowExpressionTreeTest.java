@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ThrowExpressionTreeTest extends PHPTreeModelTest {
 
   @Test
-  void test() throws Exception {
+  void test() {
     ThrowExpressionTree tree = parse("throw $a", PHPLexicalGrammar.EXPRESSION);
     assertThat(tree.is(Tree.Kind.THROW_EXPRESSION)).isTrue();
     assertThat(tree.throwToken().text()).isEqualTo("throw");
