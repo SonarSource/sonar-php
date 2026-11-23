@@ -17,7 +17,6 @@
 package org.sonar.php.tree.impl.declaration;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -309,7 +308,7 @@ class ClassPropertyDeclarationTreeTest extends PHPTreeModelTest {
    * Get list of all modifier token texts
    */
   private static List<String> modifier(ClassPropertyDeclarationTree classPropertyDeclaration) {
-    return classPropertyDeclaration.modifierTokens().stream().map(SyntaxToken::text).collect(Collectors.toList());
+    return classPropertyDeclaration.modifierTokens().stream().map(SyntaxToken::text).toList();
   }
 
   private static String builtinType(ClassPropertyDeclarationTree tree) {

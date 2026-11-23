@@ -19,7 +19,6 @@ package org.sonar.php.symbols;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.tree.symbols.SymbolReturnType;
 import org.sonar.plugins.php.api.symbols.QualifiedName;
@@ -267,7 +266,7 @@ class ClassSymbolIndexTest {
   }
 
   private ClassSymbolData data(String fqn, String superClassFqn, List<String> interfaceFqns) {
-    List<QualifiedName> interfaces = interfaceFqns.stream().map(this::fqn).collect(Collectors.toList());
+    List<QualifiedName> interfaces = interfaceFqns.stream().map(this::fqn).toList();
     return new ClassSymbolData(someLocation(), qualifiedName(fqn), qualifiedName(superClassFqn), interfaces, emptyList());
   }
 

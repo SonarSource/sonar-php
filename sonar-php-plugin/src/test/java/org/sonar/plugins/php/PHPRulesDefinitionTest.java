@@ -17,7 +17,6 @@
 package org.sonar.plugins.php;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
@@ -39,7 +38,7 @@ class PHPRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo("php");
     assertThat(repository.rules()).hasSize(CheckList.getAllChecks().size());
 
-    List<Rule> activated = repository.rules().stream().filter(Rule::activatedByDefault).collect(Collectors.toList());
+    List<Rule> activated = repository.rules().stream().filter(Rule::activatedByDefault).toList();
     assertThat(activated).isNotEmpty();
     assertThat(activated.size()).isLessThan(CheckList.getAllChecks().size());
   }

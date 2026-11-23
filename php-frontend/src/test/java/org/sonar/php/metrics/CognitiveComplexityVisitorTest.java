@@ -19,7 +19,6 @@ package org.sonar.php.metrics;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.PHPTreeModelTest;
 import org.sonar.php.metrics.CognitiveComplexityVisitor.CognitiveComplexity;
@@ -235,7 +234,7 @@ class CognitiveComplexityVisitorTest extends PHPTreeModelTest {
   private List<TestComplexityComponent> components(String functionBody) {
     FunctionTree tree = parse("function f() { " + functionBody + " }", PHPLexicalGrammar.FUNCTION_DECLARATION);
     CognitiveComplexity complexity = CognitiveComplexityVisitor.complexity(tree);
-    return complexity.getComplexityComponents().stream().map(TestComplexityComponent::create).collect(Collectors.toList());
+    return complexity.getComplexityComponents().stream().map(TestComplexityComponent::create).toList();
   }
 
   private static class TestComplexityComponent {

@@ -19,7 +19,6 @@ package org.sonar.php.metrics;
 import com.sonar.sslr.api.typed.ActionParser;
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -244,6 +243,6 @@ class CpdVisitorTest {
   }
 
   private static List<String> getImagesList(List<CpdToken> tokens) {
-    return tokens.stream().map(CpdToken::text).collect(Collectors.toList());
+    return tokens.stream().map(CpdToken::text).toList();
   }
 }
