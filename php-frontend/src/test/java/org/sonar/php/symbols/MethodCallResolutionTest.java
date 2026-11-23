@@ -17,7 +17,6 @@
 package org.sonar.php.symbols;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sonar.php.tree.impl.expression.FunctionCallTreeImpl;
@@ -68,7 +67,7 @@ class MethodCallResolutionTest {
 
   private FunctionSymbol callSymbol(String... lines) {
     CompilationUnitTree root = parse(lines);
-    List<FunctionCallTreeImpl> descendants = descendants(root, FunctionCallTreeImpl.class).collect(Collectors.toList());
+    List<FunctionCallTreeImpl> descendants = descendants(root, FunctionCallTreeImpl.class).toList();
     Assertions.assertThat(descendants).hasSize(1);
     return descendants.get(0).symbol();
   }

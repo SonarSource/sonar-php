@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -111,7 +110,7 @@ class ProjectSymbolTableTest {
     List<NewExpressionTree> newExpressions = TreeUtils.descendants(ast)
       .filter(NewExpressionTree.class::isInstance)
       .map(NewExpressionTree.class::cast)
-      .collect(Collectors.toList());
+      .toList();
     assertThat(newExpressions).extracting(e -> ((PHPTree) e).getLine()).containsExactly(2, 3);
     assertThat(newExpressions).extracting(e -> e.expression().getKind()).containsExactly(Tree.Kind.FUNCTION_CALL, Tree.Kind.NAMESPACE_NAME);
     for (NewExpressionTree newExpression : newExpressions) {

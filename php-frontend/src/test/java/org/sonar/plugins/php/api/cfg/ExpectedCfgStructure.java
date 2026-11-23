@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.sonar.plugins.php.api.tree.Tree;
 import org.sonar.plugins.php.api.tree.declaration.CallArgumentTree;
@@ -81,7 +80,7 @@ public class ExpectedCfgStructure {
   }
 
   List<String> blockIds(Collection<? extends CfgBlock> blocks) {
-    return blocks.stream().map(this::testId).collect(Collectors.toList());
+    return blocks.stream().map(this::testId).toList();
   }
 
   CfgBlock cfgBlock(String testId) {
@@ -289,7 +288,7 @@ public class ExpectedCfgStructure {
     }
 
     private static String[] getVariableStrings(Tree tree) {
-      return getStringList(tree).stream().map(s -> "$" + s).collect(Collectors.toList()).toArray(new String[] {});
+      return getStringList(tree).stream().map(s -> "$" + s).toList().toArray(new String[] {});
     }
 
     private static String[] getStrings(Tree tree) {
