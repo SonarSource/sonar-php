@@ -1,9 +1,0 @@
-{
-"flysystem:bin/set-flysystem-version.php": [
-36
-],
-"flysystem:src/Ftp/FtpAdapter.php": [
-404,
-428
-]
-}

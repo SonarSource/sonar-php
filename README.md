@@ -161,7 +161,7 @@ The "Plugin Test" is an additional integration test that verifies plugin feature
 ```
 
 #### Ruling Test
-The "Ruling Test" is a special integration test that launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as JSON files). To launch the ruling test:
+The "Ruling Test" is a special integration test that launches the analysis of a large code base, saves the issues created by the plugin in report files, and then compares those results to the set of expected issues (stored as SARIF files). To launch the ruling test:
 ```shell
 ./gradlew its:ruling:integrationTest
 ```
