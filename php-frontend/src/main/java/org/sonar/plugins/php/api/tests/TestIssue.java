@@ -26,7 +26,7 @@ public class TestIssue {
   public static class Location {
 
     private String message;
-    private int line;
+    private final int line;
     private Integer startColumn = null;
     private Integer endColumn = null;
     private Integer endLine = null;
@@ -55,8 +55,8 @@ public class TestIssue {
 
   private Double effortToFix = null;
 
-  private Location primaryLocation;
-  private List<Location> secondaryLocations = new ArrayList<>();
+  private final Location primaryLocation;
+  private final List<Location> secondaryLocations = new ArrayList<>();
 
   private TestIssue(@Nullable String message, int line) {
     primaryLocation = new Location(message, line);
