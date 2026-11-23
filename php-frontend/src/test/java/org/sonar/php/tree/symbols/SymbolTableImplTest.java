@@ -51,13 +51,13 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void staticMethodCallSymbolShouldProvideFqnWhenClassIsNotDeclared() {
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php
       use Defuse\\Crypto\\KeyOrPassword;
       KeyOrPassword::createFromPassword();
       """);
-    SymbolTableImpl.create(cut);
-    FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
+    SymbolTableImpl.create(compilationUnit);
+    FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(compilationUnit, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
     assertThat(memberSymbol.isUnknownSymbol()).isTrue();
     assertThat(memberSymbol.qualifiedName()).hasToString("defuse\\crypto\\keyorpassword::createfrompassword");
@@ -65,14 +65,14 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void staticMethodCallSymbolShouldProvideFqnWhenMethodIsNotDeclared() {
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php
       namespace Defuse\\Crypto;
       class KeyOrPassword {}
       KeyOrPassword::createFromPassword();
       """);
-    SymbolTableImpl.create(cut);
-    FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
+    SymbolTableImpl.create(compilationUnit);
+    FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(compilationUnit, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
     assertThat(memberSymbol.isUnknownSymbol()).isTrue();
     assertThat(memberSymbol.qualifiedName()).hasToString("defuse\\crypto\\keyorpassword::createfrompassword");
@@ -272,13 +272,13 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void qnClassSymbolUsages() {
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php namespace N1 {
        class A {}
        $a = new A();
       }
       $a = new \\N1\\A();""");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
     assertClassSymbols(symbolTable, "n1\\a");
     assertSymbolUsages(symbolTable, "n1\\a", 3, 5);
   }
@@ -337,7 +337,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void usageBeforeDeclaration() {
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php namespace N {
       $a = new N1\\A();
       }
@@ -345,18 +345,18 @@ class SymbolTableImplTest extends ParsingTestUtils {
       namespace N\\N1 {
       class A {}
       }""");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
     assertClassSymbols(symbolTable, "n\\n1\\a");
     assertSymbolUsages(symbolTable, "n\\n1\\a", 2);
   }
 
   @Test
   void functionUsageBeforeDeclaration() {
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php namespace N {
       f();
       function f() {}}""");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
     assertFunctionSymbols(symbolTable, "n\\f");
     assertSymbolUsages(symbolTable, "n\\f", 2);
   }
@@ -365,12 +365,12 @@ class SymbolTableImplTest extends ParsingTestUtils {
   void nestedFunction() {
     // Note that actual runtime behavior is that function g doesn't exist until f() is invoked, so this particular example
     // will actually lead to function not defined error on line 2 at runtime, however this is good enough for purpose of analysis
-    CompilationUnitTree cut = parseSource("""
+    CompilationUnitTree compilationUnit = parseSource("""
       <?php namespace N {
       g();
       f();
       function f() {  function g() {}}}""");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
     assertFunctionSymbols(symbolTable, "n\\f", "n\\g");
     assertSymbolUsages(symbolTable, "n\\f", 3);
     assertSymbolUsages(symbolTable, "n\\g", 2);
