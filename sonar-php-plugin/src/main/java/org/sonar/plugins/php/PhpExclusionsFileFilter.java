@@ -73,7 +73,7 @@ public class PhpExclusionsFileFilter implements InputFileFilter {
   private static class AverageLineLengthCalculator {
     private static final Pattern PHP_OPEN_TAG = Pattern.compile(LexicalConstant.PHP_OPENING_TAG);
 
-    private InputFile file;
+    private final InputFile file;
 
     private boolean isAtFirstLine = true;
 

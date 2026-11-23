@@ -24,12 +24,12 @@ public class LineNode {
   /**
    * The count.
    */
-  private int count;
+  private final int count;
 
   /**
    * The num.
    */
-  private int num;
+  private final int num;
 
   /**
    * The type.

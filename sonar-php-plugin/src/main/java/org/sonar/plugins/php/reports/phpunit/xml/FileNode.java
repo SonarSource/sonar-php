@@ -32,7 +32,7 @@ public class FileNode {
   /**
    * The lines.
    */
-  private List<LineNode> lines = new ArrayList<>();
+  private final List<LineNode> lines = new ArrayList<>();
 
   /**
    * Gets the lines.

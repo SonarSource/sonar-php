@@ -30,11 +30,11 @@ import org.sonar.plugins.php.api.tree.Tree;
 
 class PhpCfgBlock implements CfgBlock {
 
-  private Set<PhpCfgBlock> predecessors = new HashSet<>();
+  private final Set<PhpCfgBlock> predecessors = new HashSet<>();
   private Set<CfgBlock> successors;
   private CfgBlock syntacticSuccessor;
 
-  private LinkedList<Tree> elements = new LinkedList<>();
+  private final LinkedList<Tree> elements = new LinkedList<>();
 
   private PhpCfgBlock(Set<PhpCfgBlock> successors, @Nullable PhpCfgBlock syntacticSuccessor) {
     this.successors = Collections.unmodifiableSet(successors);
