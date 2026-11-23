@@ -80,8 +80,8 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void caseSensitivity() {
-    CompilationUnitTree cut = parse("symbols/symbolCase.php");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    CompilationUnitTree compilationUnit = parse("symbols/symbolCase.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
 
     Symbol myFunc = getUniqueSymbol("myFunc", symbolTable);
     assertThat(myFunc.kind()).isEqualTo(Kind.FUNCTION);
@@ -227,8 +227,8 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void builtInVariables() {
-    CompilationUnitTree cut = parse("symbols/symbolBuiltins.php");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    CompilationUnitTree compilationUnit = parse("symbols/symbolBuiltins.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
 
     assertThat(symbolTable.getSymbols("$myvar")).hasSize(3);
     assertThat(symbolTable.getSymbols("$GLOBALS")).isEmpty();
@@ -545,8 +545,8 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void namespaceDeclaredTypes() {
-    CompilationUnitTree cut = parse("symbols/namespace_declared_types.php");
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
+    CompilationUnitTree compilationUnit = parse("symbols/namespace_declared_types.php");
+    SymbolTableImpl symbolTable = SymbolTableImpl.create(compilationUnit);
     assertThat(symbolTable.getSymbol("a\\b\\fieldtype")).isNotNull();
     assertThat(symbolTable.getSymbol("a\\b\\paramtype")).isNotNull();
     assertThat(symbolTable.getSymbol("a\\b\\returntype")).isNotNull();
@@ -630,8 +630,8 @@ class SymbolTableImplTest extends ParsingTestUtils {
   }
 
   private SymbolTableImpl symbolTableFor(String source) {
-    CompilationUnitTree cut = parseSource(source);
-    return SymbolTableImpl.create(cut);
+    CompilationUnitTree compilationUnit = parseSource(source);
+    return SymbolTableImpl.create(compilationUnit);
   }
 
   private static Symbol getUniqueSymbol(String name, SymbolTableImpl table) {
