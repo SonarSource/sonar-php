@@ -32,13 +32,13 @@ public final class TestSuite {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestSuite.class);
 
-  private String name;
+  private final String name;
 
-  private String file;
+  private final String file;
 
-  private double time;
+  private final double time;
 
-  private List<TestSuite> testSuites = new ArrayList<>();
+  private final List<TestSuite> testSuites = new ArrayList<>();
 
   List<TestCase> testCases;
 

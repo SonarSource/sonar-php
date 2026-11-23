@@ -27,7 +27,7 @@ public class PackageNode {
   /**
    * The project files.
    */
-  private List<FileNode> files = new ArrayList<>();
+  private final List<FileNode> files = new ArrayList<>();
 
   /**
    * The project name.

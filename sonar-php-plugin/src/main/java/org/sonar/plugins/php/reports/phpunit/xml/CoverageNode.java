@@ -27,7 +27,7 @@ public class CoverageNode {
   /**
    * The projects.
    */
-  private List<ProjectNode> projects = new ArrayList<>();
+  private final List<ProjectNode> projects = new ArrayList<>();
 
   /**
    * Gets the projects.

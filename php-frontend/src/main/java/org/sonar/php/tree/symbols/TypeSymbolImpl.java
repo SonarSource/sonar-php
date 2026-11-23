@@ -26,8 +26,8 @@ import org.sonar.plugins.php.api.tree.expression.IdentifierTree;
 public class TypeSymbolImpl extends SymbolImpl implements TypeSymbol {
 
   private Symbol superClass;
-  private List<Symbol> interfaces = new ArrayList<>();
-  private List<MemberSymbol> members = new ArrayList<>();
+  private final List<Symbol> interfaces = new ArrayList<>();
+  private final List<MemberSymbol> members = new ArrayList<>();
 
   public TypeSymbolImpl(IdentifierTree declaration, Scope scope, SymbolQualifiedName qualifiedName) {
     super(declaration, Symbol.Kind.CLASS, scope, qualifiedName);

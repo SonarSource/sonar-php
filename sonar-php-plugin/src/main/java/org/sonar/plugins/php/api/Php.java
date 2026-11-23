@@ -33,7 +33,7 @@ public final class Php extends AbstractLanguage {
 
   public static final String DEFAULT_FILE_SUFFIXES = "php,php3,php4,php5,phtml,inc";
 
-  private Configuration settings;
+  private final Configuration settings;
 
   /**
    * Construct the PHP language.

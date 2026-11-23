@@ -28,7 +28,7 @@ class PhpCfgBranchingBlock extends PhpCfgBlock implements CfgBranchingBlock {
   private CfgBlock trueSuccessor;
   private CfgBlock falseSuccessor;
 
-  private Tree branchingTree;
+  private final Tree branchingTree;
 
   public PhpCfgBranchingBlock(Tree branchingTree, PhpCfgBlock trueSuccessor, PhpCfgBlock falseSuccessor) {
     this.trueSuccessor = trueSuccessor;

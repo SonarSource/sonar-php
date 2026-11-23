@@ -33,7 +33,7 @@ import org.sonar.plugins.php.api.visitors.PHPCustomRuleRepository;
 public class PHPChecks {
 
   private final CheckFactory checkFactory;
-  private Set<Checks<PHPCheck>> checksByRepository = new HashSet<>();
+  private final Set<Checks<PHPCheck>> checksByRepository = new HashSet<>();
 
   private PHPChecks(CheckFactory checkFactory) {
     this.checkFactory = checkFactory;

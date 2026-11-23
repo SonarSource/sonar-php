@@ -27,12 +27,12 @@ public class ProjectNode {
   /**
    * The project files.
    */
-  private List<FileNode> files = new ArrayList<>();
+  private final List<FileNode> files = new ArrayList<>();
 
   /**
    * The project files.
    */
-  private List<PackageNode> packages = new ArrayList<>();
+  private final List<PackageNode> packages = new ArrayList<>();
 
   /**
    * The project name.
