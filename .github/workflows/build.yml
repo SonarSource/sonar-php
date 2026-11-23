@@ -272,9 +272,6 @@ jobs:
           # Check out the PR head rather than the merge commit, so that the action can detect its own auto-update commits
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
-      - name: Create expected ruling directory
-        # The SARIF migration removes every tracked file in this directory until the update is committed.
-        run: mkdir -p its/ruling/src/test/resources/expected
       - name: Detect ruling failures
         id: ruling-status
         env:
