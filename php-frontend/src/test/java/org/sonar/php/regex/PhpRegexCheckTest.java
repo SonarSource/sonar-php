@@ -64,13 +64,13 @@ class PhpRegexCheckTest {
     List<RegexTree> items = ((SequenceTree) regex).getItems();
     assertThat(items).hasSize(3);
 
-    RegexTree A = items.get(0);
-    RegexTree B = items.get(1);
-    RegexTree C = items.get(2);
+    RegexTree a = items.get(0);
+    RegexTree b = items.get(1);
+    RegexTree c = items.get(2);
 
-    assertRange(2, 5, correspondingTextSpans(Arrays.asList(A, B, C)));
-    assertRange(2, 4, correspondingTextSpans(Arrays.asList(A, B)));
-    assertRange(2, 3, correspondingTextSpans(Arrays.asList(A, C)));
+    assertRange(2, 5, correspondingTextSpans(Arrays.asList(a, b, c)));
+    assertRange(2, 4, correspondingTextSpans(Arrays.asList(a, b)));
+    assertRange(2, 3, correspondingTextSpans(Arrays.asList(a, c)));
   }
 
   @Test

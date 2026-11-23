@@ -312,8 +312,8 @@ class PHPSensorTest {
     PHPSensor phpSensor = createSensor();
     context.fileSystem().add(inputFile);
 
-    try (MockedStatic<FileHashingUtils> FileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
-      FileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IllegalStateException("BOOM!"));
+    try (MockedStatic<FileHashingUtils> fileHashingUtilsStaticMock = Mockito.mockStatic(FileHashingUtils.class)) {
+      fileHashingUtilsStaticMock.when(() -> FileHashingUtils.inputFileContentHash(any())).thenThrow(new IllegalStateException("BOOM!"));
       phpSensor.execute(context);
       assertThat(logTester.logs(Level.DEBUG)).contains("Failed to compute content hash for file moduleKey:PHPSquidSensor.php");
     }
