@@ -1535,10 +1535,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
   void echoTag() {
-    CompilationUnitTree tree = parse("<?php\n" +
-      "function foo() {\n" +
-      "     ?><?= 'Hello' ?><?php\n" +
-      "}\n",
+    CompilationUnitTree tree = parse("""
+      <?php
+      function foo() {
+           ?><?= 'Hello' ?><?php
+      }
+      """,
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     ControlFlowGraph cfg = ControlFlowGraph.build(func, checkContext);
@@ -1554,10 +1556,12 @@ public class ControlFlowGraphTest extends PHPTreeModelTest {
 
   @Test
   void testCfgFailureLogs() {
-    CompilationUnitTree tree = parse("<?php\n" +
-      "function foo() {\n" +
-      "     break;\n" +
-      "}\n",
+    CompilationUnitTree tree = parse("""
+      <?php
+      function foo() {
+           break;
+      }
+      """,
       PHPLexicalGrammar.COMPILATION_UNIT);
     FunctionDeclarationTree func = (FunctionDeclarationTree) tree.script().statements().get(0);
     logTester.setLevel(Level.DEBUG);

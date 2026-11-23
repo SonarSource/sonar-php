@@ -76,9 +76,10 @@ class PhpCheckTestTest {
     PhpFile file = createFile("<?php $a = 1; // NOK {{another message}}");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("* [WRONG_MESSAGE] Issue at line 1 : \n"
-        + "Expected message : another message\n"
-        + "Actual message : message");
+      .hasMessageContaining("""
+        * [WRONG_MESSAGE] Issue at line 1 :\s
+        Expected message : another message
+        Actual message : message""");
   }
 
   @Test
@@ -110,9 +111,10 @@ class PhpCheckTestTest {
     List<PhpIssue> issues = createIssuesForLines("another message", 1, 1, 1);
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file, issues))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("* [WRONG_MESSAGE] Issue at line 1 : \n"
-        + "Expected message : another message\n"
-        + "Actual message : message");
+      .hasMessageContaining("""
+        * [WRONG_MESSAGE] Issue at line 1 :\s
+        Expected message : another message
+        Actual message : message""");
   }
 
   @Test
@@ -148,9 +150,10 @@ class PhpCheckTestTest {
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
     assertThatThrownBy(() -> PHPCheckTest.check(check, file))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
-        + "Expected cost : 3.0\n"
-        + "Actual cost : 2.0");
+      .hasMessageContaining("""
+        * [WRONG_COST] Issue at line 1 :\s
+        Expected cost : 3.0
+        Actual cost : 2.0""");
   }
 
   @Test
@@ -158,9 +161,10 @@ class PhpCheckTestTest {
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3]]");
     assertThatThrownBy(() -> PHPCheckTest.check(CHECK, file))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
-        + "Expected cost : 3.0\n"
-        + "Actual cost : null");
+      .hasMessageContaining("""
+        * [WRONG_COST] Issue at line 1 :\s
+        Expected cost : 3.0
+        Actual cost : null""");
   }
 
   @Test
@@ -221,9 +225,10 @@ class PhpCheckTestTest {
     PhpFile file = createFile("<?php $a = 1; // NOK [[effortToFix=3;secondary=1,1]]");
     assertThatThrownBy(() -> PHPCheckTest.check(check, file))
       .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("* [WRONG_COST] Issue at line 1 : \n"
-        + "Expected cost : 3.0\n"
-        + "Actual cost : 2.0");
+      .hasMessageContaining("""
+        * [WRONG_COST] Issue at line 1 :\s
+        Expected cost : 3.0
+        Actual cost : 2.0""");
   }
 
   @Test

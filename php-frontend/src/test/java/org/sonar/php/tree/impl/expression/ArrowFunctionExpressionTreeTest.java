@@ -68,11 +68,13 @@ class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
   @Test
   void arrowFunctionAndYieldPrecedence() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    CompilationUnitTree root = (CompilationUnitTree) parser.parse("<?php\n" +
-      "function f() {\n" +
-      " yield foo($a) => $a;\n" +
-      " yield fn($a)  => $a;\n" +
-      "}\n");
+    CompilationUnitTree root = (CompilationUnitTree) parser.parse("""
+      <?php
+      function f() {
+       yield foo($a) => $a;
+       yield fn($a)  => $a;
+      }
+      """);
     FunctionDeclarationTree function = (FunctionDeclarationTree) root.script().statements().get(0);
 
     YieldExpressionTree yield0 = (YieldExpressionTree) ((ExpressionStatementTree) function.body().statements().get(0)).expression();
@@ -89,11 +91,13 @@ class ArrowFunctionExpressionTreeTest extends PHPTreeModelTest {
   @Test
   void arrowFunctionAndArrayIndexValuePrecedence() {
     ActionParser<Tree> parser = PHPParserBuilder.createParser();
-    CompilationUnitTree root = (CompilationUnitTree) parser.parse("<?php\n" +
-      "$x = array(\n" +
-      "    foo($a) => $a,\n" +
-      "    fn($a)  => $a\n" +
-      ");\n");
+    CompilationUnitTree root = (CompilationUnitTree) parser.parse("""
+      <?php
+      $x = array(
+          foo($a) => $a,
+          fn($a)  => $a
+      );
+      """);
     ExpressionStatementTree statement = (ExpressionStatementTree) root.script().statements().get(0);
     ArrayInitializerFunctionTree arrayInitializer = (ArrayInitializerFunctionTree) ((AssignmentExpressionTree) statement.expression()).value();
 
