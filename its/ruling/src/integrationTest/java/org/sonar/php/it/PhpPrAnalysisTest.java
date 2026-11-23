@@ -75,7 +75,7 @@ public class PhpPrAnalysisTest {
     String dumpProjectKey = PROJECT_KEY + "-logs-" + scenario;
 
     // Analyze base commit
-    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
+    String baseDifferences = analyzeBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
 
     // Analyze the changed branch
     setUpChanges(tempDirectory, scenario, deletedFiles);
@@ -86,6 +86,7 @@ public class PhpPrAnalysisTest {
 
     BuildResult result = ORCHESTRATOR.executeBuild(build);
     assertPrAnalysisLogs(result, expectedTotalFiles, expectedSkipped);
+    assertThat(baseDifferences).isEmpty();
   }
 
   @ParameterizedTest
@@ -95,7 +96,7 @@ public class PhpPrAnalysisTest {
     String dumpProjectKey = PROJECT_KEY + "-issues-" + scenario;
 
     // Analyze base commit
-    analyzeAndAssertBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
+    String baseDifferences = analyzeBaseCommit(tempDirectory, litsDifferencesFile, dumpProjectKey + "-base");
 
     // Analyze the changed branch
 
@@ -112,18 +113,18 @@ public class PhpPrAnalysisTest {
 
     // Check expected issues
     String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
+    assertThat(baseDifferences).isEmpty();
     assertThat(litsDifferences).isEmpty();
     assertPrAnalysisLogs(result, expectedTotalFiles, expectedSkipped);
   }
 
-  private void analyzeAndAssertBaseCommit(File tempFile, File litsDifferencesFile, String dumpProjectKey) throws IOException {
+  private String analyzeBaseCommit(File tempFile, File litsDifferencesFile, String dumpProjectKey) throws IOException {
     FileUtils.copyDirectory(new File("../sources_pr_analysis", "base"), tempFile);
 
     SonarScanner build = RulingHelper.prepareScannerWithDumpKey(tempFile, PROJECT_KEY, dumpProjectKey, "expected/prAnalysis/base", litsDifferencesFile);
     ORCHESTRATOR.executeBuild(build);
 
-    String litsDifferences = new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
-    assertThat(litsDifferences).isEmpty();
+    return new String(Files.readAllBytes(litsDifferencesFile.toPath()), UTF_8);
   }
 
   private void assertPrAnalysisLogs(BuildResult result, int expectedTotalFiles, int expectedSkipped) {
