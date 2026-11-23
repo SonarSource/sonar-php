@@ -45,15 +45,15 @@ class PHPRulesDefinitionTest {
 
   @Test
   void owaspSecurityStandard() {
-    RulesDefinition.Repository repository_9_3 = buildRepository();
-    RulesDefinition.Rule S5328_9_3 = repository_9_3.rule("S5328");
-    assertThat(S5328_9_3).isNotNull();
-    assertThat(S5328_9_3.securityStandards()).contains("owaspTop10-2021:a4");
+    RulesDefinition.Repository repositoryV93 = buildRepository();
+    RulesDefinition.Rule ruleV93 = repositoryV93.rule("S5328");
+    assertThat(ruleV93).isNotNull();
+    assertThat(ruleV93.securityStandards()).contains("owaspTop10-2021:a4");
 
     RulesDefinition.Repository repository = buildRepository(9, 2);
-    RulesDefinition.Rule S5328 = repository.rule("S5328");
-    assertThat(S5328).isNotNull();
-    assertThat(S5328.securityStandards()).doesNotContain("owaspTop10-2021:a4");
+    RulesDefinition.Rule rule = repository.rule("S5328");
+    assertThat(rule).isNotNull();
+    assertThat(rule.securityStandards()).doesNotContain("owaspTop10-2021:a4");
   }
 
   private static RulesDefinition.Repository buildRepository() {
