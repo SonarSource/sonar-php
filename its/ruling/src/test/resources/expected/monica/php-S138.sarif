@@ -1,0 +1,210 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"getNameAttribute\" has 118 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:app/Models/Contact/Contact.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 754,
+            "startColumn" : 12,
+            "endLine" : 754,
+            "endColumn" : 39
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 104 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2016_06_08_005413_create_contacts_table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 12,
+            "endLine" : 14,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 139 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2018_03_18_085815_populate_default_relationship_type_tables.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 13,
+            "startColumn" : 12,
+            "endLine" : 13,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 118 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2018_05_07_070458_create_terms_table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 12,
+            "endLine" : 15,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 198 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2018_07_03_204220_create_default_activity_type_groups_table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 12,
+            "endLine" : 15,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 365 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2018_08_31_020908_create_life_events_table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 17,
+            "startColumn" : 12,
+            "endLine" : 17,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"up\" has 187 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:database/migrations/2018_12_09_023232_add_emotions_table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 12,
+            "endLine" : 15,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function expression has 198 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "monica:routes/web.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 41,
+            "startColumn" : 55,
+            "endLine" : 41,
+            "endColumn" : 66
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

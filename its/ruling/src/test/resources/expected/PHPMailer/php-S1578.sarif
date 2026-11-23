@@ -1,0 +1,1296 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:get_oauth_token.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-af.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ar.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-as.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-az.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ba.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-be.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-bg.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-bn.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ca.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-cs.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-da.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-de.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-el.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-eo.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-es.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-et.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-fa.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-fi.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-fo.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-fr.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-gl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-he.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-hi.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-hr.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-hu.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-hy.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-id.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-it.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ja.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ka.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ko.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-lt.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-lv.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-mg.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-mn.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ms.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-nb.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-nl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-pl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-pt.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-pt_br.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ro.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ru.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-si.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-sk.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-sl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-sr.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-sr_latn.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-sv.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-tl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-tr.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-uk.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-ur.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-vi.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-zh.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:language/phpmailer.lang-zh_cn.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-fr.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-nl.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xa_scri_cc.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xb_scri.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xc_cc.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xd_cc.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xd_scri.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xe.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-xx.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-yy.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/Fixtures/LocalizationTest/phpmailer.lang-zz.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/fakefunctions.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/testbootstrap-dist.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1578",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename this file to match this regular expression: \"[A-Z][A-Za-z0-9]+.php\""
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/validators.php",
+            "index" : -1
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

@@ -1,0 +1,666 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 1580."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4661,
+            "startColumn" : 22,
+            "endLine" : 4661,
+            "endColumn" : 41
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 152,
+            "startColumn" : 22,
+            "endLine" : 152,
+            "endColumn" : 29
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 349,
+            "startColumn" : 22,
+            "endLine" : 349,
+            "endColumn" : 37
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 366,
+            "startColumn" : 22,
+            "endLine" : 366,
+            "endColumn" : 41
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 396,
+            "startColumn" : 22,
+            "endLine" : 396,
+            "endColumn" : 28
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 456,
+            "startColumn" : 22,
+            "endLine" : 456,
+            "endColumn" : 30
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 468,
+            "startColumn" : 22,
+            "endLine" : 468,
+            "endColumn" : 28
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 485,
+            "startColumn" : 22,
+            "endLine" : 485,
+            "endColumn" : 39
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"readDefault\" on line 113."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 552,
+            "startColumn" : 22,
+            "endLine" : 552,
+            "endColumn" : 36
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testStructuredReferenceColumns\" on line 60."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/StructuredReferenceSlashTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 71,
+            "startColumn" : 21,
+            "endLine" : 71,
+            "endColumn" : 48
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testStructuredReferenceColumns\" on line 76."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Engine/StructuredReferenceTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 88,
+            "startColumn" : 21,
+            "endLine" : 88,
+            "endColumn" : 48
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testSortByRow\" on line 54."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Calculation/Functions/LookupRef/SortTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 85,
+            "startColumn" : 21,
+            "endLine" : 85,
+            "endColumn" : 44
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testConvertFormulaToA1SpreadsheetXml\" on line 120."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/AddressHelperTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 135,
+            "startColumn" : 21,
+            "endLine" : 135,
+            "endColumn" : 55
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testFractions\" on line 127."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Cell/AdvancedValueBinderTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 166,
+            "startColumn" : 21,
+            "endLine" : 166,
+            "endColumn" : 36
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testBasicCellIsComparison\" on line 48."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 159,
+            "startColumn" : 21,
+            "endLine" : 159,
+            "endColumn" : 49
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testRangeCellIsComparison\" on line 118."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 193,
+            "startColumn" : 21,
+            "endLine" : 193,
+            "endColumn" : 41
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testRangeCellIsComparison\" on line 118."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 237,
+            "startColumn" : 21,
+            "endLine" : 237,
+            "endColumn" : 40
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testBasicCellIsComparison\" on line 48."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 345,
+            "startColumn" : 21,
+            "endLine" : 345,
+            "endColumn" : 41
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testBasicCellIsComparison\" on line 48."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 376,
+            "startColumn" : 21,
+            "endLine" : 376,
+            "endColumn" : 41
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testRangeCellIsComparison\" on line 118."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 406,
+            "startColumn" : 21,
+            "endLine" : 406,
+            "endColumn" : 49
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testBasicCellIsComparison\" on line 48."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 448,
+            "startColumn" : 21,
+            "endLine" : 448,
+            "endColumn" : 46
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testRangeCellIsComparison\" on line 118."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/ConditionalFormatting/CellMatcherTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 482,
+            "startColumn" : 21,
+            "endLine" : 482,
+            "endColumn" : 50
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testFormatValueWithMaskFraction\" on line 48."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Style/NumberFormatTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 64,
+            "startColumn" : 21,
+            "endLine" : 64,
+            "endColumn" : 48
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testGetCellLocalScoped\" on line 127."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Worksheet/WorksheetNamedRangesTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 139,
+            "startColumn" : 21,
+            "endLine" : 139,
+            "endColumn" : 44
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testFormatValueWithMask\" on line 141."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Html/HtmlNumberFormatTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 173,
+            "startColumn" : 21,
+            "endLine" : 173,
+            "endColumn" : 48
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testWriteBlanksConditionals\" on line 307."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ConditionalTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 387,
+            "startColumn" : 21,
+            "endLine" : 387,
+            "endColumn" : 48
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S4144",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Update this method so that its implementation is not identical to \"testWriteBlanksConditionals\" on line 307."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:tests/PhpSpreadsheetTests/Writer/Xlsx/ConditionalTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 467,
+            "startColumn" : 21,
+            "endLine" : 467,
+            "endColumn" : 52
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

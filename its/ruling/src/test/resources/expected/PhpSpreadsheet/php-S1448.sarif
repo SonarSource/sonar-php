@@ -1,0 +1,1194 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Calculation\" has 72 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Calculation/Calculation.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 26,
+            "startColumn" : 1,
+            "endLine" : 26,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Cell\" has 52 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Cell/Cell.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 22,
+            "startColumn" : 1,
+            "endLine" : 22,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Coordinate\" has 22 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Cell/Coordinate.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 10,
+            "endLine" : 14,
+            "endColumn" : 15
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"DataValidation\" has 31 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Cell/DataValidation.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 5,
+            "startColumn" : 1,
+            "endLine" : 5,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Axis\" has 27 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Axis.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 1,
+            "endLine" : 11,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Chart\" has 71 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Chart.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 8,
+            "startColumn" : 1,
+            "endLine" : 8,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"DataSeries\" has 23 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeries.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 7,
+            "startColumn" : 1,
+            "endLine" : 7,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"DataSeriesValues\" has 39 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/DataSeriesValues.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 10,
+            "startColumn" : 1,
+            "endLine" : 10,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Layout\" has 46 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Layout.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 7,
+            "startColumn" : 1,
+            "endLine" : 7,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Properties\" has 44 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Properties.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 10,
+            "endLine" : 11,
+            "endColumn" : 15
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"JpGraphRendererBase\" has 32 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Chart/Renderer/JpGraphRendererBase.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 27,
+            "startColumn" : 10,
+            "endLine" : 27,
+            "endColumn" : 15
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Cells\" has 26 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Collection/Cells.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 12,
+            "startColumn" : 1,
+            "endLine" : 12,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Comment\" has 28 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Comment.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 1,
+            "endLine" : 14,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Properties\" has 37 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Document/Properties.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 8,
+            "startColumn" : 1,
+            "endLine" : 8,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Html\" has 27 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Helper/Html.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 1,
+            "endLine" : 14,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"BaseReader\" has 22 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/BaseReader.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 10,
+            "endLine" : 11,
+            "endColumn" : 15
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Csv\" has 41 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Csv.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 1,
+            "endLine" : 14,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Gnumeric\" has 27 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Gnumeric.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 21,
+            "startColumn" : 1,
+            "endLine" : 21,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Html\" has 47 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Html.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 28,
+            "startColumn" : 1,
+            "endLine" : 28,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Slk\" has 22 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Slk.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 1,
+            "endLine" : 15,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Xls\" has 122 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 69,
+            "startColumn" : 1,
+            "endLine" : 69,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Escher\" has 23 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xls/Escher.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 1,
+            "endLine" : 15,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Xlsx\" has 39 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 48,
+            "startColumn" : 1,
+            "endLine" : 48,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Styles\" has 21 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Reader/Xlsx/Styles.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 18,
+            "startColumn" : 1,
+            "endLine" : 18,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"ReferenceHelper\" has 43 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/ReferenceHelper.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 14,
+            "startColumn" : 1,
+            "endLine" : 14,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Date\" has 23 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Date.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 1,
+            "endLine" : 15,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"StringHelper\" has 28 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Shared/StringHelper.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 5,
+            "startColumn" : 1,
+            "endLine" : 5,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"BestFit\" has 24 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Shared/Trend/BestFit.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 5,
+            "startColumn" : 10,
+            "endLine" : 5,
+            "endColumn" : 15
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Spreadsheet\" has 101 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Spreadsheet.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 19,
+            "startColumn" : 1,
+            "endLine" : 19,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Conditional\" has 23 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Style/Conditional.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 9,
+            "startColumn" : 1,
+            "endLine" : 9,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Font\" has 45 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Style/Font.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 7,
+            "startColumn" : 1,
+            "endLine" : 7,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"NumberFormat\" has 23 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Style/NumberFormat.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 7,
+            "startColumn" : 1,
+            "endLine" : 7,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Style\" has 21 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Style/Style.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 1,
+            "endLine" : 11,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"AutoFilter\" has 44 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 19,
+            "startColumn" : 1,
+            "endLine" : 19,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Column\" has 22 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/AutoFilter/Column.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 8,
+            "startColumn" : 1,
+            "endLine" : 8,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"BaseDrawing\" has 49 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/BaseDrawing.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 1,
+            "endLine" : 11,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"HeaderFooter\" has 26 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/HeaderFooter.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 66,
+            "startColumn" : 1,
+            "endLine" : 66,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"PageSetup\" has 41 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/PageSetup.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 80,
+            "startColumn" : 1,
+            "endLine" : 80,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Protection\" has 48 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Protection.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 7,
+            "startColumn" : 1,
+            "endLine" : 7,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Table\" has 33 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Table.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 15,
+            "startColumn" : 1,
+            "endLine" : 15,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Worksheet\" has 190 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Worksheet/Worksheet.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 35,
+            "startColumn" : 1,
+            "endLine" : 35,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Csv\" has 24 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Csv.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 10,
+            "startColumn" : 1,
+            "endLine" : 10,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Html\" has 63 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Html.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 33,
+            "startColumn" : 1,
+            "endLine" : 33,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Parser\" has 29 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Parser.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 34,
+            "startColumn" : 1,
+            "endLine" : 34,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Workbook\" has 30 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Workbook.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 48,
+            "startColumn" : 1,
+            "endLine" : 48,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Worksheet\" has 70 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xls/Worksheet.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 56,
+            "startColumn" : 1,
+            "endLine" : 56,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Xlsx\" has 36 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 36,
+            "startColumn" : 1,
+            "endLine" : 36,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Chart\" has 28 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Chart.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 20,
+            "startColumn" : 1,
+            "endLine" : 20,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1448",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Class \"Worksheet\" has 46 methods, which is greater than 20 authorized. Split it into smaller classes."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PhpSpreadsheet:src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 23,
+            "startColumn" : 1,
+            "endLine" : 23,
+            "endColumn" : 6
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

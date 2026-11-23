@@ -1,0 +1,402 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"readBlockFibRgFcLcb\" has 746 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Reader/MsDoc.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 370,
+            "startColumn" : 13,
+            "endLine" : 370,
+            "endColumn" : 64
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"readPrl\" has 405 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Reader/MsDoc.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1608,
+            "startColumn" : 13,
+            "endLine" : 1608,
+            "endColumn" : 50
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"processNodes\" has 118 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Reader/ODText/Content.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 56,
+            "startColumn" : 12,
+            "endLine" : 56,
+            "endColumn" : 93
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"readParagraph\" has 112 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Reader/Word2007/AbstractPart.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 191,
+            "startColumn" : 15,
+            "endLine" : 191,
+            "endColumn" : 112
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"parseStyleDeclarations\" has 153 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/Html.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 686,
+            "startColumn" : 22,
+            "endLine" : 686,
+            "endColumn" : 86
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"parseImage\" has 101 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/Html.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 893,
+            "startColumn" : 22,
+            "endLine" : 893,
+            "endColumn" : 58
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"privParseOptions\" has 206 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1392,
+            "startColumn" : 12,
+            "endLine" : 1392,
+            "endColumn" : 111
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"privAddFile\" has 134 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2457,
+            "startColumn" : 12,
+            "endLine" : 2457,
+            "endColumn" : 71
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"privExtractByRule\" has 162 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3159,
+            "startColumn" : 12,
+            "endLine" : 3159,
+            "endColumn" : 111
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"privExtractFile\" has 148 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3457,
+            "startColumn" : 12,
+            "endLine" : 3457,
+            "endColumn" : 105
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"privDeleteByRule\" has 145 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4458,
+            "startColumn" : 12,
+            "endLine" : 4458,
+            "endColumn" : 67
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"getListTypeStyle\" has 112 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Style/ListItem.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 164,
+            "startColumn" : 13,
+            "endLine" : 164,
+            "endColumn" : 40
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"write\" has 119 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Writer/ODText/Style/Paragraph.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 45,
+            "startColumn" : 12,
+            "endLine" : 45,
+            "endColumn" : 28
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"testReadFootnote\" has 110 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:tests/PhpWordTests/Reader/Word2007/PartTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 30,
+            "startColumn" : 12,
+            "endLine" : 30,
+            "endColumn" : 39
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"testWriteTableBorders\" has 121 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:tests/PhpWordTests/Writer/HTML/Element/TableTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 31,
+            "startColumn" : 12,
+            "endLine" : 31,
+            "endColumn" : 44
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S138",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "This function \"testHeaderFooterTabs\" has 101 lines, which is greater than the 100 lines authorized. Split it into smaller functions."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:tests/PhpWordTests/Writer/ODText/Style/SectionTest.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 39,
+            "startColumn" : 12,
+            "endLine" : 39,
+            "endColumn" : 43
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

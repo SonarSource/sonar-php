@@ -1,0 +1,330 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 372,
+            "startColumn" : 24,
+            "endLine" : 373,
+            "endColumn" : 18
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 916,
+            "startColumn" : 24,
+            "endLine" : 917,
+            "endColumn" : 18
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1499,
+            "startColumn" : 28,
+            "endLine" : 1500,
+            "endColumn" : 22
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1763,
+            "startColumn" : 69,
+            "endLine" : 1765,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2055,
+            "startColumn" : 24,
+            "endLine" : 2056,
+            "endColumn" : 18
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3592,
+            "startColumn" : 123,
+            "endLine" : 3593,
+            "endColumn" : 22
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3606,
+            "startColumn" : 24,
+            "endLine" : 3607,
+            "endColumn" : 18
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4278,
+            "startColumn" : 75,
+            "endLine" : 4279,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4280,
+            "startColumn" : 93,
+            "endLine" : 4281,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4282,
+            "startColumn" : 67,
+            "endLine" : 4283,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4284,
+            "startColumn" : 81,
+            "endLine" : 4285,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4286,
+            "startColumn" : 69,
+            "endLine" : 4287,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S108",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Either remove or fill this block of code."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4288,
+            "startColumn" : 83,
+            "endLine" : 4289,
+            "endColumn" : 10
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

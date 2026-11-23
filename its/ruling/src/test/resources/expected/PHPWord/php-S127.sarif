@@ -1,0 +1,186 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_count\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2217,
+            "startColumn" : 17,
+            "endLine" : 2217,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_count\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2364,
+            "startColumn" : 17,
+            "endLine" : 2364,
+            "endColumn" : 25
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_nb_extracted\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3324,
+            "startColumn" : 87,
+            "endLine" : 3324,
+            "endColumn" : 102
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_nb_extracted\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3380,
+            "startColumn" : 21,
+            "endLine" : 3380,
+            "endColumn" : 36
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_nb_extracted\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3399,
+            "startColumn" : 96,
+            "endLine" : 3399,
+            "endColumn" : 111
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_nb_extracted\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3423,
+            "startColumn" : 96,
+            "endLine" : 3423,
+            "endColumn" : 111
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S127",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Refactor the code to avoid updating the loop counter \"$v_nb_extracted\" within the loop body."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPWord:src/PhpWord/Shared/PCLZip/pclzip.lib.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4569,
+            "startColumn" : 17,
+            "endLine" : 4569,
+            "endColumn" : 32
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

@@ -1,0 +1,258 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 12 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 930,
+            "startColumn" : 13,
+            "endLine" : 930,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 13 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1396,
+            "startColumn" : 13,
+            "endLine" : 1396,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 14 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2914,
+            "startColumn" : 13,
+            "endLine" : 2914,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 37 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2928,
+            "startColumn" : 13,
+            "endLine" : 2928,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 27 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2965,
+            "startColumn" : 13,
+            "endLine" : 2965,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 42 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2992,
+            "startColumn" : 13,
+            "endLine" : 2992,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 33 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3034,
+            "startColumn" : 13,
+            "endLine" : 3034,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 12 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 309,
+            "startColumn" : 13,
+            "endLine" : 309,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 14 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 572,
+            "startColumn" : 13,
+            "endLine" : 572,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1151",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Reduce this \"switch/case\" number of lines from 11 to at most 10, for example by extracting code into function."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 590,
+            "startColumn" : 13,
+            "endLine" : 590,
+            "endColumn" : 17
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

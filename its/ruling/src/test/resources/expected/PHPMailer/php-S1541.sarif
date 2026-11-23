@@ -1,0 +1,546 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"configureOptions\" is 13 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/DSNConfigurator.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 173,
+            "startColumn" : 13,
+            "endLine" : 173,
+            "endColumn" : 21
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"addOrEnqueueAnAddress\" is 11 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1082,
+            "startColumn" : 15,
+            "endLine" : 1082,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"parseAddresses\" is 16 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1222,
+            "startColumn" : 19,
+            "endLine" : 1222,
+            "endColumn" : 27
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"preSend\" is 31 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1540,
+            "startColumn" : 12,
+            "endLine" : 1540,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"sendmailSend\" is 16 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1724,
+            "startColumn" : 15,
+            "endLine" : 1724,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"mailSend\" is 13 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1910,
+            "startColumn" : 15,
+            "endLine" : 1910,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"smtpSend\" is 14 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2054,
+            "startColumn" : 15,
+            "endLine" : 2054,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"smtpConnect\" is 33 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2142,
+            "startColumn" : 12,
+            "endLine" : 2142,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"setLanguage\" is 16 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2311,
+            "startColumn" : 12,
+            "endLine" : 2311,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"wrapText\" is 21 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2495,
+            "startColumn" : 12,
+            "endLine" : 2495,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"createHeader\" is 23 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2663,
+            "startColumn" : 12,
+            "endLine" : 2663,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"getMailMIME\" is 11 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2763,
+            "startColumn" : 12,
+            "endLine" : 2763,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"createBody\" is 30 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 2858,
+            "startColumn" : 12,
+            "endLine" : 2858,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"attachAll\" is 15 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3326,
+            "startColumn" : 15,
+            "endLine" : 3326,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"encodeHeader\" is 15 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 3517,
+            "startColumn" : 12,
+            "endLine" : 3517,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"msgHTML\" is 21 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4391,
+            "startColumn" : 12,
+            "endLine" : 4391,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"mb_pathinfo\" is 14 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4686,
+            "startColumn" : 19,
+            "endLine" : 4686,
+            "endColumn" : 27
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"DKIM_Add\" is 20 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4986,
+            "startColumn" : 12,
+            "endLine" : 4986,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"authenticate\" is 25 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 512,
+            "startColumn" : 12,
+            "endLine" : 512,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"data\" is 13 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 730,
+            "startColumn" : 12,
+            "endLine" : 730,
+            "endColumn" : 20
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"get_lines\" is 15 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1253,
+            "startColumn" : 15,
+            "endLine" : 1253,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S1541",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "The Cyclomatic Complexity of this function \"set_up\" is 11 which is greater than 10 authorized."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/TestCase.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 141,
+            "startColumn" : 15,
+            "endLine" : 141,
+            "endColumn" : 23
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}

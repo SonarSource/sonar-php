@@ -1,0 +1,282 @@
+{
+  "$schema" : "https://json.schemastore.org/sarif-2.1.0.json",
+  "version" : "2.1.0",
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "name" : "LITS",
+        "language" : "en-US",
+        "contents" : [ "localizedData", "nonLocalizedData" ],
+        "isComprehensive" : false
+      }
+    },
+    "language" : "en-US",
+    "results" : [ {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"_mime_types\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4529,
+            "startColumn" : 28,
+            "endLine" : 4529,
+            "endColumn" : 39
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"mb_pathinfo\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4686,
+            "startColumn" : 28,
+            "endLine" : 4686,
+            "endColumn" : 39
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"DKIM_QP\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4852,
+            "startColumn" : 21,
+            "endLine" : 4852,
+            "endColumn" : 28
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"DKIM_Sign\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4877,
+            "startColumn" : 21,
+            "endLine" : 4877,
+            "endColumn" : 30
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"DKIM_HeaderC\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4919,
+            "startColumn" : 21,
+            "endLine" : 4919,
+            "endColumn" : 33
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"DKIM_BodyC\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4963,
+            "startColumn" : 21,
+            "endLine" : 4963,
+            "endColumn" : 31
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"DKIM_Add\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/PHPMailer.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4986,
+            "startColumn" : 21,
+            "endLine" : 4986,
+            "endColumn" : 29
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"client_send\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1155,
+            "startColumn" : 21,
+            "endLine" : 1155,
+            "endColumn" : 32
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"get_lines\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:src/SMTP.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 1253,
+            "startColumn" : 24,
+            "endLine" : 1253,
+            "endColumn" : 33
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"idn_to_ascii\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/fakefunctions.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 4,
+            "startColumn" : 14,
+            "endLine" : 4,
+            "endColumn" : 26
+          }
+        }
+      } ],
+      "rank" : -1.0
+    }, {
+      "ruleId" : "php:S100",
+      "ruleIndex" : -1,
+      "kind" : "fail",
+      "level" : "warning",
+      "message" : {
+        "text" : "Rename function \"mb_convert_encoding\" to match the regular expression ^[a-z][a-zA-Z0-9]*$."
+      },
+      "locations" : [ {
+        "id" : -1,
+        "physicalLocation" : {
+          "artifactLocation" : {
+            "uri" : "PHPMailer:test/fakefunctions.php",
+            "index" : -1
+          },
+          "region" : {
+            "startLine" : 11,
+            "startColumn" : 14,
+            "endLine" : 11,
+            "endColumn" : 33
+          }
+        }
+      } ],
+      "rank" : -1.0
+    } ],
+    "newlineSequences" : [ "\r\n", "\n" ],
+    "columnKind" : "utf16CodeUnits"
+  } ]
+}
