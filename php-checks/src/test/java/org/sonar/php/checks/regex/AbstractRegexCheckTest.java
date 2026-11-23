@@ -91,13 +91,13 @@ class AbstractRegexCheckTest {
 
   @Test
   void testNewIssueOnRegexFunctionCallWithCost() {
-    AbstractRegexCheck check = new AbstractRegexCheck() {
+    AbstractRegexCheck regexCheckWithCost = new AbstractRegexCheck() {
       @Override
       public void checkRegex(RegexParseResult regexParseResult, FunctionCallTree regexFunctionCall) {
         newIssue(regexFunctionCall, "TestMessage", 1, Collections.emptyList());
       }
     };
-    CheckVerifier.verify(check, "regex/AbstractRegexCheck.php");
+    CheckVerifier.verify(regexCheckWithCost, "regex/AbstractRegexCheck.php");
   }
 
   private LiteralTree pattern(String pattern) {
