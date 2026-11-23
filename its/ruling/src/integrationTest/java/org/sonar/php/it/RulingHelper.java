@@ -49,7 +49,7 @@ public class RulingHelper {
       .setEdition(Edition.ENTERPRISE_LW)
       .activateLicense()
       .addPlugin(FileLocation.byWildcardFilename(new File("../../sonar-php-plugin/build/libs"), "sonar-php-plugin-*-all.jar"))
-      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"));
+      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.13.0.16223"));
     return builder.build();
   }
 
