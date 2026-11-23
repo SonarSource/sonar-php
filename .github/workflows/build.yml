@@ -257,10 +257,10 @@ jobs:
           exit 1
 
   ruling_update_notify:
-    needs: [ qa_ruling ]
+    needs: [ qa_ruling, qa_pr_analysis ]
     runs-on: github-ubuntu-latest-s
     name: Ruling Update and Notify
-    if: ${{ github.event_name == 'pull_request' && !cancelled() && needs.qa_ruling.result != 'skipped' }}
+    if: ${{ github.event_name == 'pull_request' && !cancelled() && (needs.qa_ruling.result != 'skipped' || needs.qa_pr_analysis.result != 'skipped') }}
     permissions:
       actions: read
       contents: write
@@ -276,16 +276,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           QA_RULING_RESULT: ${{ needs.qa_ruling.result }}
+          QA_PR_ANALYSIS_RESULT: ${{ needs.qa_pr_analysis.result }}
         run: |
           # Matrix jobs cannot reliably report a combined output, so rely on the uploaded actual_* artifacts instead
           ACTUAL_ARTIFACTS=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
             --jq '.artifacts[].name | select(startswith("actual_"))' | wc -l)
           if [ "$ACTUAL_ARTIFACTS" -gt 0 ]; then
             echo "ruling-failed=true" >> "$GITHUB_OUTPUT"
-          elif [ "$QA_RULING_RESULT" = "success" ]; then
+          elif [ "$QA_RULING_RESULT" = "success" ] && [ "$QA_PR_ANALYSIS_RESULT" = "success" ]; then
             echo "ruling-failed=false" >> "$GITHUB_OUTPUT"
           else
-            echo "::warning::QA Ruling failed without producing ruling results, skipping ruling update"
+            echo "::warning::A ruling or PR analysis job failed without producing ruling results, skipping ruling update"
           fi
       - name: Update ruling and notify
         if: steps.ruling-status.outputs.ruling-failed != ''
@@ -310,6 +311,9 @@ jobs:
       - *cache-orchestrator
       - *orchestrator-secrets
       - name: Run PR Analysis Integration Tests
+        id: pr-analysis
+        # Upload generated expectations before reporting test differences.
+        continue-on-error: true
         uses: SonarSource/ci-github-actions/build-gradle@v2
         env:
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
@@ -338,6 +342,40 @@ jobs:
         with:
           name: qa-pr-analysis-reports
           path: '**/build/reports/**/*'
+      - name: Arrange PR analysis ruling results
+        if: always() && steps.pr-analysis.outcome == 'failure'
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          actual=its/ruling/build/actual
+          artifact="${RUNNER_TEMP}/pr-analysis-ruling"
+          mkdir -p "${artifact}/prAnalysis"
+          for scenario in base added changed; do
+            if [ "$scenario" = base ]; then
+              source="${actual}/prAnalysis-issues-added-base"
+            else
+              source="${actual}/prAnalysis-issues-${scenario}-branch"
+            fi
+            files=("${source}"/*.sarif)
+            if [ "${#files[@]}" -eq 0 ]; then
+              echo "::error::No PR analysis SARIF results found in ${source}"
+              exit 1
+            fi
+            mkdir -p "${artifact}/prAnalysis/${scenario}"
+            cp "${files[@]}" "${artifact}/prAnalysis/${scenario}/"
+          done
+      - name: Prepare PR analysis ruling artifact
+        if: always() && steps.pr-analysis.outcome == 'failure' && success()
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@v1
+        with:
+          artifact-name: actual_pr_analysis
+          actual-path: ${{ runner.temp }}/pr-analysis-ruling
+      - name: Fail on PR analysis differences
+        if: always() && steps.pr-analysis.outcome == 'failure'
+        run: |
+          echo "::error::QA PR Analysis tests failed"
+          exit 1
 
   promote:
     needs: [ build, build_test_analyze, qa_os_win, qa_plugin, qa_ruling, qa_pr_analysis ]
