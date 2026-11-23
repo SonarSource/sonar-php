@@ -51,9 +51,11 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void staticMethodCallSymbolShouldProvideFqnWhenClassIsNotDeclared() {
-    CompilationUnitTree cut = parseSource("<?php\n" +
-      "use Defuse\\Crypto\\KeyOrPassword;\n" +
-      "KeyOrPassword::createFromPassword();\n");
+    CompilationUnitTree cut = parseSource("""
+      <?php
+      use Defuse\\Crypto\\KeyOrPassword;
+      KeyOrPassword::createFromPassword();
+      """);
     SymbolTableImpl.create(cut);
     FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
@@ -63,10 +65,12 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void staticMethodCallSymbolShouldProvideFqnWhenMethodIsNotDeclared() {
-    CompilationUnitTree cut = parseSource("<?php\n" +
-      "namespace Defuse\\Crypto;\n" +
-      "class KeyOrPassword {}\n" +
-      "KeyOrPassword::createFromPassword();\n");
+    CompilationUnitTree cut = parseSource("""
+      <?php
+      namespace Defuse\\Crypto;
+      class KeyOrPassword {}
+      KeyOrPassword::createFromPassword();
+      """);
     SymbolTableImpl.create(cut);
     FunctionCallTreeImpl functionCall = TreeUtils.firstDescendant(cut, FunctionCallTreeImpl.class).get();
     FunctionSymbol memberSymbol = functionCall.symbol();
@@ -268,11 +272,12 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void qnClassSymbolUsages() {
-    CompilationUnitTree cut = parseSource("<?php namespace N1 {\n" +
-      " class A {}\n" +
-      " $a = new A();\n" +
-      "}\n" +
-      "$a = new \\N1\\A();");
+    CompilationUnitTree cut = parseSource("""
+      <?php namespace N1 {
+       class A {}
+       $a = new A();
+      }
+      $a = new \\N1\\A();""");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertClassSymbols(symbolTable, "n1\\a");
     assertSymbolUsages(symbolTable, "n1\\a", 3, 5);
@@ -280,36 +285,40 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void useStatements() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
-      "namespace N1 { class A {} }\n" +
-      "use N1\\A as Alias;\n" +
-      "$a = new Alias();");
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php\s
+      namespace N1 { class A {} }
+      use N1\\A as Alias;
+      $a = new Alias();""");
     assertSymbolUsages(symbolTable, "n1\\a", 4);
 
-    symbolTable = symbolTableFor("<?php \n" +
-      "namespace N1 { class A {} }\n" +
-      "use N1\\A;\n" +
-      "$a = new A();");
+    symbolTable = symbolTableFor("""
+      <?php\s
+      namespace N1 { class A {} }
+      use N1\\A;
+      $a = new A();""");
     assertSymbolUsages(symbolTable, "n1\\a", 4);
   }
 
   @Test
   void useStatementsAliasedName() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
-      "namespace N1\\N2 { class A {} }\n" +
-      "use N1\\N2;\n" +
-      "$a = new N2\\A();");
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php\s
+      namespace N1\\N2 { class A {} }
+      use N1\\N2;
+      $a = new N2\\A();""");
     assertSymbolUsages(symbolTable, "N1\\N2\\A", 4);
   }
 
   @Test
   void globalAndAliasUsage() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php \n" +
-      "class A {} \n" +
-      "namespace N { class A {} }\n" +
-      "use N\\A;\n" +
-      "$a = new A();\n" +
-      "$a = new \\A();");
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php\s
+      class A {}\s
+      namespace N { class A {} }
+      use N\\A;
+      $a = new A();
+      $a = new \\A();""");
     assertClassSymbols(symbolTable, "a", "n\\a");
     assertSymbolUsages(symbolTable, "n\\a", 5);
     assertSymbolUsages(symbolTable, "a", 6);
@@ -317,23 +326,25 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void useStatementsGroup() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};\n" +
-      "new C();\n" +
-      "new D();\n" +
-      "new E();");
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php namespace A\\B; class C {} class D {} use A\\B\\{C, D as E};
+      new C();
+      new D();
+      new E();""");
     assertSymbolUsages(symbolTable, "A\\B\\C", 2);
     assertSymbolUsages(symbolTable, "A\\B\\D", 3, 4);
   }
 
   @Test
   void usageBeforeDeclaration() {
-    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
-      "$a = new N1\\A();\n" +
-      "}\n" +
-      "\n" +
-      "namespace N\\N1 {\n" +
-      "class A {}\n" +
-      "}");
+    CompilationUnitTree cut = parseSource("""
+      <?php namespace N {
+      $a = new N1\\A();
+      }
+
+      namespace N\\N1 {
+      class A {}
+      }""");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertClassSymbols(symbolTable, "n\\n1\\a");
     assertSymbolUsages(symbolTable, "n\\n1\\a", 2);
@@ -341,10 +352,10 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void functionUsageBeforeDeclaration() {
-    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
-      "f();\n" +
-      "function f() {}" +
-      "}");
+    CompilationUnitTree cut = parseSource("""
+      <?php namespace N {
+      f();
+      function f() {}}""");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertFunctionSymbols(symbolTable, "n\\f");
     assertSymbolUsages(symbolTable, "n\\f", 2);
@@ -354,13 +365,11 @@ class SymbolTableImplTest extends ParsingTestUtils {
   void nestedFunction() {
     // Note that actual runtime behavior is that function g doesn't exist until f() is invoked, so this particular example
     // will actually lead to function not defined error on line 2 at runtime, however this is good enough for purpose of analysis
-    CompilationUnitTree cut = parseSource("<?php namespace N {\n" +
-      "g();\n" +
-      "f();\n" +
-      "function f() {" +
-      "  function g() {}" +
-      "}" +
-      "}");
+    CompilationUnitTree cut = parseSource("""
+      <?php namespace N {
+      g();
+      f();
+      function f() {  function g() {}}}""");
     SymbolTableImpl symbolTable = SymbolTableImpl.create(cut);
     assertFunctionSymbols(symbolTable, "n\\f", "n\\g");
     assertSymbolUsages(symbolTable, "n\\f", 3);
@@ -553,15 +562,16 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void symbolsAreCreatedForAttributeContent() {
-    SymbolTableImpl symbolTable = symbolTableFor("<?php\n" +
-      "#[A(new X0)]\n" +
-      "class Test1 {\n" +
-      "    #[A(new X3)]\n" +
-      "    private $a;\n" +
-      "    function foo(#[A(new X2)] $param) {\n" +
-      "        $x = new #[A(new X1)] class {};\n" +
-      "    }\n" +
-      "}");
+    SymbolTableImpl symbolTable = symbolTableFor("""
+      <?php
+      #[A(new X0)]
+      class Test1 {
+          #[A(new X3)]
+          private $a;
+          function foo(#[A(new X2)] $param) {
+              $x = new #[A(new X1)] class {};
+          }
+      }""");
     assertThat(symbolTable.getSymbol("X0")).isNotNull();
     assertThat(symbolTable.getSymbol("X1")).isNotNull();
     assertThat(symbolTable.getSymbol("X2")).isNotNull();

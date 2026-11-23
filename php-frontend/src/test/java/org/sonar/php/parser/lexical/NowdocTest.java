@@ -26,34 +26,41 @@ class NowdocTest {
   @Test
   void test() {
     assertThat(Tree.Kind.NOWDOC_LITERAL)
-      .matches("<<<'EOF'\n" +
-        "<html> content </html>\n" +
-        "\n" +
-        "<p> content </p>\n" +
-        "EOF")
+      .matches("""
+        <<<'EOF'
+        <html> content </html>
+
+        <p> content </p>
+        EOF""")
       .matches("<<<'EOD'\n"
         + "EOD")
       .matches("<<<'EOD'\n"
         + "\t EOD")
-      .matches("<<<'EOD'\n"
-        + "     \n"
-        + "     EOD")
-      .matches("<<<'EOD'\n"
-        + "     content\n"
-        + "     EOD")
-      .matches("<<<'EOD'\n"
-        + "\t\t content\n"
-        + "\t\t EOD")
-      .matches("<<<'END'\n"
-        + "\t\t EN\n"
-        + "\t\t ENDING\n"
-        + "\t\t END")
-      .notMatches("<<<\"EOD\"\n"
-        + "\t\t content\n"
-        + "\t\t EOD")
-      .notMatches("<<<EOD\n"
-        + "\t\t content\n"
-        + "\t\t EOD");
+      .matches("""
+        <<<'EOD'
+            \s
+             EOD""")
+      .matches("""
+        <<<'EOD'
+             content
+             EOD""")
+      .matches("""
+        <<<'EOD'
+        \t\t content
+        \t\t EOD""")
+      .matches("""
+        <<<'END'
+        \t\t EN
+        \t\t ENDING
+        \t\t END""")
+      .notMatches("""
+        <<<"EOD"
+        \t\t content
+        \t\t EOD""")
+      .notMatches("""
+        <<<EOD
+        \t\t content
+        \t\t EOD""");
   }
 
 }

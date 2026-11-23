@@ -66,9 +66,10 @@ class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
 
   @Test
   void testPseudoComment() {
-    String code = "<<<EOF\n" +
-      "/**/{$a}\n" +
-      "EOF";
+    String code = """
+      <<<EOF
+      /**/{$a}
+      EOF""";
     HeredocStringLiteralTree tree = parseHeredoc(code);
     assertThat(tree.strings().get(0).value()).isEqualTo("/**/");
   }
@@ -122,10 +123,11 @@ class HeredocStringLiteralTreeTest extends PHPTreeModelTest {
 
   @Test
   void withContentTokenLocation() {
-    String code = "/**/<<<EOD\n"
-      + "  ABC\n"
-      + "  DEF\n"
-      + "EOD";
+    String code = """
+      /**/<<<EOD
+        ABC
+        DEF
+      EOD""";
     HeredocStringLiteralTree tree = parseHeredoc(code);
 
     SyntaxToken openingToken = tree.openingToken();

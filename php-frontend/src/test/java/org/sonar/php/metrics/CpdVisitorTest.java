@@ -214,14 +214,15 @@ class CpdVisitorTest {
 
   @Test
   void shouldNotComputeCptTokensForAttributes() {
-    String source = "<?php\n" +
-      "    #[Route(\n" +
-      "        path: '/v1/infocontroller/{id}',\n" +
-      "        name: 'info',\n" +
-      "        requirements: [\"id\"=>\"\\d+\"],\n" +
-      "        methods: ['GET']\n" +
-      "    )]\n" +
-      "    function foo(){}";
+    String source = """
+      <?php
+          #[Route(
+              path: '/v1/infocontroller/{id}',
+              name: 'info',
+              requirements: ["id"=>"\\d+"],
+              methods: ['GET']
+          )]
+          function foo(){}""";
 
     List<CpdToken> tokens = scan(source);
 
