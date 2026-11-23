@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SymbolTableImplTest extends ParsingTestUtils {
 
   private CompilationUnitTree cut = parse("symbols/symbolTable.php");
-  private SymbolTableImpl SYMBOL_MODEL = SymbolTableImpl.create(cut);
+  private SymbolTableImpl symbolModel = SymbolTableImpl.create(cut);
 
   @Test
   void staticMethodCallSymbolShouldProvideFqnWhenClassIsNotDeclared() {
@@ -106,21 +106,21 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void symbolsFiltering() {
-    assertThat(SYMBOL_MODEL.getSymbols()).hasSize(26);
+    assertThat(symbolModel.getSymbols()).hasSize(26);
 
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).hasSize(3);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FIELD)).hasSize(5);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PARAMETER)).hasSize(4);
-    assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.VARIABLE)).hasSize(13);
+    assertThat(symbolModel.getSymbols(Symbol.Kind.FUNCTION)).hasSize(3);
+    assertThat(symbolModel.getSymbols(Symbol.Kind.CLASS)).hasSize(1);
+    assertThat(symbolModel.getSymbols(Symbol.Kind.FIELD)).hasSize(5);
+    assertThat(symbolModel.getSymbols(Symbol.Kind.PARAMETER)).hasSize(4);
+    assertThat(symbolModel.getSymbols(Symbol.Kind.VARIABLE)).hasSize(13);
 
-    assertThat(SYMBOL_MODEL.getSymbols("$a")).hasSize(3);
+    assertThat(symbolModel.getSymbols("$a")).hasSize(3);
     // Case sensitive for variables
-    assertThat(SYMBOL_MODEL.getSymbols("$A")).isEmpty();
+    assertThat(symbolModel.getSymbols("$A")).isEmpty();
 
-    assertThat(SYMBOL_MODEL.getSymbols("f")).hasSize(2);
+    assertThat(symbolModel.getSymbols("f")).hasSize(2);
     // Case in-sensitive for functions
-    assertThat(SYMBOL_MODEL.getSymbols("F")).hasSize(2);
+    assertThat(symbolModel.getSymbols("F")).hasSize(2);
   }
 
   @Test
@@ -128,11 +128,11 @@ class SymbolTableImplTest extends ParsingTestUtils {
     String fieldName = "$fieldOne";
     String constantName = "CONSTANT_FIELD";
 
-    assertThat(SYMBOL_MODEL.getSymbols(fieldName)).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols(constantName)).hasSize(1);
+    assertThat(symbolModel.getSymbols(fieldName)).hasSize(1);
+    assertThat(symbolModel.getSymbols(constantName)).hasSize(1);
 
-    Symbol field = SYMBOL_MODEL.getSymbols(fieldName).get(0);
-    Symbol constantField = SYMBOL_MODEL.getSymbols(constantName).get(0);
+    Symbol field = symbolModel.getSymbols(fieldName).get(0);
+    Symbol constantField = symbolModel.getSymbols(constantName).get(0);
 
     assertThat(field.name()).isEqualTo(fieldName);
     assertThat(field.hasModifier("public")).isTrue();
@@ -146,7 +146,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void promotedPropertiesShouldGenerateSymbols() {
-    assertThat(SYMBOL_MODEL.getSymbols())
+    assertThat(symbolModel.getSymbols())
       .map(Symbol::qualifiedName)
       .filteredOn(Objects::nonNull)
       .map(QualifiedName::toString)
@@ -155,7 +155,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void promotedPropertyShouldGenerateFieldAndParamSymbol() {
-    var symbols = SYMBOL_MODEL.getSymbols("$promoted1");
+    var symbols = symbolModel.getSymbols("$promoted1");
 
     assertThat(symbols).hasSize(2);
 
@@ -170,7 +170,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void testGlobalConstant() {
-    Symbol constant = SYMBOL_MODEL.getSymbols("CONSTANT").get(0);
+    Symbol constant = symbolModel.getSymbols("CONSTANT").get(0);
 
     assertThat(constant.hasModifier("const")).isTrue();
     assertThat(constant.is(Symbol.Kind.VARIABLE)).isTrue();
@@ -178,19 +178,19 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void listVariable() {
-    assertThat(SYMBOL_MODEL.getSymbols("$l1")).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols("$l2")).hasSize(1);
+    assertThat(symbolModel.getSymbols("$l1")).hasSize(1);
+    assertThat(symbolModel.getSymbols("$l2")).hasSize(1);
   }
 
   @Test
   void foreachVariable() {
-    assertThat(SYMBOL_MODEL.getSymbols("$key")).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols("$val")).hasSize(1);
+    assertThat(symbolModel.getSymbols("$key")).hasSize(1);
+    assertThat(symbolModel.getSymbols("$val")).hasSize(1);
   }
 
   @Test
   void staticVariable() {
-    List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$static");
+    List<Symbol> symbols = symbolModel.getSymbols("$static");
     assertThat(symbols).hasSize(1);
     Symbol symbol = symbols.get(0);
     assertThat(symbol.hasModifier("static")).isTrue();
@@ -198,7 +198,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
 
   @Test
   void globalVariable() {
-    List<Symbol> symbols = SYMBOL_MODEL.getSymbols("$global");
+    List<Symbol> symbols = symbolModel.getSymbols("$global");
     assertThat(symbols).hasSize(2);
 
     SymbolImpl globalGlobal = (SymbolImpl) symbols.get(0);
@@ -220,7 +220,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
   void retrieveSymbolByTree() {
     ExpressionTree dollarAUsage = ((AssignmentExpressionTree) ((ExpressionStatementTree) ((FunctionDeclarationTree) cut.script().statements().get(5)).body().statements().get(3))
       .expression()).variable();
-    Symbol symbol = SYMBOL_MODEL.getSymbol(dollarAUsage);
+    Symbol symbol = symbolModel.getSymbol(dollarAUsage);
     assertThat(symbol).isNotNull();
     assertThat(symbol.name()).isEqualTo("$a");
   }
@@ -532,7 +532,7 @@ class SymbolTableImplTest extends ParsingTestUtils {
   void lexicalVarsTreeSymbolAssociation() {
     FunctionExpressionTree functionExpression = (FunctionExpressionTree) ((AssignmentExpressionTree) ((ExpressionStatementTree) cut.script().statements().get(7)).expression())
       .value();
-    Symbol symbol = SYMBOL_MODEL.getSymbol(functionExpression.lexicalVars().variables().get(0));
+    Symbol symbol = symbolModel.getSymbol(functionExpression.lexicalVars().variables().get(0));
     assertThat(symbol).isNotNull();
     assertThat(((PHPTree) symbol.declaration()).getLine()).isEqualTo(3);
   }

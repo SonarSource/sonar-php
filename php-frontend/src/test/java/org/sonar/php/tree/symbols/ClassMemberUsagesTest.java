@@ -35,7 +35,7 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
   @RegisterExtension
   public final LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-  private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/class_members_usages.php"));
+  private final SymbolTableImpl symbolTable = SymbolTableImpl.create(parse("symbols/class_members_usages.php"));
 
   @Test
   void testStaticField() {
@@ -148,7 +148,7 @@ class ClassMemberUsagesTest extends ParsingTestUtils {
 
   private Symbol getSymbol(String name, Kind kind) {
     Symbol result = null;
-    for (Symbol symbol : SYMBOL_TABLE.getSymbols(name)) {
+    for (Symbol symbol : symbolTable.getSymbols(name)) {
       if (symbol.is(kind) && result == null) {
         result = symbol;
       } else {

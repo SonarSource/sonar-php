@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UsagesTest extends ParsingTestUtils {
 
-  private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/usages.php"));
+  private final SymbolTableImpl symbolTable = SymbolTableImpl.create(parse("symbols/usages.php"));
 
   private final Symbol globalSymbolA = getGlobalScopeSymbol("$a");
   private final Symbol globalSymbolB = getGlobalScopeSymbol("$b");
@@ -41,7 +41,7 @@ class UsagesTest extends ParsingTestUtils {
 
   @Test
   void test() {
-    for (Scope scope : SYMBOL_TABLE.getScopes()) {
+    for (Scope scope : symbolTable.getScopes()) {
 
       Tree tree = scope.tree();
       if (tree.is(Tree.Kind.FUNCTION_EXPRESSION)) {
@@ -160,7 +160,7 @@ class UsagesTest extends ParsingTestUtils {
   }
 
   Symbol getGlobalScopeSymbol(String name) {
-    for (Scope scope : SYMBOL_TABLE.getScopes()) {
+    for (Scope scope : symbolTable.getScopes()) {
       if (scope.isGlobal()) {
         return scope.getSymbol(name);
       }
