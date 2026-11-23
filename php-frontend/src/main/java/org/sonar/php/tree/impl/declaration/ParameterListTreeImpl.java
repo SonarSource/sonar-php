@@ -30,9 +30,9 @@ import org.sonar.plugins.php.api.visitors.VisitorCheck;
 public class ParameterListTreeImpl extends PHPTree implements ParameterListTree {
 
   private static final Kind KIND = Kind.PARAMETER_LIST;
-  private InternalSyntaxToken openParenthesis;
-  private SeparatedListImpl<ParameterTree> parameters;
-  private InternalSyntaxToken closeParenthesis;
+  private final InternalSyntaxToken openParenthesis;
+  private final SeparatedListImpl<ParameterTree> parameters;
+  private final InternalSyntaxToken closeParenthesis;
 
   public ParameterListTreeImpl(
     InternalSyntaxToken openParenthesis,

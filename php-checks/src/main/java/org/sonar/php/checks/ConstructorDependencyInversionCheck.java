@@ -36,7 +36,7 @@ public class ConstructorDependencyInversionCheck extends PHPVisitorCheck {
   public static final String KEY = "S2830";
   private static final String MESSAGE = "Remove this creation of object in constructor. Use dependency injection instead.";
 
-  private Deque<Boolean> inConstructor = new ArrayDeque<>();
+  private final Deque<Boolean> inConstructor = new ArrayDeque<>();
 
   @Override
   public void visitClassDeclaration(ClassDeclarationTree tree) {

@@ -37,7 +37,7 @@ public class GenericExceptionCheck extends PHPVisitorCheck {
   public static final String MESSAGE = "Define and throw a dedicated exception instead of using a generic one.";
 
   private static final Set<String> RAW_EXCEPTIONS = Set.of("ErrorException", "RuntimeException", "Exception");
-  private Set<String> importedGenericExceptions = new HashSet<>();
+  private final Set<String> importedGenericExceptions = new HashSet<>();
   private boolean inGlobalNamespace = true;
 
   @Override

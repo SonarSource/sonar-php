@@ -42,7 +42,7 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 public class UselessIncrementCheck extends PHPVisitorCheck {
 
   public static final String KEY = "S2123";
-  private Deque<Scope> scopes = new LinkedList<>();
+  private final Deque<Scope> scopes = new LinkedList<>();
 
   @Override
   public void visitFunctionExpression(FunctionExpressionTree tree) {

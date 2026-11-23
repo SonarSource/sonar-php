@@ -25,8 +25,8 @@ import org.sonar.plugins.php.api.visitors.PHPVisitorCheck;
 
 public class CommentLineVisitor extends PHPVisitorCheck {
 
-  private Set<Integer> comments = new HashSet<>();
-  private Set<Integer> noSonarLines = new HashSet<>();
+  private final Set<Integer> comments = new HashSet<>();
+  private final Set<Integer> noSonarLines = new HashSet<>();
 
   public CommentLineVisitor(CompilationUnitTree tree) {
     super.visitCompilationUnit(tree);

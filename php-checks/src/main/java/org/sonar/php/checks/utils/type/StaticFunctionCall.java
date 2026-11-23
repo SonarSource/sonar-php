@@ -21,8 +21,8 @@ import org.sonar.plugins.php.api.symbols.QualifiedName;
 import static org.sonar.plugins.php.api.symbols.QualifiedName.qualifiedName;
 
 public class StaticFunctionCall {
-  private QualifiedName callee;
-  private String functionName;
+  private final QualifiedName callee;
+  private final String functionName;
 
   private StaticFunctionCall(QualifiedName callee, String functionName) {
     this.callee = callee;

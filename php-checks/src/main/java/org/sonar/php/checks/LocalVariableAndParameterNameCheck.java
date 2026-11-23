@@ -43,7 +43,7 @@ public class LocalVariableAndParameterNameCheck extends PHPSubscriptionCheck {
   private static final String MESSAGE = "Rename this %s \"%s\" to match the regular expression %s.";
 
   public static final String DEFAULT = "^[a-z_][a-zA-Z0-9_]*$";
-  private Deque<Set<String>> checkedVariables = new ArrayDeque<>();
+  private final Deque<Set<String>> checkedVariables = new ArrayDeque<>();
   private Pattern pattern = null;
 
   @RuleProperty(

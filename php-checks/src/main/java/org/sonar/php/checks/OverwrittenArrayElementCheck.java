@@ -47,7 +47,7 @@ public class OverwrittenArrayElementCheck extends PHPSubscriptionCheck {
     return Arrays.asList(Tree.Kind.BLOCK, Tree.Kind.SCRIPT);
   }
 
-  private Map<String, Symbol> namesToSymbols = new HashMap<>();
+  private final Map<String, Symbol> namesToSymbols = new HashMap<>();
   // <variableName, <arrayKey, AssignmentTree>>
   private Map<String, Map<String, AssignmentExpressionTree>> writtenAndUnread = new HashMap<>();
 

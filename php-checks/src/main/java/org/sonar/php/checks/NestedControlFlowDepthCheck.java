@@ -43,7 +43,7 @@ public class NestedControlFlowDepthCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Refactor this code to not nest more than %s \"if\", \"for\", \"while\", \"switch\" and \"try\" statements.";
 
-  private Deque<Tree> nestingStack = new ArrayDeque<>();
+  private final Deque<Tree> nestingStack = new ArrayDeque<>();
 
   public static final int DEFAULT = 4;
 

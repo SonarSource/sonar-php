@@ -36,7 +36,7 @@ public class Scope {
   protected List<Symbol> symbols = new ArrayList<>();
   Scope superClassScope;
   private boolean unresolvedCompact;
-  private boolean captureOuterScope;
+  private final boolean captureOuterScope;
 
   public Scope(Scope outer, Tree tree, boolean captureOuterScope) {
     this.outer = requireNonNull(outer);

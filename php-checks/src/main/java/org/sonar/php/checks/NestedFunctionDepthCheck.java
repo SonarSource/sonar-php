@@ -35,7 +35,7 @@ public class NestedFunctionDepthCheck extends PHPVisitorCheck {
 
   private static final String MESSAGE = "Refactor this code to not nest functions more than %s levels deep.";
 
-  private Deque<SyntaxToken> nestedStack = new ArrayDeque<>();
+  private final Deque<SyntaxToken> nestedStack = new ArrayDeque<>();
   public static final int DEFAULT = 3;
 
   @RuleProperty(
