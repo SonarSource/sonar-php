@@ -348,25 +348,12 @@ jobs:
         if: always() && steps.pr-analysis.outcome == 'failure'
         shell: bash
         run: |
-          set -euo pipefail
-          shopt -s nullglob
           actual=its/ruling/build/actual
-          artifact="${RUNNER_TEMP}/pr-analysis-ruling"
-          mkdir -p "${artifact}/prAnalysis"
-          for scenario in base added changed; do
-            if [ "$scenario" = base ]; then
-              source="${actual}/prAnalysis-issues-added-base"
-            else
-              source="${actual}/prAnalysis-issues-${scenario}-branch"
-            fi
-            files=("${source}"/*.sarif)
-            if [ "${#files[@]}" -eq 0 ]; then
-              echo "::error::No PR analysis SARIF results found in ${source}"
-              exit 1
-            fi
-            mkdir -p "${artifact}/prAnalysis/${scenario}"
-            cp "${files[@]}" "${artifact}/prAnalysis/${scenario}/"
-          done
+          artifact="${RUNNER_TEMP}/pr-analysis-ruling/prAnalysis"
+          mkdir -p "${artifact}/"{base,added,changed}
+          cp "${actual}/prAnalysis-issues-added-base/"*.sarif "${artifact}/base/"
+          cp "${actual}/prAnalysis-issues-added-branch/"*.sarif "${artifact}/added/"
+          cp "${actual}/prAnalysis-issues-changed-branch/"*.sarif "${artifact}/changed/"
       - name: Prepare PR analysis ruling artifact
         if: always() && steps.pr-analysis.outcome == 'failure' && success()
         uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@v1
