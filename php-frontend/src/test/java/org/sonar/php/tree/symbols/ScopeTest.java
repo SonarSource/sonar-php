@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ScopeTest extends ParsingTestUtils {
 
-  private final SymbolTableImpl SYMBOL_TABLE = SymbolTableImpl.create(parse("symbols/scopes.php"));
+  private final SymbolTableImpl symbolTable = SymbolTableImpl.create(parse("symbols/scopes.php"));
 
   @Test
   void globalScope() {
@@ -89,9 +89,9 @@ class ScopeTest extends ParsingTestUtils {
     Scope functionScope = getScopeFor(Kind.FUNCTION_DECLARATION);
 
     assertThat(functionScope.getSymbol("$b")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(2);
+    assertThat(symbolTable.getSymbols("$b")).hasSize(2);
     assertThat(functionScope.getSymbol("$externalVariable")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$externalVariable")).hasSize(1);
+    assertThat(symbolTable.getSymbols("$externalVariable")).hasSize(1);
 
     Scope globalScope = getScopeFor(Kind.COMPILATION_UNIT);
     assertThat(globalScope.getSymbol("$b")).isEqualTo(functionScope.getSymbol("$b"));
@@ -103,9 +103,9 @@ class ScopeTest extends ParsingTestUtils {
     Scope functionScope = getScopeFor(Kind.FUNCTION_EXPRESSION);
 
     assertThat(functionScope.getSymbol("$c")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$c")).hasSize(2);
+    assertThat(symbolTable.getSymbols("$c")).hasSize(2);
     assertThat(functionScope.getSymbol("$b")).isNotNull();
-    assertThat(SYMBOL_TABLE.getSymbols("$b")).hasSize(2);
+    assertThat(symbolTable.getSymbols("$b")).hasSize(2);
 
     Scope parentScope = getScopeFor(Kind.FUNCTION_DECLARATION);
     assertThat(parentScope.getSymbol("$c")).isNotEqualTo(functionScope.getSymbol("$c"));
@@ -137,8 +137,8 @@ class ScopeTest extends ParsingTestUtils {
 
   @Test
   void sameNameInSameScope() {
-    SymbolTableImpl symbolTable = SymbolTableImpl.create(parse("symbols/scope_same_name.php"));
-    Scope scope = getScopeFor(Kind.COMPILATION_UNIT, symbolTable);
+    SymbolTableImpl sameNameSymbolTable = SymbolTableImpl.create(parse("symbols/scope_same_name.php"));
+    Scope scope = getScopeFor(Kind.COMPILATION_UNIT, sameNameSymbolTable);
 
     assertThat(scope.getSymbol("FOO", Symbol.Kind.FUNCTION)).isNotNull();
     assertThat(scope.getSymbol("FOO", Symbol.Kind.CLASS)).isNotNull();
@@ -154,7 +154,7 @@ class ScopeTest extends ParsingTestUtils {
   }
 
   private Scope getScopeFor(Tree.Kind kind) {
-    return getScopeFor(kind, SYMBOL_TABLE);
+    return getScopeFor(kind, symbolTable);
   }
 
 }
