@@ -83,7 +83,7 @@ public class POSIXFilePermissionsCheck extends PHPVisitorCheck {
   }
 
   private static int getDecimalRepresentation(String argument, int defaultValue) {
-    if (argument.matches("\"[0-9]*\"")) {
+    if (argument.matches("\"\\d*\"")) {
       return Integer.valueOf(CheckUtils.trimQuotes(argument));
     } else if (argument.matches("^0[0-7]*$")) {
       return Integer.parseInt(argument, 8);
