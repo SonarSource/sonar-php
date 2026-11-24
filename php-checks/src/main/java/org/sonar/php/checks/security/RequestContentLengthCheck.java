@@ -70,8 +70,8 @@ public class RequestContentLengthCheck extends PHPVisitorCheck {
   long fileUploadSizeLimit = DEFAULT;
 
   private static final QualifiedName SYMFONY_FILE_CONSTRAINT = qualifiedName("Symfony\\Component\\Validator\\Constraints\\File");
-  private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>[0-9]+)(?<unit>k|M|Ki|Mi)?$");
-  private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>[0-9]+)$");
+  private static final Pattern SIZE_FORMAT = Pattern.compile("^(?<number>\\d+)(?<unit>k|M|Ki|Mi)?$");
+  private static final Pattern LARAVEL_SIZE_FORMAT = Pattern.compile("^max:(?<size>\\d+)$");
   private static final Tree.Kind[] ARRAY = {Tree.Kind.ARRAY_INITIALIZER_BRACKET, Tree.Kind.ARRAY_INITIALIZER_FUNCTION};
 
   private static final QualifiedName LARAVEL_FORM_REQUEST = qualifiedName("Illuminate\\Foundation\\Http\\FormRequest");

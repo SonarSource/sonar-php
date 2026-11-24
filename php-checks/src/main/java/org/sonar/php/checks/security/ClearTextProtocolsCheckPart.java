@@ -46,7 +46,7 @@ import org.sonarsource.analyzer.commons.appsec.CleartextProtocolFilter;
 public class ClearTextProtocolsCheckPart extends PHPVisitorCheck implements CheckBundlePart {
   private static final Set<String> CLEARTEXT_PROTOCOLS = CleartextProtocolFilter.getCleartextProtocols();
 
-  private static final String LOOPBACK_IPV4 = "^127(?:\\.[0-9]+){0,2}\\.[0-9]+$";
+  private static final String LOOPBACK_IPV4 = "^127(?:\\.\\d+){0,2}\\.\\d+$";
   private static final String LOOPBACK_IPV6 = "^(?:0*:){0,7}?:?0*1$";
   private static final Pattern LOOPBACK_IP = Pattern.compile(LOOPBACK_IPV4 + "|" + LOOPBACK_IPV6);
 
