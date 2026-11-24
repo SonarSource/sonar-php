@@ -170,11 +170,11 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitPropertyHook(PropertyHookTree tree);
 
-  /**
+  /*
    * [ END ] Declaration
    */
 
-  /**
+  /*
    * [ START ] Statement
    */
 
