@@ -1848,6 +1848,15 @@ public class PHPGrammar {
           b.optional(b.token(COMMA)),
           b.token(RPARENTHESIS)),
 
+        // Must come before the generic "clone EXPRESSION": plain clone($a) keeps its existing tree shape
+        f.cloneWithArguments(
+          b.token(PHPLexicalGrammar.CLONE),
+          b.token(LPARENTHESIS),
+          EXPRESSION(),
+          b.oneOrMore(f.newTuple(b.token(COMMA), EXPRESSION())),
+          b.optional(b.token(COMMA)),
+          b.token(RPARENTHESIS)),
+
         f.internalFunction(
           b.firstOf(
             b.token(PHPLexicalGrammar.EMPTY),

@@ -1580,6 +1580,18 @@ public class TreeFactory {
       closeParenthesis);
   }
 
+  // PHP 8.5: clone(object, array) with at least one extra argument
+  public FunctionCallTree cloneWithArguments(
+    InternalSyntaxToken cloneToken, InternalSyntaxToken openParenthesis,
+    ExpressionTree expression, List<Tuple<InternalSyntaxToken, ExpressionTree>> expressionRest,
+    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis) {
+    return internalFunction(
+      cloneToken,
+      openParenthesis,
+      separatedList(expression, Optional.of(expressionRest), trailingComma.orNull()),
+      closeParenthesis);
+  }
+
   public FunctionCallTree internalFunction(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
     return internalFunction(
       includeOnceToken,
