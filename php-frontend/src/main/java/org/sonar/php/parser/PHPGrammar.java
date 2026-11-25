@@ -1836,8 +1836,8 @@ public class PHPGrammar {
         VARIABLE_IDENTIFIER()));
   }
 
-  public FunctionCallTree INTERNAL_FUNCTION() {
-    return b.<FunctionCallTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
+  public ExpressionTree INTERNAL_FUNCTION() {
+    return b.<ExpressionTree>nonterminal(PHPLexicalGrammar.INTERNAL_FUNCTION).is(
       b.firstOf(
         f.internalFunction(
           b.token(PHPLexicalGrammar.ISSET),
@@ -1845,15 +1845,6 @@ public class PHPGrammar {
           EXPRESSION(),
           b.zeroOrMore(f.newTuple(b.token(COMMA), EXPRESSION())),
           // PHP 7.3: last argument can be suffixed with an extra comma
-          b.optional(b.token(COMMA)),
-          b.token(RPARENTHESIS)),
-
-        // Must come before the generic "clone EXPRESSION": plain clone($a) keeps its existing tree shape
-        f.cloneWithArguments(
-          b.token(PHPLexicalGrammar.CLONE),
-          b.token(LPARENTHESIS),
-          EXPRESSION(),
-          b.oneOrMore(f.newTuple(b.token(COMMA), EXPRESSION())),
           b.optional(b.token(COMMA)),
           b.token(RPARENTHESIS)),
 
@@ -1871,7 +1862,19 @@ public class PHPGrammar {
             b.token(PHPLexicalGrammar.REQUIRE),
             b.token(PHPLexicalGrammar.CLONE),
             b.token(PHPLexicalGrammar.PRINT)),
-          EXPRESSION())));
+          EXPRESSION()),
+
+        // PHP 8.5: clone($object, [...]), clone($object,), clone(object: $a) and clone(...).
+        // After the generic "clone EXPRESSION" on purpose: that one fails on the comma/colon, and plain clone($a) keeps its tree shape.
+        f.cloneCall(
+          b.token(PHPLexicalGrammar.CLONE),
+          b.token(LPARENTHESIS),
+          FUNCTION_CALL_ARGUMENT(),
+          b.zeroOrMore(f.newTuple(b.token(COMMA), FUNCTION_CALL_ARGUMENT())),
+          b.optional(b.token(COMMA)),
+          b.token(RPARENTHESIS)),
+
+        f.cloneCallableConvert(b.token(PHPLexicalGrammar.CLONE), CALLABLE_CONVERT())));
   }
 
   public ArrayInitializerTree ARRAY_INITIALIZER() {

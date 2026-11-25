@@ -1580,16 +1580,23 @@ public class TreeFactory {
       closeParenthesis);
   }
 
-  // PHP 8.5: clone(object, array) with at least one extra argument
-  public FunctionCallTree cloneWithArguments(
+  public FunctionCallTree cloneCall(
     InternalSyntaxToken cloneToken, InternalSyntaxToken openParenthesis,
-    ExpressionTree expression, List<Tuple<InternalSyntaxToken, ExpressionTree>> expressionRest,
+    CallArgumentTree firstArgument, Optional<List<Tuple<InternalSyntaxToken, CallArgumentTree>>> otherArguments,
     Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis) {
-    return internalFunction(
-      cloneToken,
+    return new FunctionCallTreeImpl(
+      internalFunctionName(cloneToken),
       openParenthesis,
-      separatedList(expression, Optional.of(expressionRest), trailingComma.orNull()),
+      separatedList(firstArgument, otherArguments, trailingComma.orNull()),
       closeParenthesis);
+  }
+
+  public CallableConvertTree cloneCallableConvert(InternalSyntaxToken cloneToken, CallableConvertTree callableConvert) {
+    return ((CallableConvertTreeImpl) callableConvert).complete(internalFunctionName(cloneToken));
+  }
+
+  private static ExpressionTree internalFunctionName(InternalSyntaxToken token) {
+    return new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(token));
   }
 
   public FunctionCallTree internalFunction(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
@@ -1609,7 +1616,7 @@ public class TreeFactory {
       .map(a -> new CallArgumentTreeImpl(null, a))
       .collect(Collectors.toList());
 
-    ExpressionTree calleeExpression = new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee));
+    ExpressionTree calleeExpression = internalFunctionName(callee);
     SeparatedListImpl<CallArgumentTree> callArgs = new SeparatedListImpl<>(functionCallArguments, arguments.getSeparators());
     if (openParenthesis != null && closeParenthesis != null) {
       return new FunctionCallTreeImpl(calleeExpression, openParenthesis, callArgs, closeParenthesis);

@@ -7,6 +7,9 @@ break 1;
 break(1);                       // Noncompliant {{Remove the parentheses from this "break" call.}}
 $b = clone $a;
 $b = clone($a);                 // Noncompliant {{Remove the parentheses from this "clone" call.}}
+$b = clone($a, ['x' => 1]);     // PHP 8.5 clone with arguments: parentheses are required
+$b = clone($a,);
+$b = clone(object: $a);
 switch(1) {
     case 1: break;
     case(2): break;             // Noncompliant {{Remove the parentheses from this "case" call.}}
