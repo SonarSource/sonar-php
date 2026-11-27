@@ -122,7 +122,7 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitTrivia(SyntaxTrivia trivia);
 
-  /**
+  /*
    * [ START ] Declaration
    */
 
@@ -170,11 +170,11 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitPropertyHook(PropertyHookTree tree);
 
-  /**
+  /*
    * [ END ] Declaration
    */
 
-  /**
+  /*
    * [ START ] Statement
    */
 
@@ -337,7 +337,7 @@ public interface VisitorCheck extends PHPCheck {
 
   void visitCallArgument(CallArgumentTree tree);
 
-  /**
+  /*
    * [ END ] Expression
    */
 
