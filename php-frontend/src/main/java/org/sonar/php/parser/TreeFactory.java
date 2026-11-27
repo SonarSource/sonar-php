@@ -1580,6 +1580,25 @@ public class TreeFactory {
       closeParenthesis);
   }
 
+  public FunctionCallTree cloneCall(
+    InternalSyntaxToken cloneToken, InternalSyntaxToken openParenthesis,
+    CallArgumentTree firstArgument, Optional<List<Tuple<InternalSyntaxToken, CallArgumentTree>>> otherArguments,
+    Optional<InternalSyntaxToken> trailingComma, InternalSyntaxToken closeParenthesis) {
+    return new FunctionCallTreeImpl(
+      internalFunctionName(cloneToken),
+      openParenthesis,
+      separatedList(firstArgument, otherArguments, trailingComma.orNull()),
+      closeParenthesis);
+  }
+
+  public CallableConvertTree cloneCallableConvert(InternalSyntaxToken cloneToken, CallableConvertTree callableConvert) {
+    return ((CallableConvertTreeImpl) callableConvert).complete(internalFunctionName(cloneToken));
+  }
+
+  private static ExpressionTree internalFunctionName(InternalSyntaxToken token) {
+    return new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(token));
+  }
+
   public FunctionCallTree internalFunction(InternalSyntaxToken includeOnceToken, ExpressionTree expression) {
     return internalFunction(
       includeOnceToken,
@@ -1597,7 +1616,7 @@ public class TreeFactory {
       .map(a -> new CallArgumentTreeImpl(null, a))
       .collect(Collectors.toList());
 
-    ExpressionTree calleeExpression = new NamespaceNameTreeImpl(null, SeparatedListImpl.<NameIdentifierTree>empty(), new NameIdentifierTreeImpl(callee));
+    ExpressionTree calleeExpression = internalFunctionName(callee);
     SeparatedListImpl<CallArgumentTree> callArgs = new SeparatedListImpl<>(functionCallArguments, arguments.getSeparators());
     if (openParenthesis != null && closeParenthesis != null) {
       return new FunctionCallTreeImpl(calleeExpression, openParenthesis, callArgs, closeParenthesis);
