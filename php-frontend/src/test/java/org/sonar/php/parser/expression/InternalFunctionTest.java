@@ -65,6 +65,11 @@ class InternalFunctionTest {
     org.assertj.core.api.Assertions.assertThat(trailingComma.callArguments()).hasSize(1);
     org.assertj.core.api.Assertions.assertThat(trailingComma.callArguments().getSeparators()).hasSize(1);
 
+    // commas are separators, never call arguments
+    FunctionCallTree multiple = (FunctionCallTree) parse("clone($a, ['a' => 1], b: 2,)");
+    org.assertj.core.api.Assertions.assertThat(multiple.callArguments()).hasSize(3);
+    org.assertj.core.api.Assertions.assertThat(multiple.callArguments().getSeparators()).hasSize(3);
+
     ExpressionTree callable = parse("clone(...)");
     org.assertj.core.api.Assertions.assertThat(callable.is(Tree.Kind.CALLABLE_CONVERT)).isTrue();
 
